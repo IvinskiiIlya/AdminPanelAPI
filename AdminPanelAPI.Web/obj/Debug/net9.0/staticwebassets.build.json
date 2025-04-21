@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "GHPQz6tRVKSX0B4K6KOPu6k7MA6wOnhXYEt4sKsWTHs=",
+  "Source": "AdminPanelAPI.Web",
+  "BasePath": "_content/AdminPanelAPI.Web",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

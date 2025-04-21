@@ -1,0 +1,12 @@
+D:\Projects\AdminPanelAPI\AdminPanelAPI.Data\bin\Debug\net9.0\AdminPanelAPI.Data.deps.json
+D:\Projects\AdminPanelAPI\AdminPanelAPI.Data\bin\Debug\net9.0\AdminPanelAPI.Data.dll
+D:\Projects\AdminPanelAPI\AdminPanelAPI.Data\bin\Debug\net9.0\AdminPanelAPI.Data.pdb
+D:\Projects\AdminPanelAPI\AdminPanelAPI.Data\obj\Debug\net9.0\AdminPanelAPI.Data.csproj.AssemblyReference.cache
+D:\Projects\AdminPanelAPI\AdminPanelAPI.Data\obj\Debug\net9.0\AdminPanelAPI.Data.GeneratedMSBuildEditorConfig.editorconfig
+D:\Projects\AdminPanelAPI\AdminPanelAPI.Data\obj\Debug\net9.0\AdminPanelAPI.Data.AssemblyInfoInputs.cache
+D:\Projects\AdminPanelAPI\AdminPanelAPI.Data\obj\Debug\net9.0\AdminPanelAPI.Data.AssemblyInfo.cs
+D:\Projects\AdminPanelAPI\AdminPanelAPI.Data\obj\Debug\net9.0\AdminPanelAPI.Data.csproj.CoreCompileInputs.cache
+D:\Projects\AdminPanelAPI\AdminPanelAPI.Data\obj\Debug\net9.0\AdminPanelAPI.Data.dll
+D:\Projects\AdminPanelAPI\AdminPanelAPI.Data\obj\Debug\net9.0\refint\AdminPanelAPI.Data.dll
+D:\Projects\AdminPanelAPI\AdminPanelAPI.Data\obj\Debug\net9.0\AdminPanelAPI.Data.pdb
+D:\Projects\AdminPanelAPI\AdminPanelAPI.Data\obj\Debug\net9.0\ref\AdminPanelAPI.Data.dll
