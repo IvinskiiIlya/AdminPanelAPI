@@ -1,12 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminPanelAPI.Web", "AdminPanelAPI.Web\AdminPanelAPI.Web.csproj", "{9C4F46FB-CD3A-44C0-B4FF-253C79793CD5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "Web\Web.csproj", "{9C4F46FB-CD3A-44C0-B4FF-253C79793CD5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminPanelAPI.Data", "AdminPanelAPI.Data\AdminPanelAPI.Data.csproj", "{DC9E20E2-F49F-41CB-8D49-EF04C669F601}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{DC9E20E2-F49F-41CB-8D49-EF04C669F601}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminPanelAPI.Repositories", "AdminPanelAPI.Repositories\AdminPanelAPI.Repositories.csproj", "{60B6B4E2-1C90-4CD7-AB76-397F2C6FB507}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repositories", "Repositories\Repositories.csproj", "{60B6B4E2-1C90-4CD7-AB76-397F2C6FB507}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminPanelAPI.Services", "AdminPanelAPI.Services\AdminPanelAPI.Services.csproj", "{21D3830C-F8C3-4A2B-9D1F-C6FBEAF5F0F2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{21D3830C-F8C3-4A2B-9D1F-C6FBEAF5F0F2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,0 +1,40 @@
+using Services;
+using Services.Attachments;
+using Services.DTOs.Create;
+using Services.DTOs.Display;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Web.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class AttachmentController : ControllerBase
+{
+    private readonly IAttachmentService _attachmentService;
+
+    public AttachmentController(IAttachmentService attachmentService)
+    {
+        _attachmentService = attachmentService;
+    }
+
+    [HttpGet("{feedbackId}")]
+    public async Task<ActionResult<List<DisplayAttachmentDto>>> GetAttachmentsByFeedback(int feedbackId)
+    {
+        var attachments = await _attachmentService.GetAttachmentsByFeedbackAsync(feedbackId);
+        return Ok(attachments);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> UploadAttachment([FromBody] CreateAttachmentDto dto)
+    {
+        var attachment = await _attachmentService.CreateAttachmentAsync(dto);
+        return CreatedAtAction(nameof(GetAttachmentsByFeedback), new { feedbackId = dto.FeedbackId }, attachment);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeleteAttachment(int id)
+    {
+        await _attachmentService.DeleteAttachmentAsync(id);
+        return NoContent();
+    }
+}
