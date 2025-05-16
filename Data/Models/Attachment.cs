@@ -9,4 +9,10 @@ public class Attachment
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     
     public Feedback Feedback { get; set; } = null!;
+    
+    public Attachment(string filePath, string fileType)
+    {
+        FilePath = filePath ?? throw new ArgumentNullException(nameof(filePath));
+        FileType = fileType ?? throw new ArgumentNullException(nameof(fileType));
+    }
 }

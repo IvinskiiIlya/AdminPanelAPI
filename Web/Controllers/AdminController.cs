@@ -10,7 +10,7 @@ namespace Web.Controllers
     [Route("api/[controller]")]
     public class AdminController : ControllerBase
     {
-        private readonly IAdminService _adminService; // Пробел между типом и именем
+        private readonly IAdminService _adminService; 
 
         public AdminController(IAdminService adminService)
         {
@@ -20,15 +20,15 @@ namespace Web.Controllers
         [HttpPost]
         public async Task<ActionResult<DisplayAdminDto>> CreateAdmin([FromBody] CreateAdminDto dto)
         {
-            var admin = await _adminService.AddAdminAsync(dto); // Пробел после await
+            var admin = await _adminService.AddAdminAsync(dto); 
             return CreatedAtAction(
-                nameof(GetAdminById), // Указание имени метода для Location header
-                new { id = admin.Id }, // Параметры маршрута
-                admin // Возвращаемый объект
+                nameof(GetAdminById), 
+                new { id = admin.Id },
+                admin 
             );
         }
 
-        [HttpPut("{id}")] // Исправленный синтаксис атрибута
+        [HttpPut("{id}")]
         public async Task<ActionResult> UpdateAdmin(int id, [FromBody] UpdateAdminDto dto)
         {
             await _adminService.UpdateAdminAsync(id, dto);

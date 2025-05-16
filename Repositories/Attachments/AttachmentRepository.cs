@@ -6,6 +6,7 @@ namespace Repositories.Attachments
 {
     public class AttachmentRepository : IAttachmentRepository
     {
+        
         private readonly AppDbContext _context;
 
         public AttachmentRepository(AppDbContext context)
@@ -25,17 +26,13 @@ namespace Repositories.Attachments
         
         public async Task<IEnumerable<Attachment>> GetByFeedbackIdAsync(int feedbackId)
         {
-            return await _context.Attachments
-                .Where(a => a.FeedbackId == feedbackId)
-                .ToListAsync();
+            return await _context.Attachments.Where(a => a.FeedbackId == feedbackId).ToListAsync();
         }
 
         public async Task AddAsync(Attachment attachment)
         {
             if (attachment is null)
-            {
                 throw new ArgumentNullException(nameof(attachment));
-            }
             await _context.Attachments.AddAsync(attachment);
             await _context.SaveChangesAsync();
         }
@@ -43,9 +40,7 @@ namespace Repositories.Attachments
         public async Task UpdateAsync(Attachment attachment)
         {
             if (attachment is null)
-            {
                 throw new ArgumentNullException(nameof(attachment));
-            }
             _context.Entry(attachment).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }

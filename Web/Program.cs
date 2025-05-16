@@ -11,13 +11,19 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Добавление сервисов в контейнер DI
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+
+// Настройка Swagger
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
     {
         Title = "Admin Panel API",
         Version = "v1",
-        Description = "API для управления административной панелью"
+        Description = "API для управления административной панелью",
+        Contact = new OpenApiContact { Name = "Developer", Email = "dev@example.com" }
     });
 });
 
@@ -25,7 +31,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSQL")));
 
-// Регистрация репозиториев (Dependency Injection)
+// Регистрация репозиториев
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
@@ -34,23 +40,35 @@ builder.Services.AddScoped<IFeedbackCategoryRepository, FeedbackCategoryReposito
 builder.Services.AddScoped<IResponseRepository, ResponseRepository>();
 builder.Services.AddScoped<IAttachmentRepository, AttachmentRepository>();
 
-// Другие сервисы
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+// Добавление CORS (настройте политику под ваш фронтенд)
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 
 var app = builder.Build();
 
-app.UseExceptionHandler("/error"); // Глобальная обработка ошибок
-app.UseHttpsRedirection();
-app.UseAuthentication();
-app.UseAuthorization();
-app.MapControllers();
-
+// Конвейер middleware
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseExceptionHandler("/error");
+app.UseHttpsRedirection();
+app.UseRouting(); // Добавлено явное указание маршрутизации
+
+app.UseCors("AllowAll"); // Применение политики CORS
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
 
 app.Run();

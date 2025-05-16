@@ -22,18 +22,18 @@ public class UserController : ControllerBase
     public async Task<ActionResult<List<DisplayUserDto>>> GetAllUsers()
     {
         var users = await _userService.GetAllUsersAsync();
-        return Ok(users);
+        return Ok(users.ToList());
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<DisplayUserDto>> GetUserById(int id)
     {
         var user = await _userService.GetUserByIdAsync(id);
-        return Ok(user);
+        return user == null ? NotFound() : Ok(user);
     }
 
     [HttpPost]
-    public async Task<ActionResult> CreateUser([FromBody] CreateUserDto dto)
+    public async Task<ActionResult<DisplayUserDto>> CreateUser([FromBody] CreateUserDto dto)
     {
         var user = await _userService.CreateUserAsync(dto);
         return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);

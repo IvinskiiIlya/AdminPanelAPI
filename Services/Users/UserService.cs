@@ -1,9 +1,9 @@
-using System.Collections;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Repositories.Users;
 using Data.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Linq;
 using Services.DTOs.Create;
 using Services.DTOs.Display;
 using Services.DTOs.Update;
@@ -19,7 +19,7 @@ namespace Services.Users
             _userRepository = userRepository;
         }
 
-        public async Task<IEnumerable> GetAllUsersAsync()
+        public async Task<IEnumerable<DisplayUserDto>> GetAllUsersAsync()
         {
             var users = await _userRepository.GetAllAsync();
             return users.Select(u => new DisplayUserDto
@@ -34,10 +34,26 @@ namespace Services.Users
         public async Task<DisplayUserDto?> GetUserByIdAsync(int id)
         {
             var user = await _userRepository.GetByIdAsync(id);
-            if (user == null)
+            return user == null ? null : new DisplayUserDto
             {
-                return null;
-            }
+                Id = user.Id,
+                UserName = user.UserName,
+                Email = user.Email,
+                CreatedAt = user.CreatedAt
+            };
+        }
+
+        public async Task<DisplayUserDto> CreateUserAsync(CreateUserDto createUserDto)
+        {
+            var user = new User
+            {
+                UserName = createUserDto.UserName,
+                Email = createUserDto.Email,
+                CreatedAt = DateTime.UtcNow
+            };
+            
+            await _userRepository.AddAsync(user);
+            
             return new DisplayUserDto
             {
                 Id = user.Id,
@@ -47,26 +63,16 @@ namespace Services.Users
             };
         }
 
-        public async Task AddUserAsync(CreateUserDto createUserDto)
+        public async Task UpdateUserAsync(int id, UpdateUserDto updateUserDto)
         {
-            var user = new User
-            {
-                UserName = createUserDto.UserName,
-                Email = createUserDto.Email,
-            };
-            await _userRepository.AddAsync(user);
-        }
-
-        public async Task UpdateUserAsync(UpdateUserDto updateUserDto)
-        {
-            var user = await _userRepository.GetByIdAsync(updateUserDto.Id);
+            var user = await _userRepository.GetByIdAsync(id);
             if (user == null)
             {
-                throw new ArgumentException($"User with id {updateUserDto.Id} not found.");
+                throw new ArgumentException($"User with id {id} not found.");
             }
 
-            user.UserName = updateUserDto.UserName;
-            user.Email = updateUserDto.Email;
+            user.UserName = updateUserDto.UserName!;
+            user.Email = updateUserDto.Email!;
 
             await _userRepository.UpdateAsync(user);
         }

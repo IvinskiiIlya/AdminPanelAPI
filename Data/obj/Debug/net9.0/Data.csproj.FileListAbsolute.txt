@@ -1,0 +1,15 @@
+D:\Projects\AdminPanelAPI\Data\bin\Debug\net9.0\Data.deps.json
+D:\Projects\AdminPanelAPI\Data\bin\Debug\net9.0\Data.runtimeconfig.json
+D:\Projects\AdminPanelAPI\Data\bin\Debug\net9.0\Data.dll
+D:\Projects\AdminPanelAPI\Data\bin\Debug\net9.0\Data.pdb
+D:\Projects\AdminPanelAPI\Data\obj\Debug\net9.0\Data.csproj.AssemblyReference.cache
+D:\Projects\AdminPanelAPI\Data\obj\Debug\net9.0\Data.GeneratedMSBuildEditorConfig.editorconfig
+D:\Projects\AdminPanelAPI\Data\obj\Debug\net9.0\Data.AssemblyInfoInputs.cache
+D:\Projects\AdminPanelAPI\Data\obj\Debug\net9.0\Data.AssemblyInfo.cs
+D:\Projects\AdminPanelAPI\Data\obj\Debug\net9.0\Data.csproj.CoreCompileInputs.cache
+D:\Projects\AdminPanelAPI\Data\obj\Debug\net9.0\Data.sourcelink.json
+D:\Projects\AdminPanelAPI\Data\obj\Debug\net9.0\Data.dll
+D:\Projects\AdminPanelAPI\Data\obj\Debug\net9.0\refint\Data.dll
+D:\Projects\AdminPanelAPI\Data\obj\Debug\net9.0\Data.pdb
+D:\Projects\AdminPanelAPI\Data\obj\Debug\net9.0\Data.genruntimeconfig.cache
+D:\Projects\AdminPanelAPI\Data\obj\Debug\net9.0\ref\Data.dll

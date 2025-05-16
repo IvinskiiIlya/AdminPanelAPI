@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "lk9SVAVceCM=",
+  "dgSpecHash": "CcmKBcpOp6M=",
   "success": true,
   "projectFilePath": "D:\\Projects\\AdminPanelAPI\\Repositories\\Repositories.csproj",
   "expectedPackageFiles": [
@@ -19,6 +19,7 @@
     "C:\\Users\\ПК\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\9.0.4\\microsoft.entityframeworkcore.analyzers.9.0.4.nupkg.sha512",
     "C:\\Users\\ПК\\.nuget\\packages\\microsoft.entityframeworkcore.design\\9.0.4\\microsoft.entityframeworkcore.design.9.0.4.nupkg.sha512",
     "C:\\Users\\ПК\\.nuget\\packages\\microsoft.entityframeworkcore.relational\\9.0.4\\microsoft.entityframeworkcore.relational.9.0.4.nupkg.sha512",
+    "C:\\Users\\ПК\\.nuget\\packages\\microsoft.entityframeworkcore.tools\\9.0.4\\microsoft.entityframeworkcore.tools.9.0.4.nupkg.sha512",
     "C:\\Users\\ПК\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\9.0.4\\microsoft.extensions.caching.abstractions.9.0.4.nupkg.sha512",
     "C:\\Users\\ПК\\.nuget\\packages\\microsoft.extensions.caching.memory\\9.0.4\\microsoft.extensions.caching.memory.9.0.4.nupkg.sha512",
     "C:\\Users\\ПК\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\9.0.4\\microsoft.extensions.configuration.abstractions.9.0.4.nupkg.sha512",

@@ -22,6 +22,13 @@ namespace Repositories.Responses
         {
             return await _context.Responses.FindAsync(id);
         }
+        
+        public async Task<IEnumerable<Response>> GetByFeedbackIdAsync(int feedbackId)
+        {
+            return await _context.Responses
+                .Where(r => r.FeedbackId == feedbackId)
+                .ToListAsync();
+        }
 
         public async Task AddAsync(Response response)
         {
