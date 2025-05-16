@@ -6,6 +6,7 @@ namespace Repositories.Responses
 {
     public class ResponseRepository : IResponseRepository
     {
+        
         private readonly AppDbContext _context;
 
         public ResponseRepository(AppDbContext context)
@@ -25,17 +26,13 @@ namespace Repositories.Responses
         
         public async Task<IEnumerable<Response>> GetByFeedbackIdAsync(int feedbackId)
         {
-            return await _context.Responses
-                .Where(r => r.FeedbackId == feedbackId)
-                .ToListAsync();
+            return await _context.Responses.Where(r => r.FeedbackId == feedbackId).ToListAsync();
         }
 
         public async Task AddAsync(Response response)
         {
             if (response is null)
-            {
                 throw new ArgumentNullException(nameof(response));
-            }
             await _context.Responses.AddAsync(response);
             await _context.SaveChangesAsync();
         }
@@ -43,9 +40,7 @@ namespace Repositories.Responses
         public async Task UpdateAsync(Response response)
         {
             if (response is null)
-            {
                 throw new ArgumentNullException(nameof(response));
-            }
             _context.Entry(response).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }

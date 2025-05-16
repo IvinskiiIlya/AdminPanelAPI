@@ -6,6 +6,7 @@ namespace Repositories.Feedbacks
 {
     public class FeedbackRepository : IFeedbackRepository
     {
+        
         private readonly AppDbContext _context;
 
         public FeedbackRepository(AppDbContext context)
@@ -26,9 +27,7 @@ namespace Repositories.Feedbacks
         public async Task AddAsync(Feedback feedback)
         {
             if (feedback is null)
-            {
                 throw new ArgumentNullException(nameof(feedback));
-            }
             await _context.Feedbacks.AddAsync(feedback);
             await _context.SaveChangesAsync();
         }
@@ -36,9 +35,7 @@ namespace Repositories.Feedbacks
         public async Task UpdateAsync(Feedback feedback)
         {
             if (feedback is null)
-            {
                 throw new ArgumentNullException(nameof(feedback));
-            }
             _context.Entry(feedback).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }

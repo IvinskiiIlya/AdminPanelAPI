@@ -6,6 +6,7 @@ namespace Repositories.Categories
 {
     public class CategoryRepository : ICategoryRepository
     {
+        
         private readonly AppDbContext _context;
 
         public CategoryRepository(AppDbContext context)
@@ -26,9 +27,7 @@ namespace Repositories.Categories
         public async Task AddAsync(Category category)
         {
             if (category is null)
-            {
                 throw new ArgumentNullException(nameof(category));
-            }
             await _context.Categories.AddAsync(category);
             await _context.SaveChangesAsync();
         }
@@ -36,9 +35,7 @@ namespace Repositories.Categories
         public async Task UpdateAsync(Category category)
         {
             if (category is null)
-            {
                 throw new ArgumentNullException(nameof(category));
-            }
             _context.Entry(category).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }

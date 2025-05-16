@@ -6,6 +6,7 @@ namespace Repositories.Users
 {
     public class UserRepository : IUserRepository
     {
+        
         private readonly AppDbContext _context;
 
         public UserRepository(AppDbContext context)
@@ -31,9 +32,7 @@ namespace Repositories.Users
         public async Task AddAsync(User user)
         {
             if (user is null)
-            {
                 throw new ArgumentNullException(nameof(user));
-            }
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
         }
@@ -41,9 +40,7 @@ namespace Repositories.Users
         public async Task UpdateAsync(User user)
         {
             if (user is null)
-            {
                 throw new ArgumentNullException(nameof(user));
-            }
             _context.Entry(user).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
