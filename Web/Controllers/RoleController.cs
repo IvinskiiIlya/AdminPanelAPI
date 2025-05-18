@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Roles;
 using Services.DTO.Role;
@@ -6,6 +7,7 @@ namespace Web.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class RoleController : ControllerBase
 {
     

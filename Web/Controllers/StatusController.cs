@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Statuses;
 using Services.DTO.Status;
@@ -6,6 +7,7 @@ namespace Web.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class StatusController : ControllerBase
 {
     

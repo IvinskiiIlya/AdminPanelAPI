@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Services.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Services.DTO.Response;
@@ -6,6 +7,7 @@ namespace Web.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class ResponseController : ControllerBase
 {
     

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Services.Attachments;
 using Microsoft.AspNetCore.Mvc;
 using Services.DTO.Attachment;
@@ -6,6 +7,7 @@ namespace Web.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class AttachmentController : ControllerBase
 {
     

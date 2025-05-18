@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Services.Users;
 using Microsoft.AspNetCore.Mvc;
 using Services.DTO.User;
@@ -6,6 +7,7 @@ namespace Web.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class UserController : ControllerBase
 {
     

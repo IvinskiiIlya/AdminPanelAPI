@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Services.Categories;
 using Microsoft.AspNetCore.Mvc;
 using Services.DTO.Category;
@@ -6,6 +7,7 @@ namespace Web.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class CategoryController : ControllerBase
 {
     
