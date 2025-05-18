@@ -1,8 +1,4 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Services.DTOs.Create;
-using Services.DTOs.Display;
-using Services.DTOs.Update;
+using Services.DTO.Category;
 
 namespace Services.Categories
 {
@@ -10,8 +6,8 @@ namespace Services.Categories
     {
         Task<IEnumerable<DisplayCategoryDto>> GetAllCategoriesAsync();
         Task<DisplayCategoryDto?> GetCategoryByIdAsync(int id);
-        Task<DisplayCategoryDto> CreateCategoryAsync(CreateCategoryDto createCategoryDto); // Изменено возвращаемое значение
-        Task UpdateCategoryAsync(int id, UpdateCategoryDto updateCategoryDto); // Добавлен параметр id
+        Task<DisplayCategoryDto> CreateCategoryAsync(CreateCategoryDto createCategoryDto); 
+        Task UpdateCategoryAsync(int id, UpdateCategoryDto updateCategoryDto);
         Task DeleteCategoryAsync(int id);
     }
 }

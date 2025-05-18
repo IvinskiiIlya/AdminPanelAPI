@@ -1,17 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Repositories.Responses;
 using Data.Models;
-using Services.DTOs.Create;
-using Services.DTOs.Display;
-using Services.DTOs.Update;
+using Services.DTO.Response;
 
 namespace Services.Responses
 {
     public class ResponseService : IResponseService
     {
+        
         private readonly IResponseRepository _responseRepository;
 
         public ResponseService(IResponseRepository responseRepository)
@@ -25,20 +20,19 @@ namespace Services.Responses
             return responses.Select(r => new DisplayResponseDto
             {
                 Id = r.Id,
-                ResponseMessage = r.ResponseMessage,
+                Message = r.Message,  
                 CreatedAt = r.CreatedAt,
                 FeedbackId = r.FeedbackId,
-                AdminUserId = r.AdminUserId
+                UserId = r.UserId    
             }).ToList();
         }
 
         public async Task<DisplayResponseDto> CreateResponseAsync(CreateResponseDto createResponseDto)
         {
-            var response = new Response
+            var response = new Response(createResponseDto.Message)  
             {
-                ResponseMessage = createResponseDto.ResponseMessage,
                 FeedbackId = createResponseDto.FeedbackId,
-                AdminUserId = createResponseDto.AdminUserId,
+                UserId = createResponseDto.UserId, 
                 CreatedAt = DateTime.UtcNow
             };
             
@@ -47,10 +41,10 @@ namespace Services.Responses
             return new DisplayResponseDto
             {
                 Id = response.Id,
-                ResponseMessage = response.ResponseMessage,
+                Message = response.Message,  
                 CreatedAt = response.CreatedAt,
                 FeedbackId = response.FeedbackId,
-                AdminUserId = response.AdminUserId
+                UserId = response.UserId     
             };
         }
 
@@ -58,26 +52,23 @@ namespace Services.Responses
         {
             var response = await _responseRepository.GetByIdAsync(id);
             if (response == null)
-            {
-                throw new ArgumentException($"Response with id {id} not found.");
-            }
+                throw new ArgumentException($"Ответ с id = {id} не найден.");
 
-            response.ResponseMessage = updateResponseDto.ResponseMessage!;
+            response.Message = updateResponseDto.Message ?? response.Message;  
 
             await _responseRepository.UpdateAsync(response);
         }
 
-        // Остальные методы остаются без изменений
         public async Task<IEnumerable<DisplayResponseDto>> GetAllResponsesAsync()
         {
             var responses = await _responseRepository.GetAllAsync();
             return responses.Select(r => new DisplayResponseDto
             {
                 Id = r.Id,
-                ResponseMessage = r.ResponseMessage,
+                Message = r.Message,  
                 CreatedAt = r.CreatedAt,
                 FeedbackId = r.FeedbackId,
-                AdminUserId = r.AdminUserId
+                UserId = r.UserId    
             });
         }
 
@@ -87,10 +78,10 @@ namespace Services.Responses
             return response == null ? null : new DisplayResponseDto
             {
                 Id = response.Id,
-                ResponseMessage = response.ResponseMessage,
+                Message = response.Message,  
                 CreatedAt = response.CreatedAt,
                 FeedbackId = response.FeedbackId,
-                AdminUserId = response.AdminUserId
+                UserId = response.UserId   
             };
         }
 

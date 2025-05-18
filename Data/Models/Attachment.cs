@@ -10,6 +10,7 @@ public class Attachment
     
     public Feedback Feedback { get; set; } = null!;
     
+    public Attachment() { }
     public Attachment(string filePath, string fileType)
     {
         FilePath = filePath ?? throw new ArgumentNullException(nameof(filePath));

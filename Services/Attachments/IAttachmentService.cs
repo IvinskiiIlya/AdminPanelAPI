@@ -1,8 +1,4 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Services.DTOs.Create;
-using Services.DTOs.Display;
-using Services.DTOs.Update;
+using Services.DTO.Attachment;
 
 namespace Services.Attachments
 {

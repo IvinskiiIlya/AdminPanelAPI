@@ -1,17 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Repositories.Categories;
 using Data.Models;
-using Services.DTOs.Create;
-using Services.DTOs.Display;
-using Services.DTOs.Update;
+using Services.DTO.Category;
 
 namespace Services.Categories
 {
     public class CategoryService : ICategoryService
     {
+        
         private readonly ICategoryRepository _categoryRepository;
 
         public CategoryService(ICategoryRepository categoryRepository)
@@ -25,7 +20,7 @@ namespace Services.Categories
             return categories.Select(c => new DisplayCategoryDto
             {
                 Id = c.Id,
-                CategoryName = c.CategoryName,
+                Name = c.Name,
                 Description = c.Description
             });
         }
@@ -38,7 +33,7 @@ namespace Services.Categories
             return new DisplayCategoryDto
             {
                 Id = category.Id,
-                CategoryName = category.CategoryName,
+                Name = category.Name,
                 Description = category.Description
             };
         }
@@ -47,7 +42,7 @@ namespace Services.Categories
         {
             var category = new Category
             {
-                CategoryName = createCategoryDto.CategoryName,
+                Name = createCategoryDto.Name,
                 Description = createCategoryDto.Description
             };
             
@@ -56,7 +51,7 @@ namespace Services.Categories
             return new DisplayCategoryDto
             {
                 Id = category.Id,
-                CategoryName = category.CategoryName,
+                Name = category.Name,
                 Description = category.Description
             };
         }
@@ -65,11 +60,9 @@ namespace Services.Categories
         {
             var category = await _categoryRepository.GetByIdAsync(id);
             if (category == null)
-            {
-                throw new ArgumentException($"Category with id {id} not found.");
-            }
+                throw new ArgumentException($"Категория с id = {id} не найдена.");
 
-            category.CategoryName = updateCategoryDto.CategoryName!;
+            category.Name = updateCategoryDto.Name!;
             category.Description = updateCategoryDto.Description;
 
             await _categoryRepository.UpdateAsync(category);

@@ -1,17 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Repositories.Attachments;
 using Data.Models;
-using Services.DTOs.Create;
-using Services.DTOs.Display;
-using Services.DTOs.Update;
+using Services.DTO.Attachment;
 
 namespace Services.Attachments
 {
     public class AttachmentService : IAttachmentService
     {
+        
         private readonly IAttachmentRepository _attachmentRepository;
 
         public AttachmentService(IAttachmentRepository attachmentRepository)
@@ -45,7 +40,6 @@ namespace Services.Attachments
             }).ToList();
         }
 
-        // Остальные методы остаются без изменений
         public async Task<DisplayAttachmentDto?> GetAttachmentByIdAsync(int id)
         {
             var attachment = await _attachmentRepository.GetByIdAsync(id);
@@ -87,9 +81,7 @@ namespace Services.Attachments
         {
             var attachment = await _attachmentRepository.GetByIdAsync(updateAttachmentDto.Id);
             if (attachment == null)
-            {
-                throw new ArgumentException($"Attachment with id {updateAttachmentDto.Id} not found.");
-            }
+                throw new ArgumentException($"Вложение с id = {updateAttachmentDto.Id} не найдено.");
 
             attachment.FilePath = updateAttachmentDto.FilePath;
             attachment.FileType = updateAttachmentDto.FileType;

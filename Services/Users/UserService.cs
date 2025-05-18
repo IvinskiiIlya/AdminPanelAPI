@@ -1,17 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Repositories.Users;
 using Data.Models;
-using Services.DTOs.Create;
-using Services.DTOs.Display;
-using Services.DTOs.Update;
+using Services.DTO.User;
 
 namespace Services.Users
 {
     public class UserService : IUserService
     {
+        
         private readonly IUserRepository _userRepository;
 
         public UserService(IUserRepository userRepository)
@@ -25,9 +20,11 @@ namespace Services.Users
             return users.Select(u => new DisplayUserDto
             {
                 Id = u.Id,
-                UserName = u.UserName,
+                Name = u.Name,  
                 Email = u.Email,
-                CreatedAt = u.CreatedAt
+                RoleId = u.RoleId,  
+                CreatedAt = u.CreatedAt,
+                LastLogin = u.LastLogin  
             });
         }
 
@@ -37,29 +34,32 @@ namespace Services.Users
             return user == null ? null : new DisplayUserDto
             {
                 Id = user.Id,
-                UserName = user.UserName,
+                Name = user.Name,  
                 Email = user.Email,
-                CreatedAt = user.CreatedAt
+                RoleId = user.RoleId,  
+                CreatedAt = user.CreatedAt,
+                LastLogin = user.LastLogin  
             };
         }
 
         public async Task<DisplayUserDto> CreateUserAsync(CreateUserDto createUserDto)
         {
-            var user = new User
-            {
-                UserName = createUserDto.UserName,
-                Email = createUserDto.Email,
-                CreatedAt = DateTime.UtcNow
-            };
+            var user = new User(
+                name: createUserDto.Name,  
+                email: createUserDto.Email,
+                roleId: createUserDto.RoleId  
+            );
             
             await _userRepository.AddAsync(user);
             
             return new DisplayUserDto
             {
                 Id = user.Id,
-                UserName = user.UserName,
+                Name = user.Name,  
                 Email = user.Email,
-                CreatedAt = user.CreatedAt
+                RoleId = user.RoleId, 
+                CreatedAt = user.CreatedAt,
+                LastLogin = user.LastLogin  
             };
         }
 
@@ -67,12 +67,13 @@ namespace Services.Users
         {
             var user = await _userRepository.GetByIdAsync(id);
             if (user == null)
-            {
-                throw new ArgumentException($"User with id {id} not found.");
-            }
+                throw new ArgumentException($"Пользователь с id = {id} не найден.");
 
-            user.UserName = updateUserDto.UserName!;
-            user.Email = updateUserDto.Email!;
+            user.Name = updateUserDto.Name ?? user.Name; 
+            user.Email = updateUserDto.Email ?? user.Email;
+            
+            if (updateUserDto.RoleId.HasValue)
+                user.RoleId = updateUserDto.RoleId.Value;
 
             await _userRepository.UpdateAsync(user);
         }
