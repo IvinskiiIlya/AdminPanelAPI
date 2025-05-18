@@ -1,9 +1,6 @@
-using Services;
 using Services.Categories;
-using Services.DTOs.Create;
-using Services.DTOs.Display;
-using Services.DTOs.Update;
 using Microsoft.AspNetCore.Mvc;
+using Services.DTO.Category;
 
 namespace Web.Controllers;
 
@@ -11,6 +8,7 @@ namespace Web.Controllers;
 [Route("api/[controller]")]
 public class CategoryController : ControllerBase
 {
+    
     private readonly ICategoryService _categoryService;
 
     public CategoryController(ICategoryService categoryService)

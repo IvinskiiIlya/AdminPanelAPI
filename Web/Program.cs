@@ -1,21 +1,19 @@
 using Data;
 using Repositories.Users;
-using Repositories.Admins;
 using Repositories.Categories;
 using Repositories.Feedbacks;
-using Repositories.FeedbackCategories;
 using Repositories.Responses;
 using Repositories.Attachments;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Repositories.Roles;
+using Repositories.Statuses;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Добавление сервисов в контейнер DI
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// Настройка Swagger
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
@@ -27,20 +25,17 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// Регистрация БД
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSQL")));
 
-// Регистрация репозиториев
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IFeedbackRepository, FeedbackRepository>();
-builder.Services.AddScoped<IFeedbackCategoryRepository, FeedbackCategoryRepository>();
 builder.Services.AddScoped<IResponseRepository, ResponseRepository>();
 builder.Services.AddScoped<IAttachmentRepository, AttachmentRepository>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IStatusRepository, StatusRepository>();
 
-// Добавление CORS (настройте политику под ваш фронтенд)
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -53,7 +48,6 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Конвейер middleware
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -62,9 +56,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseExceptionHandler("/error");
 app.UseHttpsRedirection();
-app.UseRouting(); // Добавлено явное указание маршрутизации
+app.UseRouting();
 
-app.UseCors("AllowAll"); // Применение политики CORS
+app.UseCors("AllowAll"); 
 
 app.UseAuthentication();
 app.UseAuthorization();

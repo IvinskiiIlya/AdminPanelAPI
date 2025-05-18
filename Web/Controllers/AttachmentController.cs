@@ -1,8 +1,6 @@
-using Services;
 using Services.Attachments;
-using Services.DTOs.Create;
-using Services.DTOs.Display;
 using Microsoft.AspNetCore.Mvc;
+using Services.DTO.Attachment;
 
 namespace Web.Controllers;
 
@@ -10,6 +8,7 @@ namespace Web.Controllers;
 [Route("api/[controller]")]
 public class AttachmentController : ControllerBase
 {
+    
     private readonly IAttachmentService _attachmentService;
 
     public AttachmentController(IAttachmentService attachmentService)

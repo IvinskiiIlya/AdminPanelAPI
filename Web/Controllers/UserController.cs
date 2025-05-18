@@ -1,9 +1,6 @@
-using Services;
-using Services.DTOs.Create;
-using Services.DTOs.Display;
-using Services.DTOs.Update;
 using Services.Users;
 using Microsoft.AspNetCore.Mvc;
+using Services.DTO.User;
 
 namespace Web.Controllers;
 
@@ -11,6 +8,7 @@ namespace Web.Controllers;
 [Route("api/[controller]")]
 public class UserController : ControllerBase
 {
+    
     private readonly IUserService _userService;
 
     public UserController(IUserService userService)

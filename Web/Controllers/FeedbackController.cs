@@ -1,9 +1,6 @@
-using Services;
-using Services.DTOs.Create;
-using Services.DTOs.Display;
-using Services.DTOs.Update;
 using Services.Feedbacks;
 using Microsoft.AspNetCore.Mvc;
+using Services.DTO.Feedback;
 
 namespace Web.Controllers;
 
@@ -11,6 +8,7 @@ namespace Web.Controllers;
 [Route("api/[controller]")]
 public class FeedbackController : ControllerBase
 {
+    
     private readonly IFeedbackService _feedbackService;
 
     public FeedbackController(IFeedbackService feedbackService)

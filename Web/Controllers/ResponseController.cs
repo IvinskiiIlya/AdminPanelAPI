@@ -1,9 +1,6 @@
-using Services;
-using Services.DTOs.Create;
-using Services.DTOs.Display;
-using Services.DTOs.Update;
 using Services.Responses;
 using Microsoft.AspNetCore.Mvc;
+using Services.DTO.Response;
 
 namespace Web.Controllers;
 
@@ -11,6 +8,7 @@ namespace Web.Controllers;
 [Route("api/[controller]")]
 public class ResponseController : ControllerBase
 {
+    
     private readonly IResponseService _responseService;
 
     public ResponseController(IResponseService responseService)
