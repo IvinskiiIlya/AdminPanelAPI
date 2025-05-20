@@ -16,7 +16,7 @@ namespace Repositories.Roles
 
         public async Task<IEnumerable<Role>> GetAllAsync()
         {
-            return await _context.Roles.ToListAsync();
+            return await _context.Set<Role>().ToListAsync();
         }
 
         public async Task<Role> GetByIdAsync(int id)
