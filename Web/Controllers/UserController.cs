@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Services.Users;
 using Microsoft.AspNetCore.Mvc;
+using Services.DTO.Filtration;
 using Services.DTO.User;
 
 namespace Web.Controllers;
@@ -19,10 +20,10 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<DisplayUserDto>>> GetAllUsers()
+    public async Task<IActionResult> GetAllUsers([FromQuery] UserFilterParams filters)
     {
-        var users = await _userService.GetAllUsersAsync();
-        return Ok(users.ToList());
+        var response = await _userService.GetAllUsersAsync(filters);
+        return Ok(response);
     }
 
     [HttpGet("{id}")]

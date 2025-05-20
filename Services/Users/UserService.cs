@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Data.Models;
 using Microsoft.EntityFrameworkCore;
+using Services.DTO.Filtration;
+using Services.DTO.Pagination;
 using Services.DTO.User;
 
 namespace Services.Users
@@ -15,17 +17,50 @@ namespace Services.Users
             _userManager = userManager;
         }
 
-        public async Task<IEnumerable<DisplayUserDto>> GetAllUsersAsync()
+        public async Task<PagedResponse<DisplayUserDto>> GetAllUsersAsync(UserFilterParams filters)
         {
-            var users = await _userManager.Users.ToListAsync();
-            return users.Select(u => new DisplayUserDto
+            var query = _userManager.Users.AsQueryable();
+            
+            if (!string.IsNullOrEmpty(filters.SearchTerm))
+                query = query.Where(u => 
+                    u.Name.Contains(filters.SearchTerm) ||
+                    u.Email.Contains(filters.SearchTerm) ||
+                    u.Id.ToString().Contains(filters.SearchTerm)
+                );
+            else
+            {
+                if (!string.IsNullOrEmpty(filters.Name))
+                    query = query.Where(u => u.Name.Contains(filters.Name));
+                if (!string.IsNullOrEmpty(filters.Email))
+                    query = query.Where(u => u.Email.Contains(filters.Email));
+            }
+            if (filters.CreatedFrom.HasValue)
+                query = query.Where(u => u.CreatedAt >= filters.CreatedFrom);
+            if (filters.CreatedTo.HasValue)
+                query = query.Where(u => u.CreatedAt <= filters.CreatedTo);
+
+            var totalRecords = await query.CountAsync();
+            var users = await query
+                .OrderBy(u => u.Id)
+                .Skip((filters.PageNumber - 1) * filters.PageSize)
+                .Take(filters.PageSize)
+                .ToListAsync();
+
+            var userDtos = users.Select(u => new DisplayUserDto
             {
                 Id = u.Id,
                 Name = u.Name,
                 Email = u.Email,
                 CreatedAt = u.CreatedAt,
                 LastLogin = u.LastLogin
-            });
+            }).ToList();
+            
+            return new PagedResponse<DisplayUserDto>(
+                userDtos,
+                filters.PageNumber,
+                filters.PageSize,
+                totalRecords
+            );
         }
 
         public async Task<DisplayUserDto?> GetUserByIdAsync(int id)
