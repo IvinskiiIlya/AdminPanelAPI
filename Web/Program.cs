@@ -3,7 +3,6 @@ using Data;
 using Data.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Repositories.Users;
 using Repositories.Categories;
 using Repositories.Feedbacks;
 using Repositories.Responses;
@@ -11,7 +10,6 @@ using Repositories.Attachments;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Repositories.Roles;
 using Repositories.Statuses;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -57,12 +55,10 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSQL")));
 
-builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IFeedbackRepository, FeedbackRepository>();
 builder.Services.AddScoped<IResponseRepository, ResponseRepository>();
 builder.Services.AddScoped<IAttachmentRepository, AttachmentRepository>();
-builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IStatusRepository, StatusRepository>();
 
 builder.Services.AddCors(options =>
