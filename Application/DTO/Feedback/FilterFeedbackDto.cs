@@ -1,0 +1,11 @@
+namespace Application.DTO.Feedback;
+
+public class FilterFeedbackDto : PaginationParams
+{
+    public int? UserId { get; set; }
+    public int? CategoryId { get; set; }
+    public int? StatusId { get; set; }
+    public string? Message { get; set; }
+    public DateTime? CreatedFrom { get; set; }
+    public DateTime? CreatedTo { get; set; }
+}
