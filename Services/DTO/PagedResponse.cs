@@ -1,4 +1,4 @@
-namespace Services.DTO.Pagination;
+namespace Services.DTO;
 
 public class PagedResponse<T>
 {

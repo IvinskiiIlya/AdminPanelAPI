@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Data.Models;
 using Microsoft.EntityFrameworkCore;
-using Services.DTO.Filtration;
-using Services.DTO.Pagination;
+using Services.DTO;
 using Services.DTO.User;
 
 namespace Services.Users
@@ -17,7 +16,7 @@ namespace Services.Users
             _userManager = userManager;
         }
 
-        public async Task<PagedResponse<DisplayUserDto>> GetAllUsersAsync(UserFilterParams filters)
+        public async Task<PagedResponse<DisplayUserDto>> GetAllUsersAsync(FilterUserDto filters)
         {
             var query = _userManager.Users.AsQueryable();
             
