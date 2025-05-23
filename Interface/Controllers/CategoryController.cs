@@ -1,3 +1,4 @@
+using Application.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Application.DTO.Category;
@@ -6,9 +7,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace Interface.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
 public class CategoryController : ControllerBase
 {
     
@@ -22,18 +23,19 @@ public class CategoryController : ControllerBase
     /// <summary>
     /// Получить список всех категорий
     /// </summary>
+    /// <param name="filters">Параметры фильтрации категорий</param>
     /// <returns>Список категорий</returns>
     [HttpGet]
     [SwaggerOperation(
         Summary = "Получить все категории",
         Description = "Возвращает полный список категорий."
     )]
-    [SwaggerResponse(200, "Список категорий успешно получен", typeof(List<DisplayCategoryDto>))]
+    [SwaggerResponse(200, "Список категорий успешно получен", typeof(PagedResponse<DisplayCategoryDto>))]
     [SwaggerResponse(401, "Пользователь не авторизован")]
-    public async Task<ActionResult<List<DisplayCategoryDto>>> GetAllCategories()
+    public async Task<ActionResult<PagedResponse<DisplayCategoryDto>>> GetAllCategories([FromQuery] FilterCategoryDto filters)
     {
-        var categories = await _categoryService.GetAllCategoriesAsync();
-        return Ok(categories.ToList());
+        var categories = await _categoryService.GetAllCategoriesAsync(filters);
+        return Ok(categories);
     }
 
     /// <summary>

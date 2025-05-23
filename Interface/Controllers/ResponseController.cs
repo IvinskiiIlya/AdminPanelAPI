@@ -1,3 +1,4 @@
+using Application.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -6,9 +7,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace Interface.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
 public class ResponseController : ControllerBase
 {
     
@@ -17,6 +18,43 @@ public class ResponseController : ControllerBase
     public ResponseController(IResponseService responseService)
     {
         _responseService = responseService;
+    }
+    
+    /// <summary>
+    /// Получить все ответы с возможностью фильтрации
+    /// </summary>
+    /// <param name="filters">Параметры фильтрации ответов</param>
+    /// <returns>Список ответов</returns>
+    [HttpGet]
+    [SwaggerOperation(
+        Summary = "Получить все ответы",
+        Description = "Возвращает список всех ответов с применением фильтров."
+    )]
+    [SwaggerResponse(200, "Список ответов успешно получен", typeof(PagedResponse<DisplayResponseDto>))]
+    [SwaggerResponse(401, "Пользователь не авторизован")]
+    public async Task<ActionResult<PagedResponse<DisplayResponseDto>>> GetAllResponses([FromQuery] FilterResponseDto filters)
+    {
+        var responses = await _responseService.GetAllResponsesAsync(filters);
+        return Ok(responses);
+    }
+    
+    /// <summary>
+    /// Получить ответ по идентификатору
+    /// </summary>
+    /// <param name="id">Идентификатор ответа</param>
+    /// <returns>Ответ с указанным идентификатором</returns>
+    [HttpGet("{id}")]
+    [SwaggerOperation(
+        Summary = "Получить ответ по ID",
+        Description = "Возвращает ответ по указанному идентификатору."
+    )]
+    [SwaggerResponse(200, "Ответ успешно получен", typeof(DisplayResponseDto))]
+    [SwaggerResponse(401, "Пользователь не авторизован")]
+    [SwaggerResponse(404, "Ответ не найден")]
+    public async Task<ActionResult<DisplayResponseDto>> GetResponseById(int id)
+    {
+        var response = await _responseService.GetResponseByIdAsync(id);
+        return response == null ? NotFound() : Ok(response);
     }
 
     /// <summary>

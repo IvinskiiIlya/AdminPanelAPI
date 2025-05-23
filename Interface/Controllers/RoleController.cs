@@ -1,3 +1,4 @@
+using Application.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Application.Interfaces;
@@ -6,9 +7,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace Interface.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
 public class RoleController : ControllerBase
 {
     
@@ -22,18 +23,19 @@ public class RoleController : ControllerBase
     /// <summary>
     /// Получить список всех ролей
     /// </summary>
+    /// <param name="filters">Параметры фильтрации ролей</param>
     /// <returns>Список ролей</returns>
     [HttpGet]
     [SwaggerOperation(
         Summary = "Получить все роли",
         Description = "Возвращает полный список всех ролей."
     )]
-    [SwaggerResponse(200, "Список ролей успешно получен", typeof(List<DisplayRoleDto>))]
+    [SwaggerResponse(200, "Список ролей успешно получен", typeof(PagedResponse<DisplayRoleDto>))]
     [SwaggerResponse(401, "Пользователь не авторизован")]
-    public async Task<ActionResult<List<DisplayRoleDto>>> GetAllRoles()
+    public async Task<ActionResult<PagedResponse<DisplayRoleDto>>> GetAllRoles([FromQuery] FilterRoleDto filters)
     {
-        var roles = await _roleService.GetAllRolesAsync();
-        return Ok(roles.ToList());
+        var roles = await _roleService.GetAllRolesAsync(filters);
+        return Ok(roles);
     }
 
     /// <summary>

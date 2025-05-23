@@ -1,3 +1,4 @@
+using Application.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Application.DTO.Feedback;
@@ -6,9 +7,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace Interface.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
 public class FeedbackController : ControllerBase
 {
     
@@ -22,18 +23,19 @@ public class FeedbackController : ControllerBase
     /// <summary>
     /// Получить список всех отзывов
     /// </summary>
+    /// <param name="filters">Параметры фильтрации отзывов</param>
     /// <returns>Список отзывов</returns>
     [HttpGet]
     [SwaggerOperation(
         Summary = "Получить все отзывы",
         Description = "Возвращает полный список всех отзывов."
     )]
-    [SwaggerResponse(200, "Список отзывов успешно получен", typeof(List<DisplayFeedbackDto>))]
+    [SwaggerResponse(200, "Список отзывов успешно получен", typeof(PagedResponse<DisplayFeedbackDto>))]
     [SwaggerResponse(401, "Пользователь не авторизован")]
-    public async Task<ActionResult<List<DisplayFeedbackDto>>> GetAllFeedbacks()
+    public async Task<ActionResult<PagedResponse<DisplayFeedbackDto>>> GetAllFeedbacks([FromQuery] FilterFeedbackDto filters)
     {
-        var feedbacks = await _feedbackService.GetAllFeedbacksAsync();
-        return Ok(feedbacks.ToList());
+        var feedbacks = await _feedbackService.GetAllFeedbacksAsync(filters);
+        return Ok(feedbacks);
     }
 
     /// <summary>

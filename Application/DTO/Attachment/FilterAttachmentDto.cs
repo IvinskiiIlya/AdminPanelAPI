@@ -6,4 +6,5 @@ public class FilterAttachmentDto : PaginationParams
     public string? FileType { get; set; }
     public DateTime? CreatedFrom { get; set; }
     public DateTime? CreatedTo { get; set; }
+    public string? SearchTerm { get; set; }
 }

@@ -1,3 +1,4 @@
+using Application.DTO;
 using Application.DTO.Category;
 using Application.Interfaces;
 using Domain.Interfaces;
@@ -15,17 +16,41 @@ namespace Application.Services
             _categoryRepository = categoryRepository;
         }
 
-        public async Task<IEnumerable<DisplayCategoryDto>> GetAllCategoriesAsync()
+        public async Task<PagedResponse<DisplayCategoryDto>> GetAllCategoriesAsync(FilterCategoryDto filters)
         {
             var categories = await _categoryRepository.GetAllAsync();
-            return categories.Select(c => new DisplayCategoryDto
+            var filtered = categories.AsQueryable();
+
+            if (!string.IsNullOrEmpty(filters.SearchTerm))
+                filtered = filtered.Where(c => c.Name.Contains(filters.SearchTerm));
+            else if (!string.IsNullOrEmpty(filters.Name))
+            {
+                filtered = filtered.Where(c => c.Name.Contains(filters.Name));
+            }
+
+            var totalRecords = filtered.Count();
+
+            var paged = filtered
+                .OrderBy(c => c.Id)
+                .Skip((filters.PageNumber - 1) * filters.PageSize)
+                .Take(filters.PageSize)
+                .ToList();
+
+            var dtos = paged.Select(c => new DisplayCategoryDto
             {
                 Id = c.Id,
                 Name = c.Name,
                 Description = c.Description
-            });
-        }
+            }).ToList();
 
+            return new PagedResponse<DisplayCategoryDto>(
+                dtos,
+                filters.PageNumber,
+                filters.PageSize,
+                totalRecords
+            );
+        }
+        
         public async Task<DisplayCategoryDto?> GetCategoryByIdAsync(int id)
         {
             var category = await _categoryRepository.GetByIdAsync(id);

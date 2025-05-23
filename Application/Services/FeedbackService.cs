@@ -1,3 +1,4 @@
+using Application.DTO;
 using Application.DTO.Feedback;
 using Application.Interfaces;
 using Domain.Interfaces;
@@ -15,20 +16,54 @@ namespace Application.Services
             _feedbackRepository = feedbackRepository;
         }
 
-        public async Task<IEnumerable<DisplayFeedbackDto>> GetAllFeedbacksAsync()
+        public async Task<PagedResponse<DisplayFeedbackDto>> GetAllFeedbacksAsync(FilterFeedbackDto filters)
         {
             var feedbacks = await _feedbackRepository.GetAllAsync();
-            return feedbacks.Select(f => new DisplayFeedbackDto
+            var filtered = feedbacks.AsQueryable();
+
+            if (!string.IsNullOrEmpty(filters.SearchTerm))
+                filtered = filtered.Where(f => f.Message.Contains(filters.SearchTerm));
+            else
+            {
+                if (!string.IsNullOrEmpty(filters.Message))
+                    filtered = filtered.Where(f => f.Message.Contains(filters.Message));
+
+                if (filters.StatusId.HasValue)
+                    filtered = filtered.Where(f => f.StatusId == filters.StatusId.Value);
+
+                if (filters.CategoryId.HasValue)
+                    filtered = filtered.Where(f => f.CategoryId == filters.CategoryId.Value);
+
+                if (filters.UserId.HasValue)
+                    filtered = filtered.Where(f => f.UserId == filters.UserId.Value);
+            }
+
+            var totalRecords = filtered.Count();
+
+            var paged = filtered
+                .OrderBy(f => f.Id)
+                .Skip((filters.PageNumber - 1) * filters.PageSize)
+                .Take(filters.PageSize)
+                .ToList();
+
+            var dtos = paged.Select(f => new DisplayFeedbackDto
             {
                 Id = f.Id,
                 Message = f.Message,
-                StatusId = f.StatusId, 
-                CategoryId = f.CategoryId, 
+                StatusId = f.StatusId,
+                CategoryId = f.CategoryId,
                 UserId = f.UserId,
                 CreatedAt = f.CreatedAt
-            });
-        }
+            }).ToList();
 
+            return new PagedResponse<DisplayFeedbackDto>(
+                dtos,
+                filters.PageNumber,
+                filters.PageSize,
+                totalRecords
+            );
+        }
+        
         public async Task<DisplayFeedbackDto?> GetFeedbackByIdAsync(int id)
         {
             var feedback = await _feedbackRepository.GetByIdAsync(id);

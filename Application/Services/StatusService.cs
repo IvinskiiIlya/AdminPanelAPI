@@ -1,3 +1,4 @@
+using Application.DTO;
 using Application.DTO.Status;
 using Application.Interfaces;
 using Domain.Interfaces;
@@ -15,16 +16,39 @@ namespace Application.Services
             _statusRepository = statusRepository;
         }
 
-        public async Task<IEnumerable<DisplayStatusDto>> GetAllStatusesAsync()
+        public async Task<PagedResponse<DisplayStatusDto>> GetAllStatusesAsync(FilterStatusDto filters)
         {
             var statuses = await _statusRepository.GetAllAsync();
-            return statuses.Select(s => new DisplayStatusDto
+            var filtered = statuses.AsQueryable();
+
+            if (!string.IsNullOrEmpty(filters.SearchTerm))
+                filtered = filtered.Where(s => s.Name.Contains(filters.SearchTerm));
+            else
+                if (!string.IsNullOrEmpty(filters.Name))
+                    filtered = filtered.Where(s => s.Name.Contains(filters.Name));
+
+            var totalRecords = filtered.Count();
+
+            var paged = filtered
+                .OrderBy(s => s.Id)
+                .Skip((filters.PageNumber - 1) * filters.PageSize)
+                .Take(filters.PageSize)
+                .ToList();
+
+            var dtos = paged.Select(s => new DisplayStatusDto
             {
                 Id = s.Id,
                 Name = s.Name
-            });
-        }
+            }).ToList();
 
+            return new PagedResponse<DisplayStatusDto>(
+                dtos,
+                filters.PageNumber,
+                filters.PageSize,
+                totalRecords
+            );
+        }
+        
         public async Task<DisplayStatusDto?> GetStatusByIdAsync(int id)
         {
             var status = await _statusRepository.GetByIdAsync(id);

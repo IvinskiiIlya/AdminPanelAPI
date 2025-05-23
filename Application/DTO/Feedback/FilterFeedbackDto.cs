@@ -8,4 +8,5 @@ public class FilterFeedbackDto : PaginationParams
     public string? Message { get; set; }
     public DateTime? CreatedFrom { get; set; }
     public DateTime? CreatedTo { get; set; }
+    public string? SearchTerm { get; set; }
 }

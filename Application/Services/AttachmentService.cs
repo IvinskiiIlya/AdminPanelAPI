@@ -1,3 +1,4 @@
+using Application.DTO;
 using Application.DTO.Attachment;
 using Application.Interfaces;
 using Domain.Interfaces;
@@ -15,23 +16,26 @@ namespace Application.Services
             _attachmentRepository = attachmentRepository;
         }
 
-        public async Task<IEnumerable<DisplayAttachmentDto>> GetAllAttachmentsAsync()
+        public async Task<PagedResponse<DisplayAttachmentDto>> GetAllAttachmentsAsync(FilterAttachmentDto filters)
         {
             var attachments = await _attachmentRepository.GetAllAsync();
-            return attachments.Select(a => new DisplayAttachmentDto
-            {
-                Id = a.Id,
-                FeedbackId = a.FeedbackId,
-                FilePath = a.FilePath,
-                FileType = a.FileType,
-                CreatedAt = a.CreatedAt
-            });
-        }
+            var filtered = attachments.AsQueryable();
+            
+            if (filters.FeedbackId.HasValue)
+                filtered = filtered.Where(a => a.FeedbackId == filters.FeedbackId.Value);
 
-        public async Task<List<DisplayAttachmentDto>> GetAttachmentsByFeedbackAsync(int feedbackId)
-        {
-            var attachments = await _attachmentRepository.GetByFeedbackIdAsync(feedbackId);
-            return attachments.Select(a => new DisplayAttachmentDto
+            if (!string.IsNullOrEmpty(filters.FileType))
+                filtered = filtered.Where(a => a.FileType.Contains(filters.FileType));
+
+            var totalRecords = filtered.Count();
+
+            var paged = filtered
+                .OrderBy(a => a.Id)
+                .Skip((filters.PageNumber - 1) * filters.PageSize)
+                .Take(filters.PageSize)
+                .ToList();
+
+            var dtos = paged.Select(a => new DisplayAttachmentDto
             {
                 Id = a.Id,
                 FeedbackId = a.FeedbackId,
@@ -39,8 +43,15 @@ namespace Application.Services
                 FileType = a.FileType,
                 CreatedAt = a.CreatedAt
             }).ToList();
-        }
 
+            return new PagedResponse<DisplayAttachmentDto>(
+                dtos,
+                filters.PageNumber,
+                filters.PageSize,
+                totalRecords
+            );
+        }
+        
         public async Task<DisplayAttachmentDto?> GetAttachmentByIdAsync(int id)
         {
             var attachment = await _attachmentRepository.GetByIdAsync(id);
@@ -54,6 +65,19 @@ namespace Application.Services
                 FileType = attachment.FileType,
                 CreatedAt = attachment.CreatedAt
             };
+        }
+        
+        public async Task<List<DisplayAttachmentDto>> GetAttachmentsByFeedbackAsync(int feedbackId)
+        {
+            var attachments = await _attachmentRepository.GetByFeedbackIdAsync(feedbackId);
+            return attachments.Select(a => new DisplayAttachmentDto
+            {
+                Id = a.Id,
+                FeedbackId = a.FeedbackId,
+                FilePath = a.FilePath,
+                FileType = a.FileType,
+                CreatedAt = a.CreatedAt
+            }).ToList();
         }
 
         public async Task<DisplayAttachmentDto> CreateAttachmentAsync(CreateAttachmentDto createAttachmentDto)

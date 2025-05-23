@@ -1,3 +1,4 @@
+using Application.DTO;
 using Application.DTO.Role;
 using Application.Interfaces;
 using Microsoft.AspNetCore.Identity;
@@ -16,14 +17,38 @@ namespace Application.Services
             _roleManager = roleManager;
         }
 
-        public async Task<IEnumerable<DisplayRoleDto>> GetAllRolesAsync()
+        public async Task<PagedResponse<DisplayRoleDto>> GetAllRolesAsync(FilterRoleDto filters)
         {
             var roles = await _roleManager.Roles.ToListAsync();
-            return roles.Select(r => new DisplayRoleDto
+            var filtered = roles.AsQueryable();
+
+            if (!string.IsNullOrEmpty(filters.SearchTerm))
+                filtered = filtered.Where(r => r.Name.Contains(filters.SearchTerm, StringComparison.OrdinalIgnoreCase));
+            else
+                if (!string.IsNullOrEmpty(filters.Name))
+                    filtered = filtered.Where(r => r.Name.Contains(filters.Name, StringComparison.OrdinalIgnoreCase));
+
+
+            var totalRecords = filtered.Count();
+
+            var paged = filtered
+                .OrderBy(r => r.Id)
+                .Skip((filters.PageNumber - 1) * filters.PageSize)
+                .Take(filters.PageSize)
+                .ToList();
+
+            var roleDtos = paged.Select(r => new DisplayRoleDto
             {
                 Id = r.Id,
                 Name = r.Name
-            });
+            }).ToList();
+
+            return new PagedResponse<DisplayRoleDto>(
+                roleDtos,
+                filters.PageNumber,
+                filters.PageSize,
+                totalRecords
+            );
         }
 
         public async Task<DisplayRoleDto?> GetRoleByIdAsync(int id)

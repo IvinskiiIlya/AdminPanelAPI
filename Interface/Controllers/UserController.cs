@@ -6,9 +6,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace Interface.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
 public class UserController : ControllerBase
 {
     
@@ -22,7 +22,7 @@ public class UserController : ControllerBase
     /// <summary>
     /// Получить список пользователей с фильтрацией
     /// </summary>
-    /// <param name="filters">Параметры фильтрации</param>
+    /// <param name="filters">Параметры фильтрации пользователей</param>
     /// <returns>Отфильтрованный список пользователей</returns>
     [HttpGet]
     [SwaggerOperation(
@@ -33,8 +33,8 @@ public class UserController : ControllerBase
     [SwaggerResponse(401, "Пользователь не авторизован")]
     public async Task<IActionResult> GetAllUsers([FromQuery] FilterUserDto filters)
     {
-        var response = await _userService.GetAllUsersAsync(filters);
-        return Ok(response);
+        var users = await _userService.GetAllUsersAsync(filters);
+        return Ok(users);
     }
 
     /// <summary>

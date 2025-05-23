@@ -1,3 +1,4 @@
+using Application.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Application.Interfaces;
@@ -6,9 +7,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace Interface.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
 public class StatusController : ControllerBase
 {
     
@@ -22,18 +23,19 @@ public class StatusController : ControllerBase
     /// <summary>
     /// Получить список всех статусов
     /// </summary>
+    /// <param name="filters">Параметры фильтрации статусов</param>
     /// <returns>Список статусов</returns>
     [HttpGet]
     [SwaggerOperation(
         Summary = "Получить все статусы",
         Description = "Возвращает полный список всех статусов."
     )]
-    [SwaggerResponse(200, "Список статусов успешно получен", typeof(List<DisplayStatusDto>))]
+    [SwaggerResponse(200, "Список статусов успешно получен", typeof(PagedResponse<DisplayStatusDto>))]
     [SwaggerResponse(401, "Пользователь не авторизован")]
-    public async Task<ActionResult<List<DisplayStatusDto>>> GetAllStatuses()
+    public async Task<ActionResult<PagedResponse<DisplayStatusDto>>> GetAllStatuses([FromQuery] FilterStatusDto filters)
     {
-        var statuses = await _statusService.GetAllStatusesAsync();
-        return Ok(statuses.ToList());
+        var statuses = await _statusService.GetAllStatusesAsync(filters);
+        return Ok(statuses);
     }
 
     /// <summary>
