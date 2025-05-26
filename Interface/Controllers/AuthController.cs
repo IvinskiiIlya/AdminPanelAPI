@@ -18,9 +18,7 @@ public class AuthController : ControllerBase
     private readonly UserManager<User> _userManager;
     private readonly IConfiguration _configuration;
 
-    public AuthController(
-        UserManager<User> userManager, 
-        IConfiguration configuration)
+    public AuthController(UserManager<User> userManager, IConfiguration configuration)
     {
         _userManager = userManager;
         _configuration = configuration;
