@@ -62,7 +62,7 @@ public class ResponseController : ControllerBase
     /// </summary>
     /// <param name="feedbackId">Идентификатор отзыва</param>
     /// <returns>Список ответов</returns>
-    [HttpGet("{feedbackId}")]
+    [HttpGet("by-feedback/{feedbackId}")]
     [SwaggerOperation(
         Summary = "Получить ответы по отзыву",
         Description = "Возвращает список всех ответов, связанных с указанным отзывом."
@@ -114,6 +114,8 @@ public class ResponseController : ControllerBase
     [SwaggerResponse(404, "Ответ не найден")]
     public async Task<ActionResult> UpdateResponse(int id, [FromBody] UpdateResponseDto dto)
     {
+        if (id != dto.Id)
+            return BadRequest("Идентификаторы не совпадают.");
         await _responseService.UpdateResponseAsync(id, dto);
         return NoContent();
     }

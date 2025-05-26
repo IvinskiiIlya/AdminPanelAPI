@@ -113,6 +113,7 @@ namespace Application.Services
                 feedback.StatusId = updateFeedbackDto.StatusId.Value;
             if (updateFeedbackDto.CategoryId.HasValue)
                 feedback.CategoryId = updateFeedbackDto.CategoryId.Value;
+            feedback.CreatedAt = DateTime.SpecifyKind(feedback.CreatedAt, DateTimeKind.Utc);
 
             await _feedbackRepository.UpdateAsync(feedback);
         }

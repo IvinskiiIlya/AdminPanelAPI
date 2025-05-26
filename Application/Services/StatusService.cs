@@ -59,11 +59,12 @@ namespace Application.Services
             };
         }
 
-        public async Task<DisplayStatusDto> CreateStatusAsync(string name)
+        public async Task<DisplayStatusDto> CreateStatusAsync(CreateStatusDto createStatusDto)
         {
             var status = new Status
             {
-                Name = name ?? "Новый" 
+                Id = createStatusDto.Id,
+                Name = createStatusDto.Name ?? "Новый" 
             };
             
             await _statusRepository.AddAsync(status);
@@ -75,13 +76,13 @@ namespace Application.Services
             };
         }
 
-        public async Task UpdateStatusAsync(int id, string name)
+        public async Task UpdateStatusAsync(int id, UpdateStatusDto updateStatusDto) 
         {
             var status = await _statusRepository.GetByIdAsync(id);
             if (status == null)
                 throw new ArgumentException($"Статус с id = {id} не найден.");
 
-            status.Name = string.IsNullOrWhiteSpace(name) ? "Новый" : name;
+            status.Name = string.IsNullOrWhiteSpace(updateStatusDto.Name) ? "Новый" : updateStatusDto.Name;
             await _statusRepository.UpdateAsync(status);
         }
 

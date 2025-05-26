@@ -91,6 +91,8 @@ public class UserController : ControllerBase
     [SwaggerResponse(404, "Пользователь не найден")]
     public async Task<ActionResult> UpdateUser(int id, [FromBody] UpdateUserDto dto)
     {
+        if (id != dto.Id)
+            return BadRequest("Идентификаторы не совпадают.");
         await _userService.UpdateUserAsync(id, dto);
         return NoContent();
     }

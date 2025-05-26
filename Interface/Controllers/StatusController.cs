@@ -70,10 +70,10 @@ public class StatusController : ControllerBase
     [SwaggerResponse(201, "Статус успешно создан", typeof(DisplayStatusDto))]
     [SwaggerResponse(400, "Некорректные данные запроса")]
     [SwaggerResponse(401, "Пользователь не авторизован")]
-    public async Task<ActionResult<DisplayStatusDto>> CreateStatus([FromBody] string name)
+    public async Task<ActionResult<DisplayStatusDto>> CreateStatus([FromBody] CreateStatusDto dto)
     {
-        var status = await _statusService.CreateStatusAsync(name);
-        return CreatedAtAction(nameof(GetStatusById), new { id = status.Id }, status);
+        var status = await _statusService.CreateStatusAsync(dto);
+        return CreatedAtAction(nameof(GetAllStatuses), status);
     }
 
     /// <summary>
@@ -90,9 +90,12 @@ public class StatusController : ControllerBase
     [SwaggerResponse(400, "Некорректные данные запроса")]
     [SwaggerResponse(401, "Пользователь не авторизован")]
     [SwaggerResponse(404, "Статус не найден")]
-    public async Task<ActionResult> UpdateStatus(int id, [FromBody] string name)
+    public async Task<ActionResult> UpdateStatus(int id, [FromBody] UpdateStatusDto dto)
     {
-        await _statusService.UpdateStatusAsync(id, name);
+        if (id != dto.Id)
+            return BadRequest("Идентификаторы не совпадают.");
+        
+        await _statusService.UpdateStatusAsync(id, dto);
         return NoContent();
     }
 

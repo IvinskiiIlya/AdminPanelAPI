@@ -73,6 +73,8 @@ public class CategoryController : ControllerBase
     [SwaggerResponse(404, "Категория не найдена")]
     public async Task<ActionResult> UpdateCategory(int id, [FromBody] UpdateCategoryDto dto)
     {
+        if (id != dto.Id)
+            return BadRequest("Идентификаторы не совпадают.");
         await _categoryService.UpdateCategoryAsync(id, dto);
         return NoContent();
     }

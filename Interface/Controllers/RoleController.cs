@@ -90,9 +90,11 @@ public class RoleController : ControllerBase
     [SwaggerResponse(400, "Некорректные данные запроса")]
     [SwaggerResponse(401, "Пользователь не авторизован")]
     [SwaggerResponse(404, "Роль не найдена")]
-    public async Task<ActionResult> UpdateRole(int id, [FromBody] string name)
+    public async Task<ActionResult> UpdateRole(int id, [FromBody] UpdateRoleDto dto)
     {
-        await _roleService.UpdateRoleAsync(id, name);
+        if (id != dto.Id)
+            return BadRequest("Идентификаторы не совпадают.");
+        await _roleService.UpdateRoleAsync(id, dto);
         return NoContent();
     }
 

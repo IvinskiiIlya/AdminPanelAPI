@@ -78,13 +78,13 @@ namespace Application.Services
             };
         }
 
-        public async Task UpdateRoleAsync(int id, string name)
+        public async Task UpdateRoleAsync(int id, UpdateRoleDto updateRoleDto)
         {
             var role = await _roleManager.FindByIdAsync(id.ToString());
             if (role == null)
                 throw new ArgumentException($"Роль с id = {id} не найдена.");
 
-            role.Name = name;
+            role.Name = updateRoleDto.Name;
             var result = await _roleManager.UpdateAsync(role);
 
             if (!result.Succeeded)

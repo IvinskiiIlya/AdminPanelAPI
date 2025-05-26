@@ -8,7 +8,7 @@ namespace Application.Interfaces
         Task<PagedResponse<DisplayRoleDto>> GetAllRolesAsync(FilterRoleDto filters);
         Task<DisplayRoleDto?> GetRoleByIdAsync(int id);
         Task<DisplayRoleDto> CreateRoleAsync(string name);
-        Task UpdateRoleAsync(int id, string name);
+        Task UpdateRoleAsync(int id, UpdateRoleDto updateRoleDto);
         Task DeleteRoleAsync(int id);
     }
 }

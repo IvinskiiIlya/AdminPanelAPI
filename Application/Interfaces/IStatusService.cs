@@ -7,8 +7,8 @@ namespace Application.Interfaces
     {
         Task<PagedResponse<DisplayStatusDto>> GetAllStatusesAsync(FilterStatusDto filters);
         Task<DisplayStatusDto?> GetStatusByIdAsync(int id);
-        Task<DisplayStatusDto> CreateStatusAsync(string name);
-        Task UpdateStatusAsync(int id, string name);
+        Task<DisplayStatusDto> CreateStatusAsync(CreateStatusDto createStatusDto);
+        Task UpdateStatusAsync(int id, UpdateStatusDto updateStatusDto);
         Task DeleteStatusAsync(int id);
     }
 }

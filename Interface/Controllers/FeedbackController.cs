@@ -92,6 +92,8 @@ public class FeedbackController : ControllerBase
     [SwaggerResponse(404, "Отзыв не найден")]
     public async Task<ActionResult> UpdateFeedback(int id, [FromBody] UpdateFeedbackDto dto)
     {
+        if (id != dto.Id)
+            return BadRequest("Идентификаторы не совпадают.");
         await _feedbackService.UpdateFeedbackAsync(id, dto);
         return NoContent();
     }

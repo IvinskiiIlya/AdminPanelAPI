@@ -19,7 +19,7 @@ namespace Infrastructure.Repositories
             return await _context.Statuses.ToListAsync();
         }
 
-        public async Task<Status> GetByIdAsync(int id)
+        public async Task<Status?> GetByIdAsync(int id)
         {
             return await _context.Statuses.FindAsync(id);
         }

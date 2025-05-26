@@ -112,7 +112,6 @@ public class AttachmentController : ControllerBase
     {
         if (id != dto.Id)
             return BadRequest("Идентификаторы не совпадают.");
-
         await _attachmentService.UpdateAttachmentAsync(dto);
         return NoContent();
     }

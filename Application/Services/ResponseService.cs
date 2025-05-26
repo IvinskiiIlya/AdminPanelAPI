@@ -114,6 +114,7 @@ namespace Application.Services
                 throw new ArgumentException($"Ответ с id = {id} не найден.");
 
             response.Message = updateResponseDto.Message ?? response.Message;  
+            response.CreatedAt = DateTime.SpecifyKind(response.CreatedAt, DateTimeKind.Utc);
 
             await _responseRepository.UpdateAsync(response);
         }
