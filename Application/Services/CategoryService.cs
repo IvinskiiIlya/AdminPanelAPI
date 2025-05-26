@@ -68,6 +68,7 @@ namespace Application.Services
         {
             var category = new Category
             {
+                Id = createCategoryDto.Id,
                 Name = createCategoryDto.Name,
                 Description = createCategoryDto.Description
             };

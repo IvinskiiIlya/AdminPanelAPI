@@ -1,4 +1,6 @@
 using System.Text;
+using Application.Interfaces;
+using Application.Services;
 using Domain.Models;
 using Infrastructure;
 using Domain.Interfaces;
@@ -48,6 +50,14 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
+
+builder.Services.AddScoped<IAttachmentService, AttachmentService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IFeedbackService, FeedbackService>();
+builder.Services.AddScoped<IResponseService, ResponseService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IStatusService, StatusService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSQL")));

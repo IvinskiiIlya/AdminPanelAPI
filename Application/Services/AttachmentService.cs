@@ -108,9 +108,11 @@ namespace Application.Services
             if (attachment == null)
                 throw new ArgumentException($"Вложение с id = {updateAttachmentDto.Id} не найдено.");
 
+            attachment.FeedbackId = updateAttachmentDto.FeedbackId;
             attachment.FilePath = updateAttachmentDto.FilePath;
             attachment.FileType = updateAttachmentDto.FileType;
-
+            attachment.CreatedAt = DateTime.SpecifyKind(attachment.CreatedAt, DateTimeKind.Utc);
+            
             await _attachmentRepository.UpdateAsync(attachment);
         }
 
