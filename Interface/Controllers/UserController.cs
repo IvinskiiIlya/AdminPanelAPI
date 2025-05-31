@@ -85,7 +85,6 @@ public class UserController : ControllerBase
     /// <param name="id">Идентификатор пользователя</param>
     /// <param name="dto">Данные для обновления</param>
     [HttpPut("{id}")]
-    [Authorize(Roles = "Администратор")]
     [SwaggerOperation(
         Summary = "Обновить пользователя",
         Description = "Обновляет информацию о существующем пользователе"
@@ -107,7 +106,6 @@ public class UserController : ControllerBase
     /// </summary>
     /// <param name="id">Идентификатор пользователя</param>
     [HttpDelete("{id}")]
-    [Authorize(Roles = "Администратор")]
     [SwaggerOperation(
         Summary = "Удалить пользователя",
         Description = "Удаляет пользователя из системы"

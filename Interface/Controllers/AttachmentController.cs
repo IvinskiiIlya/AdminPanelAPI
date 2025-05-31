@@ -82,6 +82,7 @@ public class AttachmentController : ControllerBase
     /// <param name="dto">Данные для создания вложения</param>
     /// <returns>Созданное вложение</returns>
     [HttpPost]
+    [Authorize(Roles = "Пользователь")]
     [SwaggerOperation(
         Summary = "Загрузить вложение",
         Description = "Создает новое вложение и связывает его с отзывом."
@@ -101,6 +102,7 @@ public class AttachmentController : ControllerBase
     /// <param name="id">Идентификатор вложения</param>
     /// <param name="dto">Данные для обновления вложения</param>
     [HttpPut("{id}")]
+    [Authorize(Roles = "Пользователь")]
     [SwaggerOperation(
         Summary = "Обновить вложение",
         Description = "Обновляет данные вложения по указанному идентификатору."

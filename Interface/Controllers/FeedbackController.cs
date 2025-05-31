@@ -64,6 +64,7 @@ public class FeedbackController : ControllerBase
     /// <param name="dto">Данные для создания отзыва</param>
     /// <returns>Созданный отзыв</returns>
     [HttpPost]
+    [Authorize(Roles = "Пользователь")]
     [SwaggerOperation(
         Summary = "Создать отзыв",
         Description = "Создает новый отзыв с указанными данными."
@@ -83,6 +84,7 @@ public class FeedbackController : ControllerBase
     /// <param name="id">Идентификатор отзыва</param>
     /// <param name="dto">Данные для обновления отзыва</param>
     [HttpPut("{id}")]
+    [Authorize(Roles = "Пользователь")]
     [SwaggerOperation(
         Summary = "Обновить отзыв",
         Description = "Обновляет данные отзыва по указанному идентификатору."

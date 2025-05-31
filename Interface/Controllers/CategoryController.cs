@@ -45,6 +45,7 @@ public class CategoryController : ControllerBase
     /// <param name="dto">Данные для создания категории</param>
     /// <returns>Созданная категория</returns>
     [HttpPost]
+    [Authorize(Roles = "Администратор")]
     [SwaggerOperation(
         Summary = "Создать категорию",
         Description = "Создает новую категорию с указанными данными."
@@ -64,6 +65,7 @@ public class CategoryController : ControllerBase
     /// <param name="id">Идентификатор категории</param>
     /// <param name="dto">Данные для обновления категории</param>
     [HttpPut("{id}")]
+    [Authorize(Roles = "Администратор")]
     [SwaggerOperation(
         Summary = "Обновить категорию",
         Description = "Обновляет данные категории по указанному идентификатору."
@@ -85,6 +87,7 @@ public class CategoryController : ControllerBase
     /// </summary>
     /// <param name="id">Идентификатор категории</param>
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Администратор")]
     [SwaggerOperation(
         Summary = "Удалить категорию",
         Description = "Удаляет категорию по указанному идентификатору."

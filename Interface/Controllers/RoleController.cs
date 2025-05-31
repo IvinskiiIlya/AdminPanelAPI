@@ -64,6 +64,7 @@ public class RoleController : ControllerBase
     /// <param name="name">Имя роли</param>
     /// <returns>Созданная роль</returns>
     [HttpPost]
+    [Authorize(Roles = "Администратор")]
     [SwaggerOperation(
         Summary = "Создать роль",
         Description = "Создает новую роль с указанным именем."
@@ -83,6 +84,7 @@ public class RoleController : ControllerBase
     /// <param name="id">Идентификатор роли</param>
     /// <param name="name">Новое имя роли</param>
     [HttpPut("{id}")]
+    [Authorize(Roles = "Администратор")]
     [SwaggerOperation(
         Summary = "Обновить роль",
         Description = "Обновляет имя роли по указанному идентификатору."
@@ -104,6 +106,7 @@ public class RoleController : ControllerBase
     /// </summary>
     /// <param name="id">Идентификатор роли</param>
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Администратор")]
     [SwaggerOperation(
         Summary = "Удалить роль",
         Description = "Удаляет роль по указанному идентификатору."

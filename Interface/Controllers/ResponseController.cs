@@ -82,6 +82,7 @@ public class ResponseController : ControllerBase
     /// <param name="dto">Данные для создания ответа</param>
     /// <returns>Созданный ответ</returns>
     [HttpPost]
+    [Authorize(Roles = "Администратор")]
     [SwaggerOperation(
         Summary = "Создать ответ",
         Description = "Создает новый ответ и связывает его с отзывом."
@@ -105,6 +106,7 @@ public class ResponseController : ControllerBase
     /// <param name="id">Идентификатор ответа</param>
     /// <param name="dto">Данные для обновления ответа</param>
     [HttpPut("{id}")]
+    [Authorize(Roles = "Администратор")]
     [SwaggerOperation(
         Summary = "Обновить ответ",
         Description = "Обновляет данные ответа по указанному идентификатору."
@@ -126,6 +128,7 @@ public class ResponseController : ControllerBase
     /// </summary>
     /// <param name="id">Идентификатор ответа</param>
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Администратор")]
     [SwaggerOperation(
         Summary = "Удалить ответ",
         Description = "Удаляет ответ по указанному идентификатору."

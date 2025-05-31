@@ -64,6 +64,7 @@ public class StatusController : ControllerBase
     /// <param name="name">Имя статуса</param>
     /// <returns>Созданный статус</returns>
     [HttpPost]
+    [Authorize(Roles = "Администратор")]
     [SwaggerOperation(
         Summary = "Создать статус",
         Description = "Создает новый статус с указанным именем."
@@ -83,6 +84,7 @@ public class StatusController : ControllerBase
     /// <param name="id">Идентификатор статуса</param>
     /// <param name="name">Новое имя статуса</param>
     [HttpPut("{id}")]
+    [Authorize(Roles = "Администратор")]
     [SwaggerOperation(
         Summary = "Обновить статус",
         Description = "Обновляет имя статуса по указанному идентификатору."
@@ -105,6 +107,7 @@ public class StatusController : ControllerBase
     /// </summary>
     /// <param name="id">Идентификатор статуса</param>
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Администратор")]
     [SwaggerOperation(
         Summary = "Удалить статус",
         Description = "Удаляет статус по указанному идентификатору."
