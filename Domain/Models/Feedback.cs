@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Identity;
+
 namespace Domain.Models;
 
 public class Feedback
@@ -8,7 +10,7 @@ public class Feedback
     public int CategoryId { get; set; }
     public int StatusId { get; set; }
 
-    public User User { get; set; } = null!;
+    public IdentityUser User { get; set; } = null!;
     public Category Category { get; set; } = null!;
     public Status Status { get; set; } = null!;
 

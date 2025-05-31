@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Identity;
+
 namespace Domain.Models;
 
 public class Response
@@ -9,7 +11,7 @@ public class Response
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     
     public Feedback Feedback { get; set; } = null!;
-    public User User { get; set; } = null!;
+    public IdentityUser User { get; set; } = null!;
     
     public Response() { }
     public Response(string message)

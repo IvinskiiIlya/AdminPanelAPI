@@ -1,7 +1,6 @@
 using System.Text;
 using Application.Interfaces;
 using Application.Services;
-using Domain.Models;
 using Infrastructure;
 using Domain.Interfaces;
 using Infrastructure.Repositories;
@@ -77,7 +76,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddIdentity<User, Role>(options =>
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
     {
         options.Password.RequiredLength = builder.Configuration.GetValue<int>("Identity:Password:RequiredLength");
         options.Password.RequireNonAlphanumeric = builder.Configuration.GetValue<bool>("Identity:Password:RequireNonAlphanumeric");

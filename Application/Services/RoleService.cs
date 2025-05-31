@@ -10,9 +10,9 @@ namespace Application.Services
     public class RoleService : IRoleService
     {
         
-        private readonly RoleManager<Role> _roleManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public RoleService(RoleManager<Role> roleManager)
+        public RoleService(RoleManager<IdentityRole> roleManager)
         {
             _roleManager = roleManager;
         }
@@ -63,7 +63,7 @@ namespace Application.Services
 
         public async Task<DisplayRoleDto> CreateRoleAsync(string name)
         {
-            var role = new Role();
+            var role = new IdentityRole();
             role.Name = name;
             var result = await _roleManager.CreateAsync(role);
 

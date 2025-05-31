@@ -15,10 +15,10 @@ namespace Interface.Controllers;
 public class AuthController : ControllerBase
 {
     
-    private readonly UserManager<User> _userManager;
+    private readonly UserManager<IdentityUser> _userManager;
     private readonly IConfiguration _configuration;
 
-    public AuthController(UserManager<User> userManager, IConfiguration configuration)
+    public AuthController(UserManager<IdentityUser> userManager, IConfiguration configuration)
     {
         _userManager = userManager;
         _configuration = configuration;

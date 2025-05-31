@@ -10,9 +10,9 @@ namespace Application.Services
     public class UserService : IUserService
     {
         
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public UserService(UserManager<User> userManager)
+        public UserService(UserManager<IdentityUser> userManager)
         {
             _userManager = userManager;
         }
@@ -70,7 +70,7 @@ namespace Application.Services
 
         public async Task<DisplayUserDto> CreateUserAsync(CreateUserDto createUserDto)
         {
-            var user = new User()
+            var user = new IdentityUser()
             {
                 Email = createUserDto.Email,
                 UserName = createUserDto.Email
@@ -97,7 +97,6 @@ namespace Application.Services
 
             user.UserName = updateUserDto.UserName ?? user.UserName;
             user.Email = updateUserDto.Email ?? user.Email;
-            user.UserName = updateUserDto.Email ?? user.UserName;
 
             var result = await _userManager.UpdateAsync(user);
             if (!result.Succeeded)
