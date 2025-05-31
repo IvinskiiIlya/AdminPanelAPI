@@ -152,3 +152,4 @@ D:\Projects\AdminPanelAPI\Interface\obj\Debug\net9.0\refint\Interface.dll
 D:\Projects\AdminPanelAPI\Interface\obj\Debug\net9.0\Interface.pdb
 D:\Projects\AdminPanelAPI\Interface\obj\Debug\net9.0\Interface.genruntimeconfig.cache
 D:\Projects\AdminPanelAPI\Interface\obj\Debug\net9.0\ref\Interface.dll
+D:\Projects\AdminPanelAPI\Interface\bin\Debug\net9.0\System.Linq.Dynamic.Core.dll

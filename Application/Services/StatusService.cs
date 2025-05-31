@@ -19,18 +19,22 @@ namespace Application.Services
         public async Task<PagedResponse<DisplayStatusDto>> GetAllStatusesAsync(FilterStatusDto filters)
         {
             var statuses = await _statusRepository.GetAllAsync();
-            var filtered = statuses.AsQueryable();
+            var query = statuses.AsQueryable();
+
+            if (!string.IsNullOrEmpty(filters.Name))
+                query = query.Where(s => s.Name.Contains(filters.Name, StringComparison.OrdinalIgnoreCase));
 
             if (!string.IsNullOrEmpty(filters.SearchTerm))
-                filtered = filtered.Where(s => s.Name.Contains(filters.SearchTerm));
-            else
-                if (!string.IsNullOrEmpty(filters.Name))
-                    filtered = filtered.Where(s => s.Name.Contains(filters.Name));
+            {
+                var search = filters.SearchTerm.ToLower();
+                query = query.Where(s => s.Name.ToLower().Contains(search));
+            }
 
-            var totalRecords = filtered.Count();
+            var totalRecords = query.Count();
 
-            var paged = filtered
-                .OrderBy(s => s.Id)
+            query = ApplySorting(query, filters.SortColumn, filters.SortOrder);
+
+            var paged = query
                 .Skip((filters.PageNumber - 1) * filters.PageSize)
                 .Take(filters.PageSize)
                 .ToList();
@@ -47,6 +51,25 @@ namespace Application.Services
                 filters.PageSize,
                 totalRecords
             );
+        }
+
+        private IQueryable<Status> ApplySorting(IQueryable<Status> query, string? sortColumn, string? sortOrder)
+        {
+            if (string.IsNullOrEmpty(sortColumn))
+                sortColumn = "Id";
+            
+            if (string.IsNullOrEmpty(sortOrder))
+                sortOrder = "asc";
+
+            sortColumn = sortColumn.ToLower();
+            sortOrder = sortOrder.ToLower();
+
+            return sortColumn switch
+            {
+                "id" => sortOrder == "desc" ? query.OrderByDescending(s => s.Id) : query.OrderBy(s => s.Id),
+                "name" => sortOrder == "desc" ? query.OrderByDescending(s => s.Name) : query.OrderBy(s => s.Name),
+                _ => query.OrderBy(s => s.Id)
+            };
         }
         
         public async Task<DisplayStatusDto?> GetStatusByIdAsync(int id)

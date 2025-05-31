@@ -7,4 +7,6 @@ public class FilterAttachmentDto : PaginationParams
     public DateTime? CreatedFrom { get; set; }
     public DateTime? CreatedTo { get; set; }
     public string? SearchTerm { get; set; }
+    public string? SortColumn { get; set; } = "Id"; 
+    public string? SortOrder { get; set; } = "asc";
 }

@@ -19,36 +19,53 @@ namespace Application.Services
 
         public async Task<PagedResponse<DisplayRoleDto>> GetAllRolesAsync(FilterRoleDto filters)
         {
-            var roles = await _roleManager.Roles.ToListAsync();
-            var filtered = roles.AsQueryable();
+            var query = _roleManager.Roles.AsQueryable();
+
+            if (!string.IsNullOrEmpty(filters.Name))
+                query = query.Where(r => r.Name.Contains(filters.Name));
 
             if (!string.IsNullOrEmpty(filters.SearchTerm))
-                filtered = filtered.Where(r => r.Name.Contains(filters.SearchTerm, StringComparison.OrdinalIgnoreCase));
-            else
-                if (!string.IsNullOrEmpty(filters.Name))
-                    filtered = filtered.Where(r => r.Name.Contains(filters.Name, StringComparison.OrdinalIgnoreCase));
+            {
+                var search = filters.SearchTerm.ToLower();
+                query = query.Where(r => 
+                    r.Name.ToLower().Contains(search)
+                );
+            }
+            
+            query = ApplySorting(query, filters.SortColumn, filters.SortOrder);
 
-
-            var totalRecords = filtered.Count();
-
-            var paged = filtered
-                .OrderBy(r => r.Id)
+            var totalRecords = await query.CountAsync();
+            var paged = await query
                 .Skip((filters.PageNumber - 1) * filters.PageSize)
                 .Take(filters.PageSize)
-                .ToList();
+                .ToListAsync();
 
-            var roleDtos = paged.Select(r => new DisplayRoleDto
+            var dtos = paged.Select(r => new DisplayRoleDto
             {
                 Id = r.Id,
                 Name = r.Name
             }).ToList();
 
             return new PagedResponse<DisplayRoleDto>(
-                roleDtos,
+                dtos,
                 filters.PageNumber,
                 filters.PageSize,
                 totalRecords
             );
+        }
+
+        private IQueryable<IdentityRole> ApplySorting(IQueryable<IdentityRole> query, string? sortColumn, string? sortOrder)
+        {
+            sortColumn = (string.IsNullOrEmpty(sortColumn) ? "Name" : sortColumn).Trim();
+            sortOrder = (string.IsNullOrEmpty(sortOrder) ? "asc" : sortOrder).Trim().ToLower();
+
+            var validColumns = new[] { "Id", "Name" };
+            if (!validColumns.Contains(sortColumn, StringComparer.OrdinalIgnoreCase))
+                sortColumn = "Name";
+
+            return sortOrder == "desc" 
+                ? query.OrderByDescending(r => EF.Property<object>(r, sortColumn)) 
+                : query.OrderBy(r => EF.Property<object>(r, sortColumn));
         }
 
         public async Task<DisplayRoleDto?> GetRoleByIdAsync(string id)

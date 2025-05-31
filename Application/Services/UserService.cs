@@ -20,24 +20,28 @@ namespace Application.Services
         public async Task<PagedResponse<DisplayUserDto>> GetAllUsersAsync(FilterUserDto filters)
         {
             var query = _userManager.Users.AsQueryable();
-            
+
+            if (!string.IsNullOrEmpty(filters.Name))
+                query = query.Where(u => u.UserName.Contains(filters.Name, StringComparison.OrdinalIgnoreCase));
+
+            if (!string.IsNullOrEmpty(filters.Email))
+                query = query.Where(u => u.Email.Contains(filters.Email, StringComparison.OrdinalIgnoreCase));
+
             if (!string.IsNullOrEmpty(filters.SearchTerm))
-                query = query.Where(u => 
-                    u.UserName.Contains(filters.SearchTerm) ||
-                    u.Email.Contains(filters.SearchTerm) ||
-                    u.Id.ToString().Contains(filters.SearchTerm)
-                );
-            else
             {
-                if (!string.IsNullOrEmpty(filters.Name))
-                    query = query.Where(u => u.UserName.Contains(filters.Name));
-                if (!string.IsNullOrEmpty(filters.Email))
-                    query = query.Where(u => u.Email.Contains(filters.Email));
+                var search = filters.SearchTerm.ToLower();
+                query = query.Where(u =>
+                    (!string.IsNullOrEmpty(u.UserName) && u.UserName.ToLower().Contains(search)) ||
+                    (!string.IsNullOrEmpty(u.Email) && u.Email.ToLower().Contains(search)) ||
+                    (!string.IsNullOrEmpty(u.Id) && u.Id.ToLower().Contains(search))
+                );
             }
 
             var totalRecords = await query.CountAsync();
+
+            query = ApplySorting(query, filters.SortColumn, filters.SortOrder);
+
             var users = await query
-                .OrderBy(u => u.Id)
                 .Skip((filters.PageNumber - 1) * filters.PageSize)
                 .Take(filters.PageSize)
                 .ToListAsync();
@@ -48,13 +52,27 @@ namespace Application.Services
                 UserName = u.UserName,
                 Email = u.Email
             }).ToList();
-            
+
             return new PagedResponse<DisplayUserDto>(
                 userDtos,
                 filters.PageNumber,
                 filters.PageSize,
                 totalRecords
             );
+        }
+
+        private IQueryable<IdentityUser> ApplySorting(IQueryable<IdentityUser> query, string? sortColumn, string? sortOrder)
+        {
+            sortColumn = string.IsNullOrEmpty(sortColumn) ? "UserName" : sortColumn.Trim();
+            sortOrder = string.IsNullOrEmpty(sortOrder) ? "asc" : sortOrder.Trim().ToLower();
+
+            var validColumns = new[] { "Id", "UserName", "Email" };
+            if (!validColumns.Contains(sortColumn, StringComparer.OrdinalIgnoreCase))
+                sortColumn = "UserName";
+
+            return sortOrder == "desc"
+                ? query.OrderByDescending(u => EF.Property<object>(u, sortColumn))
+                : query.OrderBy(u => EF.Property<object>(u, sortColumn));
         }
 
         public async Task<DisplayUserDto?> GetUserByIdAsync(string id)
@@ -73,7 +91,7 @@ namespace Application.Services
             var user = new IdentityUser()
             {
                 Email = createUserDto.Email,
-                UserName = createUserDto.Email
+                UserName = createUserDto.UserName
             };
 
             var result = await _userManager.CreateAsync(user, createUserDto.Password);

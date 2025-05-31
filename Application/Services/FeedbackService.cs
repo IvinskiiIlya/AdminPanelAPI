@@ -19,29 +19,40 @@ namespace Application.Services
         public async Task<PagedResponse<DisplayFeedbackDto>> GetAllFeedbacksAsync(FilterFeedbackDto filters)
         {
             var feedbacks = await _feedbackRepository.GetAllAsync();
-            var filtered = feedbacks.AsQueryable();
+            var query = feedbacks.AsQueryable();
+
+            if (filters.CreatedFrom.HasValue)
+                query = query.Where(f => f.CreatedAt >= filters.CreatedFrom.Value);
+
+            if (filters.CreatedTo.HasValue)
+                query = query.Where(f => f.CreatedAt <= filters.CreatedTo.Value);
+
+            if (!string.IsNullOrEmpty(filters.UserId))
+                query = query.Where(f => f.UserId.Contains(filters.UserId, StringComparison.OrdinalIgnoreCase));
+
+            if (filters.CategoryId.HasValue)
+                query = query.Where(f => f.CategoryId == filters.CategoryId.Value);
+
+            if (filters.StatusId.HasValue)
+                query = query.Where(f => f.StatusId == filters.StatusId.Value);
+
+            if (!string.IsNullOrEmpty(filters.Message))
+                query = query.Where(f => f.Message.Contains(filters.Message, StringComparison.OrdinalIgnoreCase));
 
             if (!string.IsNullOrEmpty(filters.SearchTerm))
-                filtered = filtered.Where(f => f.Message.Contains(filters.SearchTerm));
-            else
             {
-                if (!string.IsNullOrEmpty(filters.Message))
-                    filtered = filtered.Where(f => f.Message.Contains(filters.Message));
-
-                if (filters.StatusId.HasValue)
-                    filtered = filtered.Where(f => f.StatusId == filters.StatusId.Value);
-
-                if (filters.CategoryId.HasValue)
-                    filtered = filtered.Where(f => f.CategoryId == filters.CategoryId.Value);
-
-                if (!string.IsNullOrEmpty(filters.UserId))
-                    filtered = filtered.Where(f => f.UserId.Contains(filters.UserId));
+                var search = filters.SearchTerm.ToLower();
+                query = query.Where(f =>
+                    (!string.IsNullOrEmpty(f.Message) && f.Message.ToLower().Contains(search)) ||
+                    (!string.IsNullOrEmpty(f.UserId) && f.UserId.ToLower().Contains(search))
+                );
             }
 
-            var totalRecords = filtered.Count();
+            var totalRecords = query.Count();
 
-            var paged = filtered
-                .OrderBy(f => f.Id)
+            query = ApplySorting(query, filters.SortColumn, filters.SortOrder);
+
+            var paged = query
                 .Skip((filters.PageNumber - 1) * filters.PageSize)
                 .Take(filters.PageSize)
                 .ToList();
@@ -62,6 +73,29 @@ namespace Application.Services
                 filters.PageSize,
                 totalRecords
             );
+        }
+
+        private IQueryable<Feedback> ApplySorting(IQueryable<Feedback> query, string? sortColumn, string? sortOrder)
+        {
+            if (string.IsNullOrEmpty(sortColumn))
+                sortColumn = "Id";
+            
+            if (string.IsNullOrEmpty(sortOrder))
+                sortOrder = "asc";
+
+            sortColumn = sortColumn.ToLower();
+            sortOrder = sortOrder.ToLower();
+
+            return sortColumn switch
+            {
+                "id" => sortOrder == "desc" ? query.OrderByDescending(f => f.Id) : query.OrderBy(f => f.Id),
+                "userid" => sortOrder == "desc" ? query.OrderByDescending(f => f.UserId) : query.OrderBy(f => f.UserId),
+                "categoryid" => sortOrder == "desc" ? query.OrderByDescending(f => f.CategoryId) : query.OrderBy(f => f.CategoryId),
+                "statusid" => sortOrder == "desc" ? query.OrderByDescending(f => f.StatusId) : query.OrderBy(f => f.StatusId),
+                "message" => sortOrder == "desc" ? query.OrderByDescending(f => f.Message) : query.OrderBy(f => f.Message),
+                "createdat" => sortOrder == "desc" ? query.OrderByDescending(f => f.CreatedAt) : query.OrderBy(f => f.CreatedAt),
+                _ => query.OrderBy(f => f.Id)
+            };
         }
         
         public async Task<DisplayFeedbackDto?> GetFeedbackByIdAsync(int id)

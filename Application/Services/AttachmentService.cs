@@ -19,18 +19,34 @@ namespace Application.Services
         public async Task<PagedResponse<DisplayAttachmentDto>> GetAllAttachmentsAsync(FilterAttachmentDto filters)
         {
             var attachments = await _attachmentRepository.GetAllAsync();
-            var filtered = attachments.AsQueryable();
-            
+            var query = attachments.AsQueryable();
+
             if (filters.FeedbackId.HasValue)
-                filtered = filtered.Where(a => a.FeedbackId == filters.FeedbackId.Value);
-
+                query = query.Where(a => a.FeedbackId == filters.FeedbackId.Value);
+            
             if (!string.IsNullOrEmpty(filters.FileType))
-                filtered = filtered.Where(a => a.FileType.Contains(filters.FileType));
+                query = query.Where(a => a.FileType.Contains(filters.FileType, StringComparison.OrdinalIgnoreCase));
+            
+            if (filters.CreatedFrom.HasValue)
+                query = query.Where(a => a.CreatedAt >= filters.CreatedFrom.Value);
+            
+            if (filters.CreatedTo.HasValue)
+                query = query.Where(a => a.CreatedAt <= filters.CreatedTo.Value);
 
-            var totalRecords = filtered.Count();
+            if (!string.IsNullOrEmpty(filters.SearchTerm))
+            {
+                var search = filters.SearchTerm.ToLower();
+                query = query.Where(a =>
+                    (!string.IsNullOrEmpty(a.FilePath) && a.FilePath.ToLower().Contains(search)) ||
+                    (!string.IsNullOrEmpty(a.FileType) && a.FileType.ToLower().Contains(search))
+                );
+            }
 
-            var paged = filtered
-                .OrderBy(a => a.Id)
+            var totalRecords = query.Count();
+            
+            query = ApplySorting(query, filters.SortColumn, filters.SortOrder);
+
+            var paged = query
                 .Skip((filters.PageNumber - 1) * filters.PageSize)
                 .Take(filters.PageSize)
                 .ToList();
@@ -50,6 +66,28 @@ namespace Application.Services
                 filters.PageSize,
                 totalRecords
             );
+        }
+
+        private IQueryable<Attachment> ApplySorting(IQueryable<Attachment> query, string? sortColumn, string? sortOrder)
+        {
+            if (string.IsNullOrEmpty(sortColumn))
+                sortColumn = "Id";
+            
+            if (string.IsNullOrEmpty(sortOrder))
+                sortOrder = "asc";
+
+            sortColumn = sortColumn.ToLower();
+            sortOrder = sortOrder.ToLower();
+
+            return sortColumn switch
+            {
+                "id" => sortOrder == "desc" ? query.OrderByDescending(a => a.Id) : query.OrderBy(a => a.Id),
+                "feedbackid" => sortOrder == "desc" ? query.OrderByDescending(a => a.FeedbackId) : query.OrderBy(a => a.FeedbackId),
+                "filepath" => sortOrder == "desc" ? query.OrderByDescending(a => a.FilePath) : query.OrderBy(a => a.FilePath),
+                "filetype" => sortOrder == "desc" ? query.OrderByDescending(a => a.FileType) : query.OrderBy(a => a.FileType),
+                "createdat" => sortOrder == "desc" ? query.OrderByDescending(a => a.CreatedAt) : query.OrderBy(a => a.CreatedAt),
+                _ => query.OrderBy(a => a.Id) 
+            };
         }
         
         public async Task<DisplayAttachmentDto?> GetAttachmentByIdAsync(int id)

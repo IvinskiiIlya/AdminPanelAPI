@@ -19,19 +19,28 @@ namespace Application.Services
         public async Task<PagedResponse<DisplayCategoryDto>> GetAllCategoriesAsync(FilterCategoryDto filters)
         {
             var categories = await _categoryRepository.GetAllAsync();
-            var filtered = categories.AsQueryable();
+            var query = categories.AsQueryable();
+
+            if (!string.IsNullOrEmpty(filters.Name))
+                query = query.Where(c => c.Name.Contains(filters.Name, StringComparison.OrdinalIgnoreCase));
+            
+            if (!string.IsNullOrEmpty(filters.Description))
+                query = query.Where(c => c.Description != null && c.Description.Contains(filters.Description, StringComparison.OrdinalIgnoreCase));
 
             if (!string.IsNullOrEmpty(filters.SearchTerm))
-                filtered = filtered.Where(c => c.Name.Contains(filters.SearchTerm));
-            else if (!string.IsNullOrEmpty(filters.Name))
             {
-                filtered = filtered.Where(c => c.Name.Contains(filters.Name));
+                var search = filters.SearchTerm.ToLower();
+                query = query.Where(c =>
+                    (!string.IsNullOrEmpty(c.Name) && c.Name.ToLower().Contains(search)) ||
+                    (!string.IsNullOrEmpty(c.Description) && c.Description.ToLower().Contains(search))
+                );
             }
 
-            var totalRecords = filtered.Count();
+            var totalRecords = query.Count();
 
-            var paged = filtered
-                .OrderBy(c => c.Id)
+            query = ApplySorting(query, filters.SortColumn, filters.SortOrder);
+
+            var paged = query
                 .Skip((filters.PageNumber - 1) * filters.PageSize)
                 .Take(filters.PageSize)
                 .ToList();
@@ -49,6 +58,26 @@ namespace Application.Services
                 filters.PageSize,
                 totalRecords
             );
+        }
+
+        private IQueryable<Category> ApplySorting(IQueryable<Category> query, string? sortColumn, string? sortOrder)
+        {
+            if (string.IsNullOrEmpty(sortColumn))
+                sortColumn = "Id";
+            
+            if (string.IsNullOrEmpty(sortOrder))
+                sortOrder = "asc";
+
+            sortColumn = sortColumn.ToLower();
+            sortOrder = sortOrder.ToLower();
+
+            return sortColumn switch
+            {
+                "id" => sortOrder == "desc" ? query.OrderByDescending(c => c.Id) : query.OrderBy(c => c.Id),
+                "name" => sortOrder == "desc" ? query.OrderByDescending(c => c.Name) : query.OrderBy(c => c.Name),
+                "description" => sortOrder == "desc" ? query.OrderByDescending(c => c.Description) : query.OrderBy(c => c.Description),
+                _ => query.OrderBy(c => c.Id)
+            };
         }
         
         public async Task<DisplayCategoryDto?> GetCategoryByIdAsync(int id)

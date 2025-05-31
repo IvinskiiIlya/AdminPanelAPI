@@ -248,19 +248,19 @@ namespace Infrastructure.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     feedback_id = table.Column<int>(type: "integer", nullable: false),
-                    user_id = table.Column<int>(type: "integer", nullable: false),
+                    user_id = table.Column<string>(type: "text", nullable: false),
                     message = table.Column<string>(type: "text", nullable: false),
-                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW()"),
-                    UserId1 = table.Column<string>(type: "text", nullable: true)
+                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW()")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_responses", x => x.id);
                     table.ForeignKey(
-                        name: "FK_responses_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_responses_AspNetUsers_user_id",
+                        column: x => x.user_id,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_responses_feedbacks_feedback_id",
                         column: x => x.feedback_id,
@@ -332,9 +332,9 @@ namespace Infrastructure.Migrations
                 column: "feedback_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_responses_UserId1",
+                name: "IX_responses_user_id",
                 table: "responses",
-                column: "UserId1");
+                column: "user_id");
         }
 
         /// <inheritdoc />

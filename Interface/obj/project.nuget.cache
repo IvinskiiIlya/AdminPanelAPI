@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "tQZDaKn001o=",
+  "dgSpecHash": "ndo0Q7CTDZ0=",
   "success": true,
   "projectFilePath": "D:\\Projects\\AdminPanelAPI\\Interface\\Interface.csproj",
   "expectedPackageFiles": [
@@ -63,6 +63,7 @@
     "C:\\Users\\ПК\\.nuget\\packages\\system.composition.typedparts\\7.0.0\\system.composition.typedparts.7.0.0.nupkg.sha512",
     "C:\\Users\\ПК\\.nuget\\packages\\system.identitymodel.tokens.jwt\\8.9.0\\system.identitymodel.tokens.jwt.8.9.0.nupkg.sha512",
     "C:\\Users\\ПК\\.nuget\\packages\\system.io.pipelines\\7.0.0\\system.io.pipelines.7.0.0.nupkg.sha512",
+    "C:\\Users\\ПК\\.nuget\\packages\\system.linq.dynamic.core\\1.6.5\\system.linq.dynamic.core.1.6.5.nupkg.sha512",
     "C:\\Users\\ПК\\.nuget\\packages\\system.reflection.metadata\\7.0.0\\system.reflection.metadata.7.0.0.nupkg.sha512",
     "C:\\Users\\ПК\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",
     "C:\\Users\\ПК\\.nuget\\packages\\system.text.json\\9.0.4\\system.text.json.9.0.4.nupkg.sha512",

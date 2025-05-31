@@ -63,6 +63,7 @@ public class UserController : ControllerBase
     /// <param name="dto">Данные для создания пользователя</param>
     /// <returns>Созданный пользователь</returns>
     [HttpPost]
+    [AllowAnonymous]
     [SwaggerOperation(
         Summary = "Создать пользователя",
         Description = "Регистрирует нового пользователя в системе"
