@@ -25,7 +25,10 @@ namespace Application.Services
                 query = query.Where(a => a.FeedbackId == filters.FeedbackId.Value);
             
             if (!string.IsNullOrEmpty(filters.FileType))
-                query = query.Where(a => a.FileType.Contains(filters.FileType, StringComparison.OrdinalIgnoreCase));
+            {
+                var fileTypeFilter = filters.FileType.ToLower();
+                query = query.Where(a => a.FileType != null && a.FileType.ToLower().Contains(fileTypeFilter));
+            }
             
             if (filters.CreatedFrom.HasValue)
                 query = query.Where(a => a.CreatedAt >= filters.CreatedFrom.Value);

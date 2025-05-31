@@ -22,7 +22,10 @@ namespace Application.Services
             var query = statuses.AsQueryable();
 
             if (!string.IsNullOrEmpty(filters.Name))
-                query = query.Where(s => s.Name.Contains(filters.Name, StringComparison.OrdinalIgnoreCase));
+            {
+                var nameFilter = filters.Name.ToLower();
+                query = query.Where(s => s.Name != null && s.Name.ToLower().Contains(nameFilter));
+            }
 
             if (!string.IsNullOrEmpty(filters.SearchTerm))
             {

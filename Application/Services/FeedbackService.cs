@@ -28,7 +28,10 @@ namespace Application.Services
                 query = query.Where(f => f.CreatedAt <= filters.CreatedTo.Value);
 
             if (!string.IsNullOrEmpty(filters.UserId))
-                query = query.Where(f => f.UserId.Contains(filters.UserId, StringComparison.OrdinalIgnoreCase));
+            {
+                var userIdFilter = filters.UserId.ToLower();
+                query = query.Where(f => f.UserId != null && f.UserId.ToLower().Contains(userIdFilter));
+            }
 
             if (filters.CategoryId.HasValue)
                 query = query.Where(f => f.CategoryId == filters.CategoryId.Value);
@@ -37,7 +40,10 @@ namespace Application.Services
                 query = query.Where(f => f.StatusId == filters.StatusId.Value);
 
             if (!string.IsNullOrEmpty(filters.Message))
-                query = query.Where(f => f.Message.Contains(filters.Message, StringComparison.OrdinalIgnoreCase));
+            {
+                var messageFilter = filters.Message.ToLower();
+                query = query.Where(f => f.Message != null && f.Message.ToLower().Contains(messageFilter));
+            }
 
             if (!string.IsNullOrEmpty(filters.SearchTerm))
             {

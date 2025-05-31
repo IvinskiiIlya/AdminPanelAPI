@@ -31,10 +31,16 @@ namespace Application.Services
                 query = query.Where(r => r.FeedbackId == filters.FeedbackId.Value);
 
             if (!string.IsNullOrEmpty(filters.UserId))
-                query = query.Where(r => r.UserId.Contains(filters.UserId, StringComparison.OrdinalIgnoreCase));
+            {
+                var userIdFilter = filters.UserId.ToLower();
+                query = query.Where(r => r.UserId != null && r.UserId.ToLower().Contains(userIdFilter));
+            }
 
             if (!string.IsNullOrEmpty(filters.Message))
-                query = query.Where(r => r.Message.Contains(filters.Message, StringComparison.OrdinalIgnoreCase));
+            {
+                var messageFilter = filters.Message.ToLower();
+                query = query.Where(r => r.Message != null && r.Message.ToLower().Contains(messageFilter));
+            }
 
             if (!string.IsNullOrEmpty(filters.SearchTerm))
             {

@@ -22,10 +22,16 @@ namespace Application.Services
             var query = _userManager.Users.AsQueryable();
 
             if (!string.IsNullOrEmpty(filters.Name))
-                query = query.Where(u => u.UserName.Contains(filters.Name, StringComparison.OrdinalIgnoreCase));
+            {
+                var nameFilter = filters.Name.ToLower();
+                query = query.Where(u => u.UserName != null && u.UserName.ToLower().Contains(nameFilter));
+            }
 
             if (!string.IsNullOrEmpty(filters.Email))
-                query = query.Where(u => u.Email.Contains(filters.Email, StringComparison.OrdinalIgnoreCase));
+            {
+                var emailFilter = filters.Email.ToLower();
+                query = query.Where(u => u.Email != null && u.Email.ToLower().Contains(emailFilter));
+            }
 
             if (!string.IsNullOrEmpty(filters.SearchTerm))
             {

@@ -22,10 +22,16 @@ namespace Application.Services
             var query = categories.AsQueryable();
 
             if (!string.IsNullOrEmpty(filters.Name))
-                query = query.Where(c => c.Name.Contains(filters.Name, StringComparison.OrdinalIgnoreCase));
-            
+            {
+                var nameFilter = filters.Name.ToLower();
+                query = query.Where(c => c.Name != null && c.Name.ToLower().Contains(nameFilter));
+            }
+
             if (!string.IsNullOrEmpty(filters.Description))
-                query = query.Where(c => c.Description != null && c.Description.Contains(filters.Description, StringComparison.OrdinalIgnoreCase));
+            {
+                var descFilter = filters.Description.ToLower();
+                query = query.Where(c => c.Description != null && c.Description.ToLower().Contains(descFilter));
+            }
 
             if (!string.IsNullOrEmpty(filters.SearchTerm))
             {

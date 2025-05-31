@@ -26,6 +26,7 @@ public class UserController : ControllerBase
     /// <param name="filters">Параметры фильтрации пользователей</param>
     /// <returns>Отфильтрованный список пользователей</returns>
     [HttpGet]
+    [Authorize(Roles = "Администратор")]
     [SwaggerOperation(
         Summary = "Получить пользователей с фильтрацией",
         Description = "Возвращает список пользователей с возможностью фильтрации и пагинации"
@@ -44,6 +45,7 @@ public class UserController : ControllerBase
     /// <param name="id">Идентификатор пользователя</param>
     /// <returns>Данные пользователя</returns>
     [HttpGet("{id}")]
+    [Authorize(Roles = "Администратор")]
     [SwaggerOperation(
         Summary = "Получить пользователя по ID",
         Description = "Возвращает детальную информацию о пользователе"
@@ -83,6 +85,7 @@ public class UserController : ControllerBase
     /// <param name="id">Идентификатор пользователя</param>
     /// <param name="dto">Данные для обновления</param>
     [HttpPut("{id}")]
+    [Authorize(Roles = "Администратор")]
     [SwaggerOperation(
         Summary = "Обновить пользователя",
         Description = "Обновляет информацию о существующем пользователе"
@@ -104,6 +107,7 @@ public class UserController : ControllerBase
     /// </summary>
     /// <param name="id">Идентификатор пользователя</param>
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Администратор")]
     [SwaggerOperation(
         Summary = "Удалить пользователя",
         Description = "Удаляет пользователя из системы"

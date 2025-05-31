@@ -22,14 +22,15 @@ namespace Application.Services
             var query = _roleManager.Roles.AsQueryable();
 
             if (!string.IsNullOrEmpty(filters.Name))
-                query = query.Where(r => r.Name.Contains(filters.Name));
-
+            {
+                var nameFilter = filters.Name.ToLower();
+                query = query.Where(r => r.Name != null && r.Name.ToLower().Contains(nameFilter));
+            }
+            
             if (!string.IsNullOrEmpty(filters.SearchTerm))
             {
                 var search = filters.SearchTerm.ToLower();
-                query = query.Where(r => 
-                    r.Name.ToLower().Contains(search)
-                );
+                query = query.Where(r => r.Name.ToLower().Contains(search));
             }
             
             query = ApplySorting(query, filters.SortColumn, filters.SortOrder);
