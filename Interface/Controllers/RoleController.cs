@@ -3,11 +3,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Application.Interfaces;
 using Application.DTO.Role;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace Interface.Controllers;
 
-// [Authorize]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [ApiController]
 [Route("api/[controller]")]
 public class RoleController : ControllerBase
@@ -51,7 +52,7 @@ public class RoleController : ControllerBase
     [SwaggerResponse(200, "Роль успешно найдена", typeof(DisplayRoleDto))]
     [SwaggerResponse(404, "Роль не найдена")]
     [SwaggerResponse(401, "Пользователь не авторизован")]
-    public async Task<ActionResult<DisplayRoleDto>> GetRoleById(int id)
+    public async Task<ActionResult<DisplayRoleDto>> GetRoleById(string id)
     {
         var role = await _roleService.GetRoleByIdAsync(id);
         return role == null ? NotFound() : Ok(role);
@@ -90,7 +91,7 @@ public class RoleController : ControllerBase
     [SwaggerResponse(400, "Некорректные данные запроса")]
     [SwaggerResponse(401, "Пользователь не авторизован")]
     [SwaggerResponse(404, "Роль не найдена")]
-    public async Task<ActionResult> UpdateRole(int id, [FromBody] UpdateRoleDto dto)
+    public async Task<ActionResult> UpdateRole(string id, [FromBody] UpdateRoleDto dto)
     {
         if (id != dto.Id)
             return BadRequest("Идентификаторы не совпадают.");
@@ -110,7 +111,7 @@ public class RoleController : ControllerBase
     [SwaggerResponse(204, "Роль успешно удалена")]
     [SwaggerResponse(401, "Пользователь не авторизован")]
     [SwaggerResponse(404, "Роль не найдена")]
-    public async Task<ActionResult> DeleteRole(int id)
+    public async Task<ActionResult> DeleteRole(string id)
     {
         await _roleService.DeleteRoleAsync(id);
         return NoContent();

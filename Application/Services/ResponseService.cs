@@ -28,8 +28,8 @@ namespace Application.Services
                 if (!string.IsNullOrEmpty(filters.Message))
                     filtered = filtered.Where(r => r.Message.Contains(filters.Message));
 
-                if (filters.UserId.HasValue)
-                    filtered = filtered.Where(r => r.UserId == filters.UserId.Value);
+                if (!string.IsNullOrEmpty(filters.UserId))
+                    filtered = filtered.Where(r => r.UserId.Contains(filters.UserId));
 
                 if (filters.FeedbackId.HasValue)
                     filtered = filtered.Where(r => r.FeedbackId == filters.FeedbackId.Value);

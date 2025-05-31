@@ -5,7 +5,7 @@ namespace Application.DTO.Role;
 public class UpdateRoleDto
 {
     [Required]
-    public int Id { get; set; }
+    public string Id { get; set; }
 
     [Required]
     [MaxLength(20)]

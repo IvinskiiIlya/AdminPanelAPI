@@ -51,7 +51,7 @@ namespace Application.Services
             );
         }
 
-        public async Task<DisplayRoleDto?> GetRoleByIdAsync(int id)
+        public async Task<DisplayRoleDto?> GetRoleByIdAsync(string id)
         {
             var role = await _roleManager.FindByIdAsync(id.ToString());
             return role == null ? null : new DisplayRoleDto
@@ -63,7 +63,8 @@ namespace Application.Services
 
         public async Task<DisplayRoleDto> CreateRoleAsync(string name)
         {
-            var role = new Role(name);
+            var role = new Role();
+            role.Name = name;
             var result = await _roleManager.CreateAsync(role);
 
             if (!result.Succeeded)
@@ -78,7 +79,7 @@ namespace Application.Services
             };
         }
 
-        public async Task UpdateRoleAsync(int id, UpdateRoleDto updateRoleDto)
+        public async Task UpdateRoleAsync(string id, UpdateRoleDto updateRoleDto)
         {
             var role = await _roleManager.FindByIdAsync(id.ToString());
             if (role == null)
@@ -93,7 +94,7 @@ namespace Application.Services
             }
         }
 
-        public async Task DeleteRoleAsync(int id)
+        public async Task DeleteRoleAsync(string id)
         {
             var role = await _roleManager.FindByIdAsync(id.ToString());
             if (role == null)

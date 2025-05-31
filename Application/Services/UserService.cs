@@ -23,21 +23,17 @@ namespace Application.Services
             
             if (!string.IsNullOrEmpty(filters.SearchTerm))
                 query = query.Where(u => 
-                    u.Name.Contains(filters.SearchTerm) ||
+                    u.UserName.Contains(filters.SearchTerm) ||
                     u.Email.Contains(filters.SearchTerm) ||
                     u.Id.ToString().Contains(filters.SearchTerm)
                 );
             else
             {
                 if (!string.IsNullOrEmpty(filters.Name))
-                    query = query.Where(u => u.Name.Contains(filters.Name));
+                    query = query.Where(u => u.UserName.Contains(filters.Name));
                 if (!string.IsNullOrEmpty(filters.Email))
                     query = query.Where(u => u.Email.Contains(filters.Email));
             }
-            if (filters.CreatedFrom.HasValue)
-                query = query.Where(u => u.CreatedAt >= filters.CreatedFrom);
-            if (filters.CreatedTo.HasValue)
-                query = query.Where(u => u.CreatedAt <= filters.CreatedTo);
 
             var totalRecords = await query.CountAsync();
             var users = await query
@@ -49,10 +45,8 @@ namespace Application.Services
             var userDtos = users.Select(u => new DisplayUserDto
             {
                 Id = u.Id,
-                Name = u.Name,
-                Email = u.Email,
-                CreatedAt = u.CreatedAt,
-                LastLogin = u.LastLogin
+                UserName = u.UserName,
+                Email = u.Email
             }).ToList();
             
             return new PagedResponse<DisplayUserDto>(
@@ -63,22 +57,20 @@ namespace Application.Services
             );
         }
 
-        public async Task<DisplayUserDto?> GetUserByIdAsync(int id)
+        public async Task<DisplayUserDto?> GetUserByIdAsync(string id)
         {
-            var user = await _userManager.FindByIdAsync(id.ToString());
+            var user = await _userManager.FindByIdAsync(id);
             return user == null ? null : new DisplayUserDto
             {
                 Id = user.Id,
-                Name = user.Name,
-                Email = user.Email,
-                CreatedAt = user.CreatedAt,
-                LastLogin = user.LastLogin
+                UserName = user.UserName,
+                Email = user.Email
             };
         }
 
         public async Task<DisplayUserDto> CreateUserAsync(CreateUserDto createUserDto)
         {
-            var user = new User(createUserDto.Name, createUserDto.Email)
+            var user = new User()
             {
                 Email = createUserDto.Email,
                 UserName = createUserDto.Email
@@ -92,20 +84,18 @@ namespace Application.Services
             return new DisplayUserDto
             {
                 Id = user.Id,
-                Name = user.Name,
-                Email = user.Email,
-                CreatedAt = user.CreatedAt,
-                LastLogin = user.LastLogin
+                UserName = user.UserName,
+                Email = user.Email
             };
         }
 
-        public async Task UpdateUserAsync(int id, UpdateUserDto updateUserDto)
+        public async Task UpdateUserAsync(string id, UpdateUserDto updateUserDto)
         {
-            var user = await _userManager.FindByIdAsync(id.ToString());
+            var user = await _userManager.FindByIdAsync(id);
             if (user == null)
                 throw new ArgumentException($"Пользователь с id = {id} не найден.");
 
-            user.Name = updateUserDto.Name ?? user.Name;
+            user.UserName = updateUserDto.UserName ?? user.UserName;
             user.Email = updateUserDto.Email ?? user.Email;
             user.UserName = updateUserDto.Email ?? user.UserName;
 
@@ -114,9 +104,9 @@ namespace Application.Services
                 throw new Exception(string.Join(", ", result.Errors.Select(e => e.Description)));
         }
 
-        public async Task DeleteUserAsync(int id)
+        public async Task DeleteUserAsync(string id)
         {
-            var user = await _userManager.FindByIdAsync(id.ToString());
+            var user = await _userManager.FindByIdAsync(id);
             if (user == null)
                 throw new ArgumentException($"Пользователь с id = {id} не найден.");
 

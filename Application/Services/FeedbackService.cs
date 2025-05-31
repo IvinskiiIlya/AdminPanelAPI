@@ -34,8 +34,8 @@ namespace Application.Services
                 if (filters.CategoryId.HasValue)
                     filtered = filtered.Where(f => f.CategoryId == filters.CategoryId.Value);
 
-                if (filters.UserId.HasValue)
-                    filtered = filtered.Where(f => f.UserId == filters.UserId.Value);
+                if (!string.IsNullOrEmpty(filters.UserId))
+                    filtered = filtered.Where(f => f.UserId.Contains(filters.UserId));
             }
 
             var totalRecords = filtered.Count();

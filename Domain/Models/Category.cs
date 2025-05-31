@@ -6,7 +6,7 @@ public class Category
     public string Name { get; set; }
     public string? Description { get; set; }
     
-    public Category() {}
+    public Category() { }
     public Category(string name)
     {
         Name = name ?? throw new ArgumentNullException(nameof(name));

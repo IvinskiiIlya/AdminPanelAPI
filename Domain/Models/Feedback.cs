@@ -4,7 +4,7 @@ public class Feedback
 {
     public int Id { get; set; }
     
-    public int UserId { get; set; }
+    public string UserId { get; set; }
     public int CategoryId { get; set; }
     public int StatusId { get; set; }
 
@@ -15,6 +15,7 @@ public class Feedback
     public string Message { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
+    public Feedback() { }
     public Feedback(string message)
     {
         Message = message ?? throw new ArgumentNullException(nameof(message));

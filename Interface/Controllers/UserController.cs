@@ -2,11 +2,12 @@ using Microsoft.AspNetCore.Authorization;
 using Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Application.DTO.User;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace Interface.Controllers;
 
-// [Authorize]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [ApiController]
 [Route("api/[controller]")]
 public class UserController : ControllerBase
@@ -50,7 +51,7 @@ public class UserController : ControllerBase
     [SwaggerResponse(200, "Пользователь успешно найден", typeof(DisplayUserDto))]
     [SwaggerResponse(404, "Пользователь не найден")]
     [SwaggerResponse(401, "Пользователь не авторизован")]
-    public async Task<ActionResult<DisplayUserDto>> GetUserById(int id)
+    public async Task<ActionResult<DisplayUserDto>> GetUserById(string id)
     {
         var user = await _userService.GetUserByIdAsync(id);
         return user == null ? NotFound() : Ok(user);
@@ -89,7 +90,7 @@ public class UserController : ControllerBase
     [SwaggerResponse(400, "Некорректные данные запроса")]
     [SwaggerResponse(401, "Пользователь не авторизован")]
     [SwaggerResponse(404, "Пользователь не найден")]
-    public async Task<ActionResult> UpdateUser(int id, [FromBody] UpdateUserDto dto)
+    public async Task<ActionResult> UpdateUser(string id, [FromBody] UpdateUserDto dto)
     {
         if (id != dto.Id)
             return BadRequest("Идентификаторы не совпадают.");
@@ -109,7 +110,7 @@ public class UserController : ControllerBase
     [SwaggerResponse(204, "Пользователь успешно удален")]
     [SwaggerResponse(401, "Пользователь не авторизован")]
     [SwaggerResponse(404, "Пользователь не найден")]
-    public async Task<ActionResult> DeleteUser(int id)
+    public async Task<ActionResult> DeleteUser(string id)
     {
         await _userService.DeleteUserAsync(id);
         return NoContent();

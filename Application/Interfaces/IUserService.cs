@@ -6,9 +6,9 @@ namespace Application.Interfaces
     public interface IUserService
     {
         Task<PagedResponse<DisplayUserDto>> GetAllUsersAsync(FilterUserDto filters);
-        Task<DisplayUserDto?> GetUserByIdAsync(int id);
+        Task<DisplayUserDto?> GetUserByIdAsync(string id);
         Task<DisplayUserDto> CreateUserAsync(CreateUserDto createUserDto);
-        Task UpdateUserAsync(int id, UpdateUserDto updateUserDto); 
-        Task DeleteUserAsync(int id);
+        Task UpdateUserAsync(string id, UpdateUserDto updateUserDto); 
+        Task DeleteUserAsync(string id);
     }
 }

@@ -1,11 +1,10 @@
 ﻿using Domain.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure;
 
-public class AppDbContext : IdentityDbContext<User, Role, int>
+public class AppDbContext : IdentityDbContext<User, Role, string>
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -38,22 +37,6 @@ public class AppDbContext : IdentityDbContext<User, Role, int>
 
             entity.Property(c => c.Name).IsRequired().HasMaxLength(50).HasColumnName("name");
             entity.Property(c => c.Description).HasMaxLength(200).HasColumnName("description");
-        });
-        
-        modelBuilder.Entity<User>(entity =>
-        {
-            entity.ToTable("users");
-            
-            entity.HasKey(u => u.Id);
-            entity.Property(u => u.Id).HasColumnName("id");
-
-            entity.Property(u => u.Name).IsRequired().HasMaxLength(50).HasColumnName("name");
-            
-            entity.Property(u => u.Email).IsRequired().HasMaxLength(256).HasColumnName("email");
-            entity.HasIndex(u => u.Email).IsUnique();
-            
-            entity.Property(u => u.CreatedAt).HasDefaultValueSql("NOW()").HasColumnName("created_at");
-            entity.Property(u => u.LastLogin).IsRequired(false).HasColumnName("last_login");
         });
         
         modelBuilder.Entity<Feedback>(entity =>

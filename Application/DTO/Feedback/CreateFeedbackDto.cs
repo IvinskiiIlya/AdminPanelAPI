@@ -5,7 +5,7 @@ namespace Application.DTO.Feedback;
 public class CreateFeedbackDto
 {
     [Required]
-    public int UserId { get; set; }
+    public string UserId { get; set; }
 
     [Required]
     public int CategoryId { get; set; }

@@ -8,7 +8,7 @@ public class UpdateFeedbackDto
     public int Id { get; set; }
 
     [Required]
-    public int? UserId { get; set; }
+    public string? UserId { get; set; }
 
     [Required]
     public int? CategoryId { get; set; }

@@ -8,7 +8,7 @@ public class CreateResponseDto
     public int FeedbackId { get; set; }
 
     [Required]
-    public int UserId { get; set; } 
+    public string UserId { get; set; } 
 
     [Required]
     public string Message { get; set; }  
