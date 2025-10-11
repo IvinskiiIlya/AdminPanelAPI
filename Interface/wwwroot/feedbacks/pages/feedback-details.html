@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <title>Детали отзыва - Рабочая панель</title>
+    <link rel="stylesheet" href="../css/feedbacks.css" />
+</head>
+<body>
+<div class="container-card">
+    <h1>Детали отзыва</h1>
+
+    <div>
+        <strong>Пользователь:</strong> <span id="userName"></span> (<span id="userEmail"></span>)<br />
+        <strong>Категория:</strong> <span id="categoryName"></span><br />
+        <strong>Статус:</strong> <span id="statusName"></span><br />
+        <strong>Дата создания:</strong> <span id="createdAt"></span><br /><br />
+
+        <strong>Сообщение:</strong>
+        <p id="message"></p>
+    </div>
+
+    <div>
+        <h2>Ответы</h2>
+        <ul id="responsesList"></ul>
+    </div>
+
+    <div>
+        <h2>Вложения</h2>
+        <ul id="attachmentsList"></ul>
+    </div>
+
+    <button class="return-buttons" onclick="location.href='feedbacks.html'">Вернуться</button>
+</div>
+
+<script src="../js/feedback-details.js"></script>
+</body>
+</html>

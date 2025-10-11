@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Application.DTO.User;
+using Microsoft.AspNetCore.Authorization;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace Interface.Controllers;
@@ -66,11 +67,45 @@ public class AuthController : ControllerBase
             expires: DateTime.Now.AddMinutes(_configuration.GetValue<double>("Jwt:ExpiryInMinutes")),
             signingCredentials: creds
         );
+        
+        var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Strict,
+            Expires = token.ValidTo
+        };
+        Response.Cookies.Append("jwtToken", tokenString, cookieOptions);
 
-        return Ok(new JwtTokenResponse 
-        { 
-            Token = new JwtSecurityTokenHandler().WriteToken(token) 
-        });
+        return Ok(new { message = "Аутентификация прошла успешно" });
+    }
+    
+    /// <summary>
+    /// Разлогирование, удаление токена
+    /// </summary>
+    [HttpPost("logout")]
+    public IActionResult Logout()
+    {
+        if (Request.Cookies.ContainsKey("jwtToken"))
+        {
+            Response.Cookies.Delete("jwtToken");
+        }
+        return Ok(new { message = "Выход выполнен" });
+    }
+    
+    /// <summary>
+    /// Получение информации о пользователе
+    /// </summary>
+    [HttpGet("userinfo")]
+    [Authorize]
+    public IActionResult UserInfo()
+    {
+        var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "";
+        var userName = User.Identity?.Name ?? "";
+        var roles = User.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList();
+
+        return Ok(new { id = userId, name = userName, roles });
     }
 
     /// <summary>

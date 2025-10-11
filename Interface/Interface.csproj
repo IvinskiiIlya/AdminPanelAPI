@@ -27,4 +27,16 @@
       <ProjectReference Include="..\Application\Application.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="wwwroot\assets\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\pages\attachments\attachment-create.html" />
+      <_ContentIncludedByDefault Remove="wwwroot\pages\attachments\attachment-details.html" />
+      <_ContentIncludedByDefault Remove="wwwroot\pages\attachments\attachment-edit.html" />
+      <_ContentIncludedByDefault Remove="wwwroot\pages\attachments\attachments.html" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\styles.css" />
+    </ItemGroup>
+
 </Project>

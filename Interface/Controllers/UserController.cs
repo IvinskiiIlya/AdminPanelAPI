@@ -45,7 +45,7 @@ public class UserController : ControllerBase
     /// <param name="id">Идентификатор пользователя</param>
     /// <returns>Данные пользователя</returns>
     [HttpGet("{id}")]
-    [Authorize(Roles = "Администратор")]
+    [Authorize(Roles = "Пользователь")]
     [SwaggerOperation(
         Summary = "Получить пользователя по ID",
         Description = "Возвращает детальную информацию о пользователе"

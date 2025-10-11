@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <title>Редактировать отзыв - Рабочая панель</title>
+    <link rel="stylesheet" href="../css/feedbacks.css" />
+</head>
+<body>
+<div class="container-card">
+    <h1>Редактирование отзыва</h1>
+    <form id="feedbackForm">
+        <label for="category">Категория:</label><br />
+        <select id="category" name="categoryId" required></select><br /><br />
+
+        <label for="message">Сообщение:</label><br />
+        <textarea id="message" name="message" minlength="10" maxlength="1000" required rows="6"></textarea><br /><br />
+
+        <button type="button" class="return-buttons" onclick="location.href='feedbacks.html'">Вернуться</button>
+        <button type="submit" class="create-buttons">Сохранить</button>
+    </form>
+    <div id="formMessage"></div>
+</div>
+
+<script src="../js/feedback-edit.js"></script>
+</body>
+</html>

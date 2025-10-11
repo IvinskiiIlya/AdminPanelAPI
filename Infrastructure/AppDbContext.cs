@@ -14,7 +14,7 @@ public class AppDbContext : IdentityDbContext<IdentityUser, IdentityRole, string
     public DbSet<Feedback> Feedbacks => Set<Feedback>();
     public DbSet<Response> Responses => Set<Response>();
     public DbSet<Attachment> Attachments => Set<Attachment>();
-
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

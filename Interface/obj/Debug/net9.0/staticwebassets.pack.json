@@ -1,0 +1,225 @@
+{
+  "Files": [
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\assets\\back.jpg",
+      "PackagePath": "staticwebassets\\assets\\back.jpg"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\attachments\\css\\attachments.css",
+      "PackagePath": "staticwebassets\\attachments\\css\\attachments.css"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\attachments\\js\\attachments.js",
+      "PackagePath": "staticwebassets\\attachments\\js\\attachments.js"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\attachments\\pages\\attachment-create.html",
+      "PackagePath": "staticwebassets\\attachments\\pages\\attachment-create.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\attachments\\pages\\attachment-details.html",
+      "PackagePath": "staticwebassets\\attachments\\pages\\attachment-details.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\attachments\\pages\\attachment-edit.html",
+      "PackagePath": "staticwebassets\\attachments\\pages\\attachment-edit.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\attachments\\pages\\attachments.html",
+      "PackagePath": "staticwebassets\\attachments\\pages\\attachments.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\auth.html",
+      "PackagePath": "staticwebassets\\auth.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\categories\\categorie-create.html",
+      "PackagePath": "staticwebassets\\categories\\categorie-create.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\categories\\categorie-details.html",
+      "PackagePath": "staticwebassets\\categories\\categorie-details.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\categories\\categorie-edit.html",
+      "PackagePath": "staticwebassets\\categories\\categorie-edit.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\categories\\categories.css",
+      "PackagePath": "staticwebassets\\categories\\categories.css"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\categories\\categories.html",
+      "PackagePath": "staticwebassets\\categories\\categories.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\categories\\categories.js",
+      "PackagePath": "staticwebassets\\categories\\categories.js"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\feedbacks\\css\\feedbacks.css",
+      "PackagePath": "staticwebassets\\feedbacks\\css\\feedbacks.css"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\feedbacks\\js\\feedback-create.js",
+      "PackagePath": "staticwebassets\\feedbacks\\js\\feedback-create.js"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\feedbacks\\js\\feedback-details.js",
+      "PackagePath": "staticwebassets\\feedbacks\\js\\feedback-details.js"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\feedbacks\\js\\feedback-edit.js",
+      "PackagePath": "staticwebassets\\feedbacks\\js\\feedback-edit.js"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\feedbacks\\js\\feedbacks.js",
+      "PackagePath": "staticwebassets\\feedbacks\\js\\feedbacks.js"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\feedbacks\\pages\\feedback-create.html",
+      "PackagePath": "staticwebassets\\feedbacks\\pages\\feedback-create.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\feedbacks\\pages\\feedback-details.html",
+      "PackagePath": "staticwebassets\\feedbacks\\pages\\feedback-details.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\feedbacks\\pages\\feedback-edit.html",
+      "PackagePath": "staticwebassets\\feedbacks\\pages\\feedback-edit.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\feedbacks\\pages\\feedbacks.html",
+      "PackagePath": "staticwebassets\\feedbacks\\pages\\feedbacks.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\index.html",
+      "PackagePath": "staticwebassets\\index.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\responses\\response-create.html",
+      "PackagePath": "staticwebassets\\responses\\response-create.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\responses\\response-details.html",
+      "PackagePath": "staticwebassets\\responses\\response-details.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\responses\\response-edit.html",
+      "PackagePath": "staticwebassets\\responses\\response-edit.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\responses\\responses.css",
+      "PackagePath": "staticwebassets\\responses\\responses.css"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\responses\\responses.html",
+      "PackagePath": "staticwebassets\\responses\\responses.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\responses\\responses.js",
+      "PackagePath": "staticwebassets\\responses\\responses.js"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\roles\\role-create.html",
+      "PackagePath": "staticwebassets\\roles\\role-create.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\roles\\role-details.html",
+      "PackagePath": "staticwebassets\\roles\\role-details.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\roles\\role-edit.html",
+      "PackagePath": "staticwebassets\\roles\\role-edit.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\roles\\roles.css",
+      "PackagePath": "staticwebassets\\roles\\roles.css"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\roles\\roles.html",
+      "PackagePath": "staticwebassets\\roles\\roles.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\roles\\roles.js",
+      "PackagePath": "staticwebassets\\roles\\roles.js"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\script.js",
+      "PackagePath": "staticwebassets\\script.js"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\statuses\\status-create.html",
+      "PackagePath": "staticwebassets\\statuses\\status-create.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\statuses\\status-details.html",
+      "PackagePath": "staticwebassets\\statuses\\status-details.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\statuses\\status-edit.html",
+      "PackagePath": "staticwebassets\\statuses\\status-edit.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\statuses\\statuses.css",
+      "PackagePath": "staticwebassets\\statuses\\statuses.css"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\statuses\\statuses.html",
+      "PackagePath": "staticwebassets\\statuses\\statuses.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\statuses\\statuses.js",
+      "PackagePath": "staticwebassets\\statuses\\statuses.js"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\styles.css",
+      "PackagePath": "staticwebassets\\styles.css"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\users\\user-create.html",
+      "PackagePath": "staticwebassets\\users\\user-create.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\users\\user-details.html",
+      "PackagePath": "staticwebassets\\users\\user-details.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\users\\user-edit.html",
+      "PackagePath": "staticwebassets\\users\\user-edit.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\users\\users.css",
+      "PackagePath": "staticwebassets\\users\\users.css"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\users\\users.html",
+      "PackagePath": "staticwebassets\\users\\users.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\users\\users.js",
+      "PackagePath": "staticwebassets\\users\\users.js"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.Interface.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.Interface.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.build.Interface.props",
+      "PackagePath": "build\\Interface.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.buildMultiTargeting.Interface.props",
+      "PackagePath": "buildMultiTargeting\\Interface.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.buildTransitive.Interface.props",
+      "PackagePath": "buildTransitive\\Interface.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
