@@ -28,6 +28,11 @@ namespace Infrastructure.Repositories
         {
             return await _context.Attachments.Where(a => a.FeedbackId == feedbackId).ToListAsync();
         }
+        
+        public async Task<IEnumerable<Attachment>> GetByUserIdAsync(string userId)
+        {
+            return await _context.Attachments.Where(a => a.UserId == userId).ToListAsync();
+        }
 
         public async Task AddAsync(Attachment attachment)
         {

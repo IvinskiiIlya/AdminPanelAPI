@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <title>Создать категорию - Рабочая панель</title>
+    <link rel="stylesheet" href="../css/categories.css" />
+</head>
+<body>
+<div class="container-card">
+    <h1>Создание категории</h1>
+    <form id="categoryForm">
+        <label for="id">Идентификатор:</label><br />
+        <input type="text" id="id" name="id" required />
+
+        <label for="name">Название:</label><br />
+        <input type="text" id="name" name="name" required maxlength="100" /><br /><br />
+
+        <label for="description">Описание:</label><br />
+        <textarea id="description" name="description" maxlength="500" rows="4" placeholder="Описание категории (необязательно)"></textarea><br /><br />
+
+        <button type="button" class="return-buttons" onclick="location.href='categories.html'">Вернуться</button>
+        <button type="submit" class="create-buttons">Отправить</button>
+    </form>
+
+    <div id="formMessage"></div>
+</div>
+
+<script src="../js/category-create.js"></script>
+</body>
+</html>

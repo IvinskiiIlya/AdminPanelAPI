@@ -1,12 +1,64 @@
 {
   "Files": [
     {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\assets\\attachments\\complaints\\slow_search.mp4",
+      "PackagePath": "staticwebassets\\assets\\attachments\\complaints\\slow_search.mp4"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\assets\\attachments\\docs\\api_missing.txt",
+      "PackagePath": "staticwebassets\\assets\\attachments\\docs\\api_missing.txt"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\assets\\attachments\\errors\\error500.png",
+      "PackagePath": "staticwebassets\\assets\\attachments\\errors\\error500.png"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\assets\\attachments\\integration\\crm_error.log",
+      "PackagePath": "staticwebassets\\assets\\attachments\\integration\\crm_error.log"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\assets\\attachments\\other\\thanks_letter.docx",
+      "PackagePath": "staticwebassets\\assets\\attachments\\other\\thanks_letter.docx"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\assets\\attachments\\performance\\large_file_logs.log",
+      "PackagePath": "staticwebassets\\assets\\attachments\\performance\\large_file_logs.log"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\assets\\attachments\\questions\\export_example.docx",
+      "PackagePath": "staticwebassets\\assets\\attachments\\questions\\export_example.docx"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\assets\\attachments\\security\\xss_report.pdf",
+      "PackagePath": "staticwebassets\\assets\\attachments\\security\\xss_report.pdf"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\assets\\attachments\\suggestions\\darktheme.pdf",
+      "PackagePath": "staticwebassets\\assets\\attachments\\suggestions\\darktheme.pdf"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\assets\\attachments\\ui\\button_screenshot.jpg",
+      "PackagePath": "staticwebassets\\assets\\attachments\\ui\\button_screenshot.jpg"
+    },
+    {
       "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\assets\\back.jpg",
       "PackagePath": "staticwebassets\\assets\\back.jpg"
     },
     {
       "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\attachments\\css\\attachments.css",
       "PackagePath": "staticwebassets\\attachments\\css\\attachments.css"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\attachments\\js\\attachment-create.js",
+      "PackagePath": "staticwebassets\\attachments\\js\\attachment-create.js"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\attachments\\js\\attachment-details.js",
+      "PackagePath": "staticwebassets\\attachments\\js\\attachment-details.js"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\attachments\\js\\attachment-edit.js",
+      "PackagePath": "staticwebassets\\attachments\\js\\attachment-edit.js"
     },
     {
       "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\attachments\\js\\attachments.js",
@@ -33,28 +85,40 @@
       "PackagePath": "staticwebassets\\auth.html"
     },
     {
-      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\categories\\categorie-create.html",
-      "PackagePath": "staticwebassets\\categories\\categorie-create.html"
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\categories\\css\\categories.css",
+      "PackagePath": "staticwebassets\\categories\\css\\categories.css"
     },
     {
-      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\categories\\categorie-details.html",
-      "PackagePath": "staticwebassets\\categories\\categorie-details.html"
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\categories\\js\\categories.js",
+      "PackagePath": "staticwebassets\\categories\\js\\categories.js"
     },
     {
-      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\categories\\categorie-edit.html",
-      "PackagePath": "staticwebassets\\categories\\categorie-edit.html"
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\categories\\js\\category-create.js",
+      "PackagePath": "staticwebassets\\categories\\js\\category-create.js"
     },
     {
-      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\categories\\categories.css",
-      "PackagePath": "staticwebassets\\categories\\categories.css"
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\categories\\js\\category-details.js",
+      "PackagePath": "staticwebassets\\categories\\js\\category-details.js"
     },
     {
-      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\categories\\categories.html",
-      "PackagePath": "staticwebassets\\categories\\categories.html"
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\categories\\js\\category-edit.js",
+      "PackagePath": "staticwebassets\\categories\\js\\category-edit.js"
     },
     {
-      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\categories\\categories.js",
-      "PackagePath": "staticwebassets\\categories\\categories.js"
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\categories\\pages\\categories.html",
+      "PackagePath": "staticwebassets\\categories\\pages\\categories.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\categories\\pages\\category-create.html",
+      "PackagePath": "staticwebassets\\categories\\pages\\category-create.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\categories\\pages\\category-details.html",
+      "PackagePath": "staticwebassets\\categories\\pages\\category-details.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\categories\\pages\\category-edit.html",
+      "PackagePath": "staticwebassets\\categories\\pages\\category-edit.html"
     },
     {
       "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\feedbacks\\css\\feedbacks.css",

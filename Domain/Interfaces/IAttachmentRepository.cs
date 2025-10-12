@@ -7,6 +7,7 @@ namespace Domain.Interfaces
         Task<IEnumerable<Attachment>> GetAllAsync();
         Task<Attachment?> GetByIdAsync(int id);
         Task<IEnumerable<Attachment>> GetByFeedbackIdAsync(int feedbackId);
+        Task<IEnumerable<Attachment>> GetByUserIdAsync(string userId);
         Task AddAsync(Attachment attachment);
         Task UpdateAsync(Attachment attachment);
         Task DeleteAsync(int id);

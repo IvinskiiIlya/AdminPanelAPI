@@ -14,11 +14,17 @@ namespace Interface.Controllers;
 public class AttachmentController : ControllerBase
 {
     
+    private readonly IWebHostEnvironment _env;
     private readonly IAttachmentService _attachmentService;
+    private readonly IFeedbackService _feedbackService;
+    private readonly ICategoryService _categoryService;
 
-    public AttachmentController(IAttachmentService attachmentService)
+    public AttachmentController(IWebHostEnvironment env, IAttachmentService attachmentService, IFeedbackService feedbackService, ICategoryService categoryService)
     {
+        _env = env;
         _attachmentService = attachmentService;
+        _feedbackService = feedbackService;
+        _categoryService = categoryService;
     }
 
     /// <summary>
@@ -75,6 +81,27 @@ public class AttachmentController : ControllerBase
         var attachments = await _attachmentService.GetAttachmentsByFeedbackAsync(feedbackId);
         return Ok(attachments);
     }
+    
+    /// <summary>
+    /// Получить список вложений пользователя.
+    /// </summary>
+    /// <returns>Список вложений</returns>
+    [HttpGet("attachments")]
+    [SwaggerOperation(
+        Summary = "Получить вложения текущего пользователя",
+        Description = "Возвращает список вложений текущего авторизованного пользователя."
+    )]
+    [SwaggerResponse(200, "Список вложений успешно получен", typeof(List<DisplayAttachmentDto>))]
+    [SwaggerResponse(401, "Пользователь не авторизован")]
+    public async Task<ActionResult<List<DisplayAttachmentDto>>> GetAttachmentsByUser()
+    {
+        var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userId))
+            return Unauthorized();
+
+        var attachments = await _attachmentService.GetAttachmentsByUserIdAsync(userId);
+        return Ok(attachments);
+    }
 
     /// <summary>
     /// Загрузить новое вложение.
@@ -83,6 +110,7 @@ public class AttachmentController : ControllerBase
     /// <returns>Созданное вложение</returns>
     [HttpPost]
     [Authorize(Roles = "Пользователь")]
+    [Consumes("multipart/form-data")]
     [SwaggerOperation(
         Summary = "Загрузить вложение",
         Description = "Создает новое вложение и связывает его с отзывом."
@@ -90,9 +118,29 @@ public class AttachmentController : ControllerBase
     [SwaggerResponse(201, "Вложение успешно создано", typeof(DisplayAttachmentDto))]
     [SwaggerResponse(400, "Некорректные данные запроса")]
     [SwaggerResponse(401, "Пользователь не авторизован")]
-    public async Task<ActionResult<DisplayAttachmentDto>> UploadAttachment([FromBody] CreateAttachmentDto dto)
+    public async Task<ActionResult<DisplayAttachmentDto>> UploadAttachment([FromForm] CreateAttachmentDto dto)
     {
+        if (dto.File == null || dto.File.Length == 0)
+            return BadRequest("Файл не загружен");
+
+        var uploadFolder = Path.Combine(_env.WebRootPath ?? "wwwroot", "assets", "attachments");
+        if (!Directory.Exists(uploadFolder))
+            Directory.CreateDirectory(uploadFolder);
+
+        var extension = Path.GetExtension(dto.File.FileName);
+        var uniqueFileName = $"{Guid.NewGuid()}{extension}";
+        var filePath = Path.Combine(uploadFolder, uniqueFileName);
+
+        using (var stream = new FileStream(filePath, FileMode.Create))
+        {
+            await dto.File.CopyToAsync(stream);
+        }
+
+        dto.FilePath = Path.Combine("uploads", uniqueFileName).Replace("\\", "/");
+        dto.FileType = dto.File.ContentType;
+
         var attachment = await _attachmentService.CreateAttachmentAsync(dto);
+
         return CreatedAtAction(nameof(GetAttachmentById), new { id = attachment.Id }, attachment);
     }
 

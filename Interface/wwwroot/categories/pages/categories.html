@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <title>Категории - Рабочая панель</title>
+    <link rel="stylesheet" href="../css/categories.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<div class="container-card">
+    <nav>
+        <ul>
+            <li><a href="categories.html" class="active">Категории</a></li>
+            <li><a href="../../responses/pages/responses.html">Ответы</a></li>
+            <li><a href="../../roles/pages/roles.html">Роли</a></li>
+            <li><a href="../../statuses/pages/statuses.html">Статусы</a></li>
+            <li><a href="../../users/pages/users.html">Пользователи</a></li>
+        </ul>
+    </nav>
+
+    <h1>Категории</h1>
+    <p>Здесь отображаются категории.</p>
+
+    <div class="category-list">
+        <p>Загрузка категорий...</p>
+    </div>
+
+    <div class="pagination"></div>
+
+    <div>
+        <button class="return-buttons" onclick="location.href='../../index.html'">Вернуться</button>
+        <button class="create-buttons" onclick="location.href='category-create.html'">Создать категорию</button>
+    </div>
+</div>
+
+<script src="../js/categories.js"></script>
+</body>
+</html>

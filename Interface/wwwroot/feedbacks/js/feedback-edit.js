@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const userInfo = await getUserInfo();
     if (!userInfo) {
-        alert('Требуется авторизация');
         window.location.href = '../../auth.html';
         return;
     }
@@ -91,7 +90,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const currentUserId = userInfo.userId;
         if (!currentUserId) {
-            alert('Не удалось определить пользователя. Требуется авторизация.');
             window.location.href = '../../auth.html';
             return;
         }
@@ -126,7 +124,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const errorData = await response.json();
                 formMessage.textContent = 'Ошибка: ' + (errorData.detail || 'Некорректные данные');
             } else if (response.status === 401) {
-                alert('Сессия истекла. Требуется авторизация');
                 window.location.href = '../../auth.html';
             } else if (response.status === 404) {
                 alert('Отзыв не найден');

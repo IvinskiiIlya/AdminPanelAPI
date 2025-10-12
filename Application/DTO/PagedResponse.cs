@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace Application.DTO;
 
 public class PagedResponse<T>

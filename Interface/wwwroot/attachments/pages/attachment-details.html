@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <title>Детали вложения - Рабочая панель</title>
+    <link rel="stylesheet" href="../css/attachments.css" />
+</head>
+<body>
+<div class="container-card">
+    <h1>Детали вложения</h1>
+
+    <div>
+        <strong>Отзыв:</strong> <span id="feedbackMessagePreview"></span><br />
+        <strong>Путь к файлу:</strong> <span id="filePath"></span><br />
+        <strong>Тип файла:</strong> <span id="fileType"></span><br />
+        <strong>Дата создания:</strong> <span id="createdAt"></span><br />
+    </div>
+
+    <div>
+        <h2>Файл</h2>
+        <a id="fileLink" href="#" target="_blank">Открыть файл</a>
+    </div>
+
+    <button class="return-buttons" onclick="location.href='attachments.html'">Вернуться</button>
+</div>
+
+<script src="../js/attachment-details.js"></script>
+</body>
+</html>

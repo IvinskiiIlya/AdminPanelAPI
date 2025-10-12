@@ -38,6 +38,27 @@ public class CategoryController : ControllerBase
         var categories = await _categoryService.GetAllCategoriesAsync(filters);
         return Ok(categories);
     }
+    
+    /// <summary>
+    /// Получить категорию по идентификатору
+    /// </summary>
+    /// <param name="id">Идентификатор категории</param>
+    /// <returns>Данные категории</returns>
+    [HttpGet("{id}")]
+    [SwaggerOperation(
+        Summary = "Получить категорию по ID",
+        Description = "Возвращает данные категории по указанному идентификатору."
+    )]
+    [SwaggerResponse(200, "Категория успешно получена", typeof(DisplayCategoryDto))]
+    [SwaggerResponse(401, "Пользователь не авторизован")]
+    [SwaggerResponse(404, "Категория не найдена")]
+    public async Task<ActionResult<DisplayCategoryDto>> GetCategoryById(int id)
+    {
+        var category = await _categoryService.GetCategoryByIdAsync(id);
+        if (category == null)
+            return NotFound();
+        return Ok(category);
+    }
 
     /// <summary>
     /// Создать новую категорию

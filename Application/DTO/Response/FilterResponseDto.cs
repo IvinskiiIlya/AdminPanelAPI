@@ -1,3 +1,5 @@
+using System;
+
 namespace Application.DTO.Response;
 
 public class FilterResponseDto : PaginationParams

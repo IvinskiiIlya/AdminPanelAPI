@@ -1,15 +1,25 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using Application.DTO;
 using Application.DTO.Attachment;
 using Application.Interfaces;
 using Domain.Interfaces;
 using Domain.Models;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Application.Services
 {
     public class AttachmentService : IAttachmentService
     {
         
+        private readonly IWebHostEnvironment _env;
         private readonly IAttachmentRepository _attachmentRepository;
+        private readonly IAttachmentService _attachmentService;
+        private readonly IFeedbackService _feedbackService;
+        private readonly ICategoryService _categoryService;
 
         public AttachmentService(IAttachmentRepository attachmentRepository)
         {
@@ -23,6 +33,11 @@ namespace Application.Services
 
             if (filters.FeedbackId.HasValue)
                 query = query.Where(a => a.FeedbackId == filters.FeedbackId.Value);
+            
+            if (!string.IsNullOrEmpty(filters.UserId))
+            {
+                query = query.Where(a => a.UserId == filters.UserId);
+            }
             
             if (!string.IsNullOrEmpty(filters.FileType))
             {
@@ -58,6 +73,7 @@ namespace Application.Services
             {
                 Id = a.Id,
                 FeedbackId = a.FeedbackId,
+                UserId = a.UserId,
                 FilePath = a.FilePath,
                 FileType = a.FileType,
                 CreatedAt = a.CreatedAt
@@ -115,6 +131,20 @@ namespace Application.Services
             {
                 Id = a.Id,
                 FeedbackId = a.FeedbackId,
+                FilePath = a.FilePath,
+                FileType = a.FileType,
+                CreatedAt = a.CreatedAt
+            }).ToList();
+        }
+        
+        public async Task<List<DisplayAttachmentDto>> GetAttachmentsByUserIdAsync(string userId)
+        {
+            var attachments = await _attachmentRepository.GetByUserIdAsync(userId);
+            return attachments.Select(a => new DisplayAttachmentDto
+            {
+                Id = a.Id,
+                FeedbackId = a.FeedbackId,
+                UserId = a.UserId,
                 FilePath = a.FilePath,
                 FileType = a.FileType,
                 CreatedAt = a.CreatedAt

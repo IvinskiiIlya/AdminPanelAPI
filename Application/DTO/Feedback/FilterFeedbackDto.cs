@@ -1,3 +1,5 @@
+using System;
+
 namespace Application.DTO.Feedback;
 
 public class FilterFeedbackDto : PaginationParams

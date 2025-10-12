@@ -1,10 +1,12 @@
+using System;
+
 namespace Application.DTO.Attachment;
 
 public class DisplayAttachmentDto
 {
     public int Id { get; set; }
     public int FeedbackId { get; set; }
-
+    public string UserId { get; set; }
     public string FilePath { get; set; }
     public string FileType { get; set; }
 

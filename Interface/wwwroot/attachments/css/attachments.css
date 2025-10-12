@@ -1,0 +1,225 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url('../../assets/back.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    font-family: sans-serif;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.25rem 0;
+    display: flex;
+    gap: 0.9375rem;
+    justify-content: center;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #333333;
+    font-weight: bold;
+    padding: 0.5rem 0.9375rem;
+    border-radius: 0.5rem;
+    border: 2px solid transparent;
+    transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+nav ul li a:hover {
+    background-color: #333333;
+    color: white;
+    box-shadow: none;
+}
+
+nav ul li a.active {
+    background-color: #333333;
+    color: white;
+    border-color: #333333;
+}
+
+.container-card {
+    background-color: rgba(255, 255, 255, 0.3);
+    padding: 2.5rem 3.125rem;
+    border-radius: 0.9375rem;
+    box-shadow: 0 0.5rem 1.25rem rgb(24 78 104 / 0.35);
+    max-width: 80rem;
+    width: 90%;
+    text-align: center;
+    color: #333333;
+}
+
+.container-card div {
+    margin-bottom: 1.5rem;
+}
+
+h1 {
+    color: #333333;
+}
+
+p {
+    color: #444444;
+    margin: 0.5rem 0;
+    font-size: 1.25rem;
+}
+
+.attachment-list {
+    max-height: 400px;
+    overflow-y: auto;
+    margin-bottom: 1.875rem;
+    text-align: left;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    background-color: rgba(255, 255, 255, 0.6);
+    padding: 1rem;
+    color: #333;
+}
+
+.attachment-item {
+    border-bottom: 1px solid #ddd;
+    padding: 0.5rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.attachment-item:last-child {
+    border-bottom: none;
+}
+
+button {
+    background-color: transparent;
+    color: #333333;
+    border: 2px solid #333333;
+    padding: 0.75rem 1.5625rem;
+    margin: 0.3125rem 0.625rem;
+    font-size: 1rem;
+    border-radius: 0.625rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    box-shadow: none;
+}
+
+button:hover {
+    background-color: white;
+    color: #333333;
+    border-color: white;
+    box-shadow: none;
+}
+
+.pagination {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.pagination button {
+    margin: 0 4px;
+    padding: 6px 12px;
+    border: 1px solid white;
+    background-color: white;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.pagination button:hover {
+    background-color: #333333;
+    color: white;
+    border-color: #333333;
+}
+
+.pagination button:disabled {
+    cursor: default;
+    opacity: 0.3;
+}
+
+form label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.3rem;
+    color: #333333;
+}
+
+form input {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-family: sans-serif;
+    margin-bottom: 1rem;
+}
+
+#feedbackList {
+    max-height: 200px; 
+    overflow-y: auto; 
+    border: 1px solid #ccc; 
+    padding: 10px;
+}
+
+#feedbackList label {
+    text-align: start;
+}
+
+.attachment-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+.attachment-buttons button {
+    margin: 0;
+    padding: 0.4rem 0.9rem;
+    font-size: 0.9rem;
+    border-radius: 0.4rem;
+}
+
+.btn-detail:hover {
+    background-color: #007BFF;
+    border-color: #007BFF;
+    color: white;
+}
+
+.btn-edit:hover {
+    background-color: #ffe030;
+    border-color: #ffe030;
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #ff0000;
+    border-color: #ff0000;
+    color: white;
+}
+
+#formMessage {
+    font-size: 1rem;
+    margin-top: 1rem;
+    color: red;
+}
+
+.custom-file-input {
+    margin-bottom: 1rem;
+}
+
+#fileSelectBtn {
+    padding: 6px 12px;
+    background-color: white;
+    color: black;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#fileSelectBtn:hover {
+    background-color: black;
+    color: white;
+}
+

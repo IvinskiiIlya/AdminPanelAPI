@@ -87,6 +87,7 @@ public class AppDbContext : IdentityDbContext<IdentityUser, IdentityRole, string
             entity.Property(a => a.Id).HasColumnName("id");
 
             entity.Property(a => a.FeedbackId).HasColumnName("feedback_id");
+            entity.Property(a => a.UserId).HasColumnName("user_id"); 
 
             entity.Property(a => a.FilePath).IsRequired().HasMaxLength(255).HasColumnName("file_path");
             entity.Property(a => a.FileType).IsRequired().HasMaxLength(100).HasColumnName("file_type");
@@ -96,6 +97,10 @@ public class AppDbContext : IdentityDbContext<IdentityUser, IdentityRole, string
                 .WithMany(f => f.Attachments)
                 .HasForeignKey(a => a.FeedbackId)
                 .OnDelete(DeleteBehavior.Cascade);
+            
+            entity.HasOne(a => a.User)
+                .WithMany()
+                .HasForeignKey(a => a.UserId);
         });
     }
 }

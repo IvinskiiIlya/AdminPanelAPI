@@ -28,7 +28,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="wwwroot\assets\" />
+      <Folder Include="wwwroot\assets\attachments\" />
     </ItemGroup>
 
     <ItemGroup>
@@ -37,6 +37,18 @@
       <_ContentIncludedByDefault Remove="wwwroot\pages\attachments\attachment-edit.html" />
       <_ContentIncludedByDefault Remove="wwwroot\pages\attachments\attachments.html" />
       <_ContentIncludedByDefault Remove="wwwroot\css\styles.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\attachments\css\attachments.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\attachments\js\attachments.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\attachments\pages\attachment-create.html" />
+      <_ContentIncludedByDefault Remove="wwwroot\attachments\pages\attachment-details.html" />
+      <_ContentIncludedByDefault Remove="wwwroot\attachments\pages\attachment-edit.html" />
+      <_ContentIncludedByDefault Remove="wwwroot\attachments\pages\attachments.html" />
+      <_ContentIncludedByDefault Remove="wwwroot\categories\categorie-create.html" />
+      <_ContentIncludedByDefault Remove="wwwroot\categories\categorie-details.html" />
+      <_ContentIncludedByDefault Remove="wwwroot\categories\categorie-edit.html" />
+      <_ContentIncludedByDefault Remove="wwwroot\categories\categories.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\categories\categories.html" />
+      <_ContentIncludedByDefault Remove="wwwroot\categories\categories.js" />
     </ItemGroup>
 
 </Project>
