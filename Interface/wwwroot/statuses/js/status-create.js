@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     getUserInfo().then(userInfo => {
         if (!userInfo) {
+            alert('Требуется авторизация, перенаправление на страницу входа');
             window.location.href = '../../auth.html';
             return;
         }
@@ -28,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const name = document.getElementById('name').value.trim();
 
         if (name.length < 1) {
-            formMessage.textContent = 'Название статуса обязательно.';
+            alert('Название статуса обязательно.');
             return;
         }
 
@@ -44,18 +45,20 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (response.status === 201) {
+                alert('Статус успешно создан');
                 window.location.href = 'statuses.html';
             } else if (response.status === 400) {
                 const errorData = await response.json();
-                formMessage.textContent = 'Ошибка: ' + (errorData.detail || 'Некорректные данные');
+                alert('Ошибка: ' + (errorData.detail || 'Некорректные данные'));
             } else if (response.status === 401) {
+                alert('Сессия истекла, требуется повторная авторизация');
                 window.location.href = '../../auth.html';
             } else {
-                formMessage.textContent = 'Ошибка создания статуса.';
+                alert('Ошибка создания статуса.');
             }
         } catch (error) {
             console.error(error);
-            formMessage.textContent = 'Ошибка сервера. Попробуйте позже.';
+            alert('Ошибка сервера. Попробуйте позже.');
         }
     });
 });

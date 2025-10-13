@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     getUserInfo().then(userInfo => {
         if (!userInfo) {
+            alert('Требуется авторизация, перенаправление на страницу входа');
             window.location.href = '../../auth.html';
             return;
         }
@@ -29,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const description = document.getElementById('description').value.trim();
 
         if (name.length < 1) {
-            formMessage.textContent = 'Название категории обязательно.';
+            alert('Название категории обязательно.');
             return;
         }
 
@@ -45,18 +46,20 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (response.status === 201) {
+                alert('Категория успешно создана');
                 window.location.href = 'categories.html';
             } else if (response.status === 400) {
                 const errorData = await response.json();
-                formMessage.textContent = 'Ошибка: ' + (errorData.detail || 'Некорректные данные');
+                alert('Ошибка: ' + (errorData.detail || 'Некорректные данные'));
             } else if (response.status === 401) {
+                alert('Сессия истекла, требуется повторная авторизация');
                 window.location.href = '../../auth.html';
             } else {
-                formMessage.textContent = 'Ошибка создания категории.';
+                alert('Ошибка создания категории.');
             }
         } catch (error) {
             console.error(error);
-            formMessage.textContent = 'Ошибка сервера. Попробуйте позже.';
+            alert('Ошибка сервера. Попробуйте позже.');
         }
     });
 });

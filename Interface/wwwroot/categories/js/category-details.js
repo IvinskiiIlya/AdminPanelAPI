@@ -6,7 +6,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     async function fetchJson(url) {
         try {
             const resp = await fetch(url, { credentials: 'include' });
-            if (!resp.ok) throw new Error(`Ошибка загрузки ${url}: ${resp.status}`);
+            if (!resp.ok) {
+                alert(`Ошибка загрузки данных: ${resp.status}`);
+                throw new Error(`Ошибка загрузки ${url}: ${resp.status}`);
+            }
             return resp.json();
         } catch (error) {
             console.error(error);

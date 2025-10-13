@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const userInfo = await getUserInfo();
     if (!userInfo) {
+        alert('Требуется авторизация, перенаправление на страницу входа');
         window.location.href = '../../auth.html';
         return;
     }
@@ -31,7 +32,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (response.status === 404) {
                     alert('Роль не найдена');
                 } else if (response.status === 401) {
-                    alert('Требуется авторизация');
+                    alert('Сессия истекла, требуется повторная авторизация');
                 } else {
                     alert('Ошибка загрузки роли');
                 }
@@ -54,7 +55,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         formMessage.textContent = '';
 
         if (nameInput.value.trim().length < 1) {
-            formMessage.textContent = 'Название роли обязательно.';
+            alert('Название роли обязательно.');
             return;
         }
 
@@ -72,21 +73,23 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
 
             if (response.status === 204) {
+                alert('Роль успешно обновлена');
                 window.location.href = 'roles.html';
             } else if (response.status === 400) {
                 const errorData = await response.json();
-                formMessage.textContent = 'Ошибка: ' + (errorData.detail || 'Некорректные данные');
+                alert('Ошибка: ' + (errorData.detail || 'Некорректные данные'));
             } else if (response.status === 401) {
+                alert('Сессия истекла, требуется повторная авторизация');
                 window.location.href = '../../auth.html';
             } else if (response.status === 404) {
                 alert('Роль не найдена');
                 window.location.href = 'roles.html';
             } else {
-                formMessage.textContent = 'Ошибка обновления роли.';
+                alert('Ошибка обновления роли.');
             }
         } catch (error) {
             console.error(error);
-            formMessage.textContent = 'Ошибка сервера. Попробуйте позже.';
+            alert('Ошибка сервера. Попробуйте позже.');
         }
     });
 });

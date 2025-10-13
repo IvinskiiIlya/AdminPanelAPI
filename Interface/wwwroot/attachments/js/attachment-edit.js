@@ -54,6 +54,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const userInfo = await getUserInfo();
     if (!userInfo) {
+        alert('Требуется авторизация, перенаправление на страницу входа');
         window.location.href = '../../auth.html';
         return;
     }
@@ -72,7 +73,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         };
 
         if (!dto.feedbackId || !dto.filePath || !dto.fileType) {
-            formMessage.textContent = 'Пожалуйста, заполните все поля корректно.';
+            alert('Пожалуйста, заполните все поля корректно.');
             return;
         }
 
@@ -87,21 +88,23 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
 
             if (response.status === 204) {
+                alert('Вложение успешно обновлено');
                 window.location.href = 'attachments.html';
             } else if (response.status === 400) {
                 const errorData = await response.json();
-                formMessage.textContent = 'Ошибка: ' + (errorData.detail || 'Некорректные данные');
+                alert('Ошибка: ' + (errorData.detail || 'Некорректные данные'));
             } else if (response.status === 401) {
+                alert('Сессия истекла, требуется повторная авторизация');
                 window.location.href = '../../auth.html';
             } else if (response.status === 404) {
                 alert('Вложение не найдено');
                 window.location.href = 'attachments.html';
             } else {
-                formMessage.textContent = 'Ошибка обновления вложения.';
+                alert('Ошибка обновления вложения.');
             }
         } catch (error) {
             console.error(error);
-            formMessage.textContent = 'Ошибка сервера. Попробуйте позже.';
+            alert('Ошибка сервера. Попробуйте позже.');
         }
     });
 });

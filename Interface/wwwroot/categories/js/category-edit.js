@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    const idInput = document.getElementById('id');             
+    const idInput = document.getElementById('id');
     const nameInput = document.getElementById('name');
     const descriptionInput = document.getElementById('description');
     const formMessage = document.getElementById('formMessage');
@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const userInfo = await getUserInfo();
     if (!userInfo) {
+        alert('Требуется авторизация, перенаправление на страницу входа');
         window.location.href = '../../auth.html';
         return;
     }
@@ -38,7 +39,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (response.status === 404) {
                     alert('Категория не найдена');
                 } else if (response.status === 401) {
-                    alert('Требуется авторизация');
+                    alert('Сессия истекла, требуется повторная авторизация');
                 } else {
                     alert('Ошибка загрузки категории');
                 }
@@ -46,7 +47,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 return;
             }
             loadedCategory = await response.json();
-            idInput.value = loadedCategory.id;              
+            idInput.value = loadedCategory.id;
             nameInput.value = loadedCategory.name;
             descriptionInput.value = loadedCategory.description || '';
         } catch (error) {
@@ -63,13 +64,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         formMessage.textContent = '';
 
         const dto = {
-            id: Number(idInput.value), 
+            id: Number(idInput.value),
             name: nameInput.value.trim(),
             description: descriptionInput.value.trim() || null
         };
 
         if (dto.name.length < 1) {
-            formMessage.textContent = 'Название категории обязательно.';
+            alert('Название категории обязательно.');
             return;
         }
 
@@ -82,21 +83,23 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
 
             if (response.status === 204) {
+                alert('Категория успешно обновлена');
                 window.location.href = 'categories.html';
             } else if (response.status === 400) {
                 const errorData = await response.json();
-                formMessage.textContent = 'Ошибка: ' + (errorData.detail || 'Некорректные данные');
+                alert('Ошибка: ' + (errorData.detail || 'Некорректные данные'));
             } else if (response.status === 401) {
+                alert('Сессия истекла, требуется повторная авторизация');
                 window.location.href = '../../auth.html';
             } else if (response.status === 404) {
                 alert('Категория не найдена');
                 window.location.href = 'categories.html';
             } else {
-                formMessage.textContent = 'Ошибка обновления категории.';
+                alert('Ошибка обновления категории.');
             }
         } catch (error) {
             console.error(error);
-            formMessage.textContent = 'Ошибка сервера. Попробуйте позже.';
+            alert('Ошибка сервера. Попробуйте позже.');
         }
     });
 });

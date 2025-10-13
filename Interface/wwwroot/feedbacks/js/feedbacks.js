@@ -1,10 +1,52 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const pagination = {
         pageNumber: 1,
         pageSize: 10,
         totalPages: 1
     };
-    loadFeedbacks(pagination.pageNumber);
+
+    let currentUserInfo = null;
+
+    async function init() {
+        currentUserInfo = await getUserInfo();
+        if (!currentUserInfo) {
+            alert('Требуется авторизация, перенаправление на страницу входа');
+            window.location.href = '../../auth.html';
+            return;
+        }
+
+        const isAdmin = currentUserInfo.roles && currentUserInfo.roles.includes('Администратор');
+
+        const menu = document.querySelector('nav ul');
+        const links = menu.querySelectorAll('li');
+
+        if (!isAdmin) {
+            links.forEach(li => {
+                const a = li.querySelector('a');
+                if (a) {
+                    const text = a.textContent.trim();
+                    if (text !== 'Вложения' && text !== 'Отзывы') {
+                        li.style.display = 'none';
+                    }
+                }
+            });
+        }
+
+        const currentPath = window.location.pathname.split('/').pop();
+        links.forEach(li => {
+            const a = li.querySelector('a');
+            if (a) {
+                const href = a.getAttribute('href');
+                if (href === currentPath || href.endsWith(currentPath)) {
+                    a.classList.add('active');
+                } else {
+                    a.classList.remove('active');
+                }
+            }
+        });
+
+        loadFeedbacks(pagination.pageNumber);
+    }
 
     document.querySelector('.pagination').addEventListener('click', (event) => {
         const target = event.target;
@@ -21,14 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const feedbackListContainer = document.querySelector('.feedback-list');
         const paginationContainer = document.querySelector('.pagination');
 
-        const userInfo = await getUserInfo();
-        if (!userInfo) {
-            window.location.href = '../../auth.html';
-            return;
-        }
-        
-        const currentUserId = userInfo.userId || null;
-
         feedbackListContainer.innerHTML = '<p>Загрузка отзывов...</p>';
         paginationContainer.innerHTML = '';
 
@@ -40,6 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!response.ok) {
                 if (response.status === 401) {
+                    alert('Сессия истекла, требуется повторная авторизация');
                     window.location.href = '../../auth.html';
                     return;
                 }
@@ -59,12 +94,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
             feedbackListContainer.innerHTML = '';
 
+            const isAdmin = currentUserInfo.roles && currentUserInfo.roles.includes('Администратор');
+            const currentUserId = currentUserInfo.userId || null;
+
             feedbacks.forEach(fb => {
                 const feedbackElem = document.createElement('div');
                 feedbackElem.className = 'feedback-item';
 
                 let buttonsHtml = `<button class="btn-detail" data-id="${fb.id}"><i class="fa fa-search"></i></button>`;
-                if (fb.userId === currentUserId) {
+                if (isAdmin || fb.userId === currentUserId) {
                     buttonsHtml += `
                     <button class="btn-edit" data-id="${fb.id}"><i class="fa fa-pencil"></i></button>
                     <button class="btn-delete" data-id="${fb.id}"><i class="fa fa-trash"></i></button>`;
@@ -179,8 +217,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 credentials: 'include'
             });
             if (!response.ok) {
-                throw new Error('Ошибка при удалении');
+                alert('Ошибка при удалении отзыва');
+                return;
             }
+            alert('Отзыв успешно удалён');
             loadFeedbacks(1);
         } catch (error) {
             alert('Не удалось удалить отзыв.');
@@ -197,6 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const userInfo = await getUserInfo();
             if (!userInfo) {
+                alert('Требуется авторизация, перенаправление на страницу входа');
                 window.location.href = '../../auth.html';
                 return;
             }
@@ -206,7 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const message = document.getElementById('message').value.trim();
 
             if (!categoryId || !statusId || message.length < 10) {
-                formMessage.textContent = 'Пожалуйста, заполните все поля корректно.';
+                alert('Пожалуйста, заполните все поля корректно.');
                 return;
             }
 
@@ -228,19 +269,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 if (response.status === 201) {
+                    alert('Отзыв успешно создан');
                     window.location.href = 'feedbacks.html';
                 } else if (response.status === 400) {
                     const errorData = await response.json();
-                    formMessage.textContent = 'Ошибка: ' + (errorData.detail || 'Некорректные данные');
+                    alert('Ошибка: ' + (errorData.detail || 'Некорректные данные'));
                 } else if (response.status === 401) {
+                    alert('Сессия истекла, требуется повторная авторизация');
                     window.location.href = '../../auth.html';
                 } else {
-                    formMessage.textContent = 'Ошибка создания отзыва.';
+                    alert('Ошибка создания отзыва.');
                 }
             } catch (error) {
+                alert('Ошибка сервера. Попробуйте позже.');
                 console.error(error);
-                formMessage.textContent = 'Ошибка сервера. Попробуйте позже.';
             }
         });
     }
+
+    init();
 });

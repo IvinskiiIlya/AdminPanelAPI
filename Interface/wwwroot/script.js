@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: 'POST',
                 credentials: 'include'
             });
+            alert('Вы успешно вышли из системы');
             window.location.href = 'auth.html';
         });
     }
@@ -41,9 +42,10 @@ async function handleLoginForm() {
                 alert('Неверная электронная почта или пароль');
                 return;
             }
-            
+
+            alert('Вход выполнен успешно');
             window.location.href = 'index.html';
-            
+
         } catch (error) {
             alert('Ошибка сервера, попробуйте позже');
             console.error(error);
@@ -71,6 +73,7 @@ async function handleMainPageRoleControl() {
 
     const userInfo = await getUserInfo();
     if (!userInfo) {
+        alert('Требуется авторизация, перенаправление на страницу входа');
         window.location.href = '/auth.html';
         return;
     }
@@ -85,27 +88,27 @@ async function handleMainPageRoleControl() {
         }
     }
 
-    const elementsToCheck = [
-        { selector: "button[onclick*='attachment-create.html']", requiredRole: 'Пользователь', hideParent: false },
-        { selector: "button[onclick*='category-create.html']", requiredRole: 'Администратор', hideParent: false },
-        { selector: "button[onclick*='feedback-create.html']", requiredRole: 'Пользователь', hideParent: false },
-        { selector: "button[onclick*='response-create.html']", requiredRole: 'Администратор', hideParent: false },
-        { selector: "button[onclick*='role-create.html']", requiredRole: 'Администратор', hideParent: false },
-        { selector: "button[onclick*='status-create.html']", requiredRole: 'Администратор', hideParent: false },
-        { selector: "button[onclick*='user-create.html']", requiredRole: 'Администратор', hideParent: false },
+    if (!hasRole('Пользователь', roles)) {
+        return;
+    }
 
-        { selector: "nav ul li a[href*='attachments.html']", requiredRole: 'Пользователь', hideParent: true },
-        { selector: "nav ul li a[href*='categories.html']", requiredRole: 'Администратор', hideParent: true },
-        { selector: "nav ul li a[href*='feedbacks.html']", requiredRole: 'Пользователь', hideParent: true },
-        { selector: "nav ul li a[href*='responses.html']", requiredRole: 'Администратор', hideParent: true },
-        { selector: "nav ul li a[href*='roles.html']", requiredRole: 'Администратор', hideParent: true },
-        { selector: "nav ul li a[href*='statuses.html']", requiredRole: 'Администратор', hideParent: true },
-        { selector: "nav ul li a[href*='users.html']", requiredRole: 'Администратор', hideParent: true },
+    const elementsToCheck = [
+        { selector: "button[onclick*='category-create.html']", hideParent: false },
+        { selector: "button[onclick*='response-create.html']", hideParent: false },
+        { selector: "button[onclick*='role-create.html']", hideParent: false },
+        { selector: "button[onclick*='status-create.html']", hideParent: false },
+        { selector: "button[onclick*='user-create.html']", hideParent: false },
+
+        { selector: "nav ul li a[href*='categories.html']", hideParent: true },
+        { selector: "nav ul li a[href*='responses.html']", hideParent: true },
+        { selector: "nav ul li a[href*='roles.html']", hideParent: true },
+        { selector: "nav ul li a[href*='statuses.html']", hideParent: true },
+        { selector: "nav ul li a[href*='users.html']", hideParent: true },
     ];
 
-    elementsToCheck.forEach(({ selector, requiredRole, hideParent }) => {
+    elementsToCheck.forEach(({ selector, hideParent }) => {
         const element = container.querySelector(selector);
-        if (element && !hasRole(requiredRole, roles)) {
+        if (element) {
             if (hideParent && element.parentElement) {
                 element.parentElement.style.display = 'none';
             } else {

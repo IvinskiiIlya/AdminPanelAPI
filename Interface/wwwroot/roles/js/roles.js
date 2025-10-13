@@ -1,10 +1,52 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const pagination = {
         pageNumber: 1,
         pageSize: 10,
         totalPages: 1
     };
-    loadRoles(pagination.pageNumber);
+
+    let currentUserInfo = null;
+
+    async function init() {
+        currentUserInfo = await getUserInfo();
+        if (!currentUserInfo) {
+            alert('Требуется авторизация, перенаправление на страницу входа');
+            window.location.href = '../../auth.html';
+            return;
+        }
+
+        const isAdmin = currentUserInfo.roles && currentUserInfo.roles.includes('Администратор');
+
+        const menu = document.querySelector('nav ul');
+        const links = menu.querySelectorAll('li');
+
+        if (!isAdmin) {
+            links.forEach(li => {
+                const a = li.querySelector('a');
+                if (a) {
+                    const text = a.textContent.trim();
+                    if (text !== 'Вложения' && text !== 'Отзывы') {
+                        li.style.display = 'none';
+                    }
+                }
+            });
+        }
+
+        const currentPath = window.location.pathname.split('/').pop();
+        links.forEach(li => {
+            const a = li.querySelector('a');
+            if (a) {
+                const href = a.getAttribute('href');
+                if (href === currentPath || href.endsWith(currentPath)) {
+                    a.classList.add('active');
+                } else {
+                    a.classList.remove('active');
+                }
+            }
+        });
+
+        loadRoles(pagination.pageNumber);
+    }
 
     document.querySelector('.pagination').addEventListener('click', (event) => {
         const target = event.target;
@@ -32,6 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!response.ok) {
                 if (response.status === 401) {
+                    alert('Сессия истекла, требуется повторная авторизация');
                     window.location.href = '../../auth.html';
                     return;
                 }
@@ -51,15 +94,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
             roleListContainer.innerHTML = '';
 
+            const isAdmin = currentUserInfo.roles && currentUserInfo.roles.includes('Администратор');
+
             roles.forEach(role => {
                 const roleElem = document.createElement('div');
                 roleElem.className = 'role-item';
 
-                let buttonsHtml = `
-                    <button class="btn-detail" data-id="${role.id}"><i class="fa fa-search"></i></button>
-                    <button class="btn-edit" data-id="${role.id}"><i class="fa fa-pencil"></i></button>
-                    <button class="btn-delete" data-id="${role.id}"><i class="fa fa-trash"></i></button>
-                `;
+                let buttonsHtml = `<button class="btn-detail" data-id="${role.id}"><i class="fa fa-search"></i></button>`;
+
+                if (isAdmin) {
+                    buttonsHtml += `
+                        <button class="btn-edit" data-id="${role.id}"><i class="fa fa-pencil"></i></button>
+                        <button class="btn-delete" data-id="${role.id}"><i class="fa fa-trash"></i></button>
+                    `;
+                }
 
                 roleElem.innerHTML = `
                 <div class="role-content">
@@ -79,6 +127,17 @@ document.addEventListener('DOMContentLoaded', () => {
             roleListContainer.innerHTML = '<p>Ошибка загрузки ролей. Попробуйте позже.</p>';
             console.error(error);
         }
+    }
+
+    async function getUserInfo() {
+        const response = await fetch('/api/auth/userinfo', {
+            method: 'GET',
+            credentials: 'include'
+        });
+        if (!response.ok) return null;
+
+        const data = await response.json();
+        return { userId: data.id || data.userId || null, name: data.name, roles: data.roles };
     }
 
     function buildPagination(container, currentPage, totalPages) {
@@ -159,6 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 credentials: 'include'
             });
             if (response.ok) {
+                alert('Роль успешно удалена');
                 const responseCheck = await fetch(`/api/role?pageNumber=${pagination.pageNumber}&pageSize=${pagination.pageSize}`, {
                     method: 'GET',
                     credentials: 'include'
@@ -185,4 +245,6 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error(error);
         }
     }
+
+    init();
 });

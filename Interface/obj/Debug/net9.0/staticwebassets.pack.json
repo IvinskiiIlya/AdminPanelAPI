@@ -1,18 +1,6 @@
 {
   "Files": [
     {
-      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\assets\\attachments\\07415883-791e-4110-9126-f76a28300780.png",
-      "PackagePath": "staticwebassets\\assets\\attachments\\07415883-791e-4110-9126-f76a28300780.png"
-    },
-    {
-      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\assets\\attachments\\37090612-0505-4a1d-864f-b5cffb7278f5.png",
-      "PackagePath": "staticwebassets\\assets\\attachments\\37090612-0505-4a1d-864f-b5cffb7278f5.png"
-    },
-    {
-      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\assets\\attachments\\6a7d20ea-866a-437a-a8d5-b9b6699d37b4.png",
-      "PackagePath": "staticwebassets\\assets\\attachments\\6a7d20ea-866a-437a-a8d5-b9b6699d37b4.png"
-    },
-    {
       "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\assets\\attachments\\complaints\\slow_search.mp4",
       "PackagePath": "staticwebassets\\assets\\attachments\\complaints\\slow_search.mp4"
     },
@@ -43,6 +31,14 @@
     {
       "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\assets\\attachments\\security\\xss_report.pdf",
       "PackagePath": "staticwebassets\\assets\\attachments\\security\\xss_report.pdf"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\assets\\attachments\\suggestions\\51917359-3291-47e9-8cc9-61477b0d1bfb.docx",
+      "PackagePath": "staticwebassets\\assets\\attachments\\suggestions\\51917359-3291-47e9-8cc9-61477b0d1bfb.docx"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\assets\\attachments\\suggestions\\5c0701fd-53c0-4ad6-a372-e0360fdfc599.png",
+      "PackagePath": "staticwebassets\\assets\\attachments\\suggestions\\5c0701fd-53c0-4ad6-a372-e0360fdfc599.png"
     },
     {
       "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\assets\\attachments\\suggestions\\darktheme.pdf",

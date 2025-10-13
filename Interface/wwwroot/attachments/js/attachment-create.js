@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
             fileNameSpan.textContent = 'Файл не выбран';
         }
     });
-    
+
     async function getUserInfo() {
         const response = await fetch('/api/auth/userinfo', {
             method: 'GET',
@@ -40,24 +40,11 @@ document.addEventListener('DOMContentLoaded', () => {
         return data.data || [];
     }
 
-    function escapeHtml(text) {
-        if (!text) return '';
-        return text.replace(/[&<>"']/g, m => {
-            switch (m) {
-                case '&': return '&amp;';
-                case '<': return '&lt;';
-                case '>': return '&gt;';
-                case '"': return '&quot;';
-                case "'": return '&#39;';
-                default: return m;
-            }
-        });
-    }
-
     async function renderFeedbacks() {
         feedbackListDiv.innerHTML = '<p>Загрузка отзывов...</p>';
         const userInfo = await getUserInfo();
         if (!userInfo || !userInfo.userId) {
+            alert('Требуется авторизация, перенаправление на страницу входа');
             window.location.href = '../../auth.html';
             return;
         }
@@ -87,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 checkbox.value = fb.id;
 
                 label.appendChild(checkbox);
-                label.appendChild(document.createTextNode(' ' + escapeHtml(messagePreview)));
+                label.appendChild(document.createTextNode(messagePreview));
 
                 feedbackListDiv.appendChild(label);
             });
@@ -103,6 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const userInfo = await getUserInfo();
         if (!userInfo) {
+            alert('Требуется авторизация, перенаправление на страницу входа');
             window.location.href = '../../auth.html';
             return;
         }
@@ -136,22 +124,24 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (response.status === 201) {
+                alert('Вложение успешно добавлено');
                 window.location.href = 'attachments.html';
             } else if (response.status === 400) {
                 const errorData = await response.json();
                 if (errorData.errors) {
-                    formMessage.textContent = 'Ошибка: ' + Object.values(errorData.errors).flat().join(', ');
+                    alert('Ошибка: ' + Object.values(errorData.errors).flat().join(', '));
                 } else {
-                    formMessage.textContent = 'Ошибка: ' + (errorData.detail || 'Некорректные данные');
+                    alert('Ошибка: ' + (errorData.detail || 'Некорректные данные'));
                 }
             } else if (response.status === 401) {
+                alert('Сессия истекла, требуется повторная авторизация');
                 window.location.href = '../../auth.html';
             } else {
-                formMessage.textContent = 'Ошибка при добавлении вложения.';
+                alert('Ошибка при добавлении вложения.');
             }
         } catch (error) {
             console.error(error);
-            formMessage.textContent = 'Ошибка сервера. Попробуйте позже.';
+            alert('Ошибка сервера. Попробуйте позже.');
         }
     });
 

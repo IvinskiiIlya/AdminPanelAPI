@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const userInfo = await getUserInfo();
     if (!userInfo) {
+        alert('Требуется авторизация, перенаправление на страницу входа');
         window.location.href = '../../auth.html';
         return;
     }
@@ -30,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             return respJson.data || [];
         } catch (err) {
             console.error(err);
-            formMessage.textContent = 'Ошибка загрузки данных.';
+            alert('Ошибка загрузки данных.');
             return [];
         }
     }
@@ -61,7 +62,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         };
 
         if (!dto.categoryId || dto.message.length < 10) {
-            formMessage.textContent = 'Пожалуйста, заполните все поля корректно.';
+            alert('Пожалуйста, заполните все поля корректно.');
             return;
         }
 
@@ -76,18 +77,20 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
 
             if (response.status === 201) {
+                alert('Отзыв успешно создан');
                 window.location.href = 'feedbacks.html';
             } else if (response.status === 400) {
                 const errorData = await response.json();
-                formMessage.textContent = 'Ошибка: ' + (errorData.detail || 'Некорректные данные');
+                alert('Ошибка: ' + (errorData.detail || 'Некорректные данные'));
             } else if (response.status === 401) {
+                alert('Сессия истекла, требуется повторная авторизация');
                 window.location.href = '../../auth.html';
             } else {
-                formMessage.textContent = 'Ошибка создания отзыва.';
+                alert('Ошибка создания отзыва.');
             }
         } catch (error) {
             console.error(error);
-            formMessage.textContent = 'Ошибка сервера. Попробуйте позже.';
+            alert('Ошибка сервера. Попробуйте позже.');
         }
     });
 });

@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const userInfo = await getUserInfo();
     if (!userInfo) {
+        alert('Требуется авторизация, перенаправление на страницу входа');
         window.location.href = '../../auth.html';
         return;
     }
@@ -32,7 +33,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             return respJson.data || [];
         } catch (err) {
             console.error(err);
-            formMessage.textContent = 'Ошибка загрузки данных.';
+            alert('Ошибка загрузки данных.');
             return [];
         }
     }
@@ -64,7 +65,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (response.status === 404) {
                     alert('Отзыв не найден');
                 } else if (response.status === 401) {
-                    alert('Требуется авторизация');
+                    alert('Сессия истекла, требуется повторная авторизация');
                 } else {
                     alert('Ошибка загрузки отзыва');
                 }
@@ -90,6 +91,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const currentUserId = userInfo.userId;
         if (!currentUserId) {
+            alert('Требуется авторизация, перенаправление на страницу входа');
             window.location.href = '../../auth.html';
             return;
         }
@@ -103,7 +105,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         };
 
         if (!dto.categoryId || dto.message.length < 10) {
-            formMessage.textContent = 'Пожалуйста, заполните все поля корректно.';
+            alert('Пожалуйста, заполните все поля корректно.');
             return;
         }
 
@@ -122,18 +124,19 @@ document.addEventListener('DOMContentLoaded', async () => {
                 window.location.href = 'feedbacks.html';
             } else if (response.status === 400) {
                 const errorData = await response.json();
-                formMessage.textContent = 'Ошибка: ' + (errorData.detail || 'Некорректные данные');
+                alert('Ошибка: ' + (errorData.detail || 'Некорректные данные'));
             } else if (response.status === 401) {
+                alert('Сессия истекла, требуется повторная авторизация');
                 window.location.href = '../../auth.html';
             } else if (response.status === 404) {
                 alert('Отзыв не найден');
                 window.location.href = 'feedbacks.html';
             } else {
-                formMessage.textContent = 'Ошибка обновления отзыва.';
+                alert('Ошибка обновления отзыва.');
             }
         } catch (error) {
             console.error(error);
-            formMessage.textContent = 'Ошибка сервера. Попробуйте позже.';
+            alert('Ошибка сервера. Попробуйте позже.');
         }
     });
 });

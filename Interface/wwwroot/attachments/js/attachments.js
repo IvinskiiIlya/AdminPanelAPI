@@ -1,9 +1,47 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const pagination = {
         pageNumber: 1,
         pageSize: 10,
         totalPages: 1
     };
+
+    const userInfo = await getUserInfo();
+    if (!userInfo) {
+        alert('Требуется авторизация, перенаправление на страницу входа');
+        window.location.href = '../../auth.html';
+        return;
+    }
+
+    const isAdmin = userInfo.roles && userInfo.roles.includes('Администратор');
+
+    const menu = document.querySelector('nav ul');
+    const links = menu.querySelectorAll('li');
+
+    if (!isAdmin) {
+        links.forEach(li => {
+            const a = li.querySelector('a');
+            if (a) {
+                const text = a.textContent.trim();
+                if (text !== 'Вложения' && text !== 'Отзывы') {
+                    li.style.display = 'none';
+                }
+            }
+        });
+    }
+
+    const currentPath = window.location.pathname.split('/').pop();
+    links.forEach(li => {
+        const a = li.querySelector('a');
+        if (a) {
+            const href = a.getAttribute('href');
+            if (href === currentPath || href.endsWith(currentPath)) {
+                a.classList.add('active');
+            } else {
+                a.classList.remove('active');
+            }
+        }
+    });
+
     loadAttachments(pagination.pageNumber);
 
     document.querySelector('.pagination').addEventListener('click', (event) => {
@@ -21,12 +59,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const attachmentListContainer = document.querySelector('.attachment-list');
         const paginationContainer = document.querySelector('.pagination');
 
-        const userInfo = await getUserInfo();
-        if (!userInfo) {
-            window.location.href = '../../auth.html';
-            return;
-        }
-
         const currentUserId = userInfo.userId || null;
 
         attachmentListContainer.innerHTML = '<p>Загрузка вложений...</p>';
@@ -40,9 +72,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!response.ok) {
                 if (response.status === 401) {
+                    alert('Сессия истекла, требуется повторная авторизация');
                     window.location.href = '../../auth.html';
                     return;
                 }
+                alert(`Ошибка загрузки вложений: ${response.status}`);
                 throw new Error(`Ошибка загрузки вложений: ${response.status}`);
             }
 
@@ -86,13 +120,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const attachmentElem = document.createElement('div');
                 attachmentElem.className = 'attachment-item';
 
+                const isAdmin = userInfo.roles && userInfo.roles.includes('Администратор');
                 let buttonsHtml = `<button class="btn-detail" data-id="${att.id}"><i class="fa fa-search"></i></button>`;
-
-                if (att.userId === currentUserId) {
+                if (isAdmin || att.userId === currentUserId) {
                     buttonsHtml += `
-                    <button class="btn-edit" data-id="${att.id}"><i class="fa fa-pencil"></i></button>
-                    <button class="btn-delete" data-id="${att.id}"><i class="fa fa-trash"></i></button>
-                `;
+                        <button class="btn-edit" data-id="${att.id}"><i class="fa fa-pencil"></i></button>
+                        <button class="btn-delete" data-id="${att.id}"><i class="fa fa-trash"></i></button>
+                    `;
                 }
 
                 attachmentElem.innerHTML = `
@@ -215,6 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert('Ошибка при удалении вложения');
                 return;
             }
+            alert('Вложение успешно удалено');
             loadAttachments(pagination.pageNumber);
         } catch (error) {
             console.error(error);
