@@ -15,11 +15,7 @@ namespace Application.Services
     public class AttachmentService : IAttachmentService
     {
         
-        private readonly IWebHostEnvironment _env;
         private readonly IAttachmentRepository _attachmentRepository;
-        private readonly IAttachmentService _attachmentService;
-        private readonly IFeedbackService _feedbackService;
-        private readonly ICategoryService _categoryService;
 
         public AttachmentService(IAttachmentRepository attachmentRepository)
         {

@@ -2,7 +2,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     const pagination = {
         pageNumber: 1,
         pageSize: 10,
-        totalPages: 1
+        totalPages: 1,
+        searchTerm: "",
+        sortColumn: "Id",
+        sortOrder: "asc"
     };
 
     const userInfo = await getUserInfo();
@@ -55,6 +58,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
+    document.getElementById('filterBtn').addEventListener('click', () => {
+        const searchTerm = document.getElementById('searchTerm').value.trim();
+        const sortColumn = document.getElementById('sortColumn').value;
+        const sortOrder = document.getElementById('sortOrder').value;
+
+        pagination.searchTerm = searchTerm;
+        pagination.sortColumn = sortColumn;
+        pagination.sortOrder = sortOrder;
+        pagination.pageNumber = 1;
+
+        loadAttachments(pagination.pageNumber);
+    });
+
     async function loadAttachments(pageNumber) {
         const attachmentListContainer = document.querySelector('.attachment-list');
         const paginationContainer = document.querySelector('.pagination');
@@ -65,7 +81,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         paginationContainer.innerHTML = '';
 
         try {
-            const response = await fetch(`/api/attachment?pageNumber=${pageNumber}&pageSize=${pagination.pageSize}`, {
+            const params = new URLSearchParams({
+                pageNumber,
+                pageSize: pagination.pageSize,
+                searchTerm: pagination.searchTerm || "",
+                sortColumn: pagination.sortColumn || "Id",
+                sortOrder: pagination.sortOrder || "asc"
+            });
+
+            const response = await fetch(`/api/attachment?${params.toString()}`, {
                 method: 'GET',
                 credentials: 'include'
             });

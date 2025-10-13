@@ -2,7 +2,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     const pagination = {
         pageNumber: 1,
         pageSize: 10,
-        totalPages: 1
+        totalPages: 1,
+        searchTerm: "",
+        categoryId: "",
+        statusId: "",
+        createdFrom: "",
+        createdTo: "",
+        sortColumn: "Id",
+        sortOrder: "asc"
     };
 
     let currentUserInfo = null;
@@ -45,7 +52,52 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         });
 
+        await loadCategories();
+        await loadStatuses();
+
         loadFeedbacks(pagination.pageNumber);
+    }
+
+    async function loadCategories() {
+        try {
+            const response = await fetch('/api/category', { method: 'GET', credentials: 'include' });
+            if (!response.ok) throw new Error('Ошибка загрузки категорий');
+            const data = await response.json();
+            const categories = data.data || data;
+
+            const categorySelect = document.getElementById('categoryId');
+            if (categorySelect && categories) {
+                categories.forEach(cat => {
+                    const option = document.createElement('option');
+                    option.value = cat.id;
+                    option.textContent = cat.name || `Категория ${cat.id}`;
+                    categorySelect.appendChild(option);
+                });
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async function loadStatuses() {
+        try {
+            const response = await fetch('/api/status', { method: 'GET', credentials: 'include' });
+            if (!response.ok) throw new Error('Ошибка загрузки статусов');
+            const data = await response.json();
+            const statuses = data.data || data;
+
+            const statusSelect = document.getElementById('statusId');
+            if (statusSelect && statuses) {
+                statuses.forEach(st => {
+                    const option = document.createElement('option');
+                    option.value = st.id;
+                    option.textContent = st.name || `Статус ${st.id}`;
+                    statusSelect.appendChild(option);
+                });
+            }
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     document.querySelector('.pagination').addEventListener('click', (event) => {
@@ -59,6 +111,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
+    document.getElementById('filterBtn').addEventListener('click', () => {
+        pagination.searchTerm = document.getElementById('searchTerm').value.trim();
+        pagination.categoryId = document.getElementById('categoryId').value;
+        pagination.statusId = document.getElementById('statusId').value;
+        pagination.createdFrom = document.getElementById('createdFrom').value;
+        pagination.createdTo = document.getElementById('createdTo').value;
+        pagination.sortColumn = document.getElementById('sortColumn').value;
+        pagination.sortOrder = document.getElementById('sortOrder').value;
+        pagination.pageNumber = 1;
+
+        loadFeedbacks(pagination.pageNumber);
+    });
+
     async function loadFeedbacks(pageNumber) {
         const feedbackListContainer = document.querySelector('.feedback-list');
         const paginationContainer = document.querySelector('.pagination');
@@ -67,7 +132,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         paginationContainer.innerHTML = '';
 
         try {
-            const response = await fetch(`/api/feedback?pageNumber=${pageNumber}&pageSize=${pagination.pageSize}`, {
+            const params = new URLSearchParams({
+                pageNumber,
+                pageSize: pagination.pageSize,
+                searchTerm: pagination.searchTerm || "",
+                categoryId: pagination.categoryId || "",
+                statusId: pagination.statusId || "",
+                createdFrom: pagination.createdFrom || "",
+                createdTo: pagination.createdTo || "",
+                sortColumn: pagination.sortColumn || "Id",
+                sortOrder: pagination.sortOrder || "asc"
+            });
+
+            const response = await fetch(`/api/feedback?${params.toString()}`, {
                 method: 'GET',
                 credentials: 'include'
             });
@@ -84,7 +161,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             const responseData = await response.json();
             const feedbacks = responseData.data;
 
-            paginationContainer.innerHTML = '';
             pagination.totalPages = responseData.totalPages;
 
             if (feedbacks.length === 0) {
@@ -122,7 +198,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
 
             buildPagination(paginationContainer, responseData.pageNumber, responseData.totalPages);
-
         } catch (error) {
             feedbackListContainer.innerHTML = '<p>Ошибка загрузки отзывов. Попробуйте позже.</p>';
             console.error(error);
@@ -226,65 +301,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             alert('Не удалось удалить отзыв.');
             console.error(error);
         }
-    }
-
-    const feedbackForm = document.getElementById('feedbackForm');
-    if (feedbackForm) {
-        feedbackForm.addEventListener('submit', async (event) => {
-            event.preventDefault();
-            const formMessage = document.getElementById('formMessage');
-            formMessage.textContent = '';
-
-            const userInfo = await getUserInfo();
-            if (!userInfo) {
-                alert('Требуется авторизация, перенаправление на страницу входа');
-                window.location.href = '../../auth.html';
-                return;
-            }
-
-            const categoryId = document.getElementById('category').value;
-            const statusId = document.getElementById('status').value;
-            const message = document.getElementById('message').value.trim();
-
-            if (!categoryId || !statusId || message.length < 10) {
-                alert('Пожалуйста, заполните все поля корректно.');
-                return;
-            }
-
-            const dto = {
-                userId: userInfo.userId,
-                categoryId: Number(categoryId),
-                statusId: Number(statusId),
-                message: message
-            };
-
-            try {
-                const response = await fetch('/api/feedback', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    credentials: 'include',
-                    body: JSON.stringify(dto)
-                });
-
-                if (response.status === 201) {
-                    alert('Отзыв успешно создан');
-                    window.location.href = 'feedbacks.html';
-                } else if (response.status === 400) {
-                    const errorData = await response.json();
-                    alert('Ошибка: ' + (errorData.detail || 'Некорректные данные'));
-                } else if (response.status === 401) {
-                    alert('Сессия истекла, требуется повторная авторизация');
-                    window.location.href = '../../auth.html';
-                } else {
-                    alert('Ошибка создания отзыва.');
-                }
-            } catch (error) {
-                alert('Ошибка сервера. Попробуйте позже.');
-                console.error(error);
-            }
-        });
     }
 
     init();

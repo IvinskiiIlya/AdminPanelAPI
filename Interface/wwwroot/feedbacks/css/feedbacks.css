@@ -68,7 +68,7 @@ p {
 }
 
 .feedback-list {
-    max-height: 400px;
+    max-height: 300px;
     overflow-y: auto;
     margin-bottom: 1.875rem;
     text-align: left;
@@ -220,6 +220,17 @@ form textarea {
 
 #message, #responsesList, #attachmentsList {
     text-align: start;
+}
+
+.filter-bar {
+    margin-bottom: 15px;
+}
+.filter-bar input,
+.filter-bar select,
+.filter-bar button {
+    margin-right: 10px;
+    padding: 5px 8px;
+    font-size: 14px;
 }
 
 
