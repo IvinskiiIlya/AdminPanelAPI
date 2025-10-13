@@ -123,9 +123,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const formData = new FormData();
         formData.append('File', file);
-        formData.append('UserId', userInfo.userId);
+        formData.append('UserId', String(userInfo.userId));
+        formData.append('FeedbackId', String(Number(selectedFeedback.value)));
         formData.append('FileType', fileType);
-        formData.append('FeedbackId', selectedFeedback.value);
+        formData.append('FilePath', 'temp');
 
         try {
             const response = await fetch('/api/attachment', {
@@ -138,7 +139,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.href = 'attachments.html';
             } else if (response.status === 400) {
                 const errorData = await response.json();
-                formMessage.textContent = 'Ошибка: ' + (errorData.detail || 'Некорректные данные');
+                if (errorData.errors) {
+                    formMessage.textContent = 'Ошибка: ' + Object.values(errorData.errors).flat().join(', ');
+                } else {
+                    formMessage.textContent = 'Ошибка: ' + (errorData.detail || 'Некорректные данные');
+                }
             } else if (response.status === 401) {
                 window.location.href = '../../auth.html';
             } else {

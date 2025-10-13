@@ -44,7 +44,7 @@ public class RoleController : ControllerBase
     /// </summary>
     /// <param name="id">Идентификатор роли</param>
     /// <returns>Роль с указанным идентификатором</returns>
-    [HttpGet("{id}")]
+    [HttpGet("{id:guid}")]
     [SwaggerOperation(
         Summary = "Получить роль по ID",
         Description = "Возвращает роль по заданному идентификатору."

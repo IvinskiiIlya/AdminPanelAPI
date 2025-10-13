@@ -157,6 +157,7 @@ namespace Application.Services
             {
                 FeedbackId = createAttachmentDto.FeedbackId,
                 FilePath = createAttachmentDto.FilePath,
+                UserId = createAttachmentDto.UserId,
                 FileType = createAttachmentDto.FileType,
                 CreatedAt = DateTime.UtcNow
             };
@@ -168,6 +169,7 @@ namespace Application.Services
                 Id = attachment.Id,
                 FeedbackId = attachment.FeedbackId,
                 FilePath = attachment.FilePath,
+                UserId = attachment.UserId,
                 FileType = attachment.FileType,
                 CreatedAt = attachment.CreatedAt
             };

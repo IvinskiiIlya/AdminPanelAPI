@@ -64,7 +64,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
             attachmentListContainer.innerHTML = '';
 
-            attachments.forEach(att => {
+            async function getFeedbackPreview(feedbackId) {
+                if (!feedbackId) return '';
+                try {
+                    const resp = await fetch(`/api/feedback/${feedbackId}`, { credentials: 'include' });
+                    if (!resp.ok) throw new Error(`Ошибка загрузки отзыва: ${resp.status}`);
+                    const feedback = await resp.json();
+                    if (feedback.message) {
+                        return feedback.message.length > 100 ? feedback.message.substring(0, 100) + '...' : feedback.message;
+                    } else {
+                        return '';
+                    }
+                } catch {
+                    return '';
+                }
+            }
+
+            for (const att of attachments) {
+                const feedbackPreview = await getFeedbackPreview(att.feedbackId);
+
                 const attachmentElem = document.createElement('div');
                 attachmentElem.className = 'attachment-item';
 
@@ -82,12 +100,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p><strong>Файл:</strong> <a href="${escapeHtml(att.filePath)}" target="_blank" class="file-link" data-filepath="${escapeHtml(att.filePath)}">${escapeHtml(att.filePath.split('/').pop())}</a></p>
                     <p><small>Тип: ${escapeHtml(att.fileType)}</small></p>
                     <p><small>Дата: ${new Date(att.createdAt).toLocaleString()}</small></p>
+                    <p class="feedback-preview">${escapeHtml(feedbackPreview) || '(нет)'}</p>
                 </div>
                 <div class="attachment-buttons">${buttonsHtml}</div>
-            `;
+                `;
 
                 attachmentListContainer.appendChild(attachmentElem);
-            });
+            }
 
             buildPagination(paginationContainer, responseData.pageNumber, responseData.totalPages);
 

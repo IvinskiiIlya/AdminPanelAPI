@@ -49,6 +49,18 @@
       <_ContentIncludedByDefault Remove="wwwroot\categories\categories.css" />
       <_ContentIncludedByDefault Remove="wwwroot\categories\categories.html" />
       <_ContentIncludedByDefault Remove="wwwroot\categories\categories.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\statuses\status-create.html" />
+      <_ContentIncludedByDefault Remove="wwwroot\statuses\status-details.html" />
+      <_ContentIncludedByDefault Remove="wwwroot\statuses\status-edit.html" />
+      <_ContentIncludedByDefault Remove="wwwroot\statuses\statuses.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\statuses\statuses.html" />
+      <_ContentIncludedByDefault Remove="wwwroot\statuses\statuses.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\roles\role-create.html" />
+      <_ContentIncludedByDefault Remove="wwwroot\roles\role-details.html" />
+      <_ContentIncludedByDefault Remove="wwwroot\roles\role-edit.html" />
+      <_ContentIncludedByDefault Remove="wwwroot\roles\roles.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\roles\roles.html" />
+      <_ContentIncludedByDefault Remove="wwwroot\roles\roles.js" />
     </ItemGroup>
 
 </Project>

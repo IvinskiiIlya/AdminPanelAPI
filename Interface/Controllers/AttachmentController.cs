@@ -122,8 +122,19 @@ public class AttachmentController : ControllerBase
     {
         if (dto.File == null || dto.File.Length == 0)
             return BadRequest("Файл не загружен");
+        
+        if (dto.FeedbackId <= 0)
+            return BadRequest("Некорректный идентификатор отзыва");
 
-        var uploadFolder = Path.Combine(_env.WebRootPath ?? "wwwroot", "assets", "attachments");
+        var feedback = await _feedbackService.GetFeedbackByIdAsync(dto.FeedbackId);
+        if (feedback == null)
+            return BadRequest("Отзыв не найден");
+
+        var categoryId = feedback.CategoryId;
+        var category = await _categoryService.GetCategoryByIdAsync(categoryId);
+
+        var uploadFolder = Path.Combine(_env.WebRootPath, "assets", "attachments", category.Name);
+
         if (!Directory.Exists(uploadFolder))
             Directory.CreateDirectory(uploadFolder);
 
@@ -136,7 +147,7 @@ public class AttachmentController : ControllerBase
             await dto.File.CopyToAsync(stream);
         }
 
-        dto.FilePath = Path.Combine("uploads", uniqueFileName).Replace("\\", "/");
+        dto.FilePath = Path.Combine("/assets/attachments", category.Name,uniqueFileName).Replace("\\", "/");
         dto.FileType = dto.File.ContentType;
 
         var attachment = await _attachmentService.CreateAttachmentAsync(dto);

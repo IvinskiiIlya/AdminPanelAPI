@@ -1,6 +1,18 @@
 {
   "Files": [
     {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\assets\\attachments\\07415883-791e-4110-9126-f76a28300780.png",
+      "PackagePath": "staticwebassets\\assets\\attachments\\07415883-791e-4110-9126-f76a28300780.png"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\assets\\attachments\\37090612-0505-4a1d-864f-b5cffb7278f5.png",
+      "PackagePath": "staticwebassets\\assets\\attachments\\37090612-0505-4a1d-864f-b5cffb7278f5.png"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\assets\\attachments\\6a7d20ea-866a-437a-a8d5-b9b6699d37b4.png",
+      "PackagePath": "staticwebassets\\assets\\attachments\\6a7d20ea-866a-437a-a8d5-b9b6699d37b4.png"
+    },
+    {
       "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\assets\\attachments\\complaints\\slow_search.mp4",
       "PackagePath": "staticwebassets\\assets\\attachments\\complaints\\slow_search.mp4"
     },
@@ -185,56 +197,80 @@
       "PackagePath": "staticwebassets\\responses\\responses.js"
     },
     {
-      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\roles\\role-create.html",
-      "PackagePath": "staticwebassets\\roles\\role-create.html"
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\roles\\css\\roles.css",
+      "PackagePath": "staticwebassets\\roles\\css\\roles.css"
     },
     {
-      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\roles\\role-details.html",
-      "PackagePath": "staticwebassets\\roles\\role-details.html"
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\roles\\js\\role-create.js",
+      "PackagePath": "staticwebassets\\roles\\js\\role-create.js"
     },
     {
-      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\roles\\role-edit.html",
-      "PackagePath": "staticwebassets\\roles\\role-edit.html"
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\roles\\js\\role-details.js",
+      "PackagePath": "staticwebassets\\roles\\js\\role-details.js"
     },
     {
-      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\roles\\roles.css",
-      "PackagePath": "staticwebassets\\roles\\roles.css"
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\roles\\js\\role-edit.js",
+      "PackagePath": "staticwebassets\\roles\\js\\role-edit.js"
     },
     {
-      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\roles\\roles.html",
-      "PackagePath": "staticwebassets\\roles\\roles.html"
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\roles\\js\\roles.js",
+      "PackagePath": "staticwebassets\\roles\\js\\roles.js"
     },
     {
-      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\roles\\roles.js",
-      "PackagePath": "staticwebassets\\roles\\roles.js"
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\roles\\pages\\role-create.html",
+      "PackagePath": "staticwebassets\\roles\\pages\\role-create.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\roles\\pages\\role-details.html",
+      "PackagePath": "staticwebassets\\roles\\pages\\role-details.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\roles\\pages\\role-edit.html",
+      "PackagePath": "staticwebassets\\roles\\pages\\role-edit.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\roles\\pages\\roles.html",
+      "PackagePath": "staticwebassets\\roles\\pages\\roles.html"
     },
     {
       "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\script.js",
       "PackagePath": "staticwebassets\\script.js"
     },
     {
-      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\statuses\\status-create.html",
-      "PackagePath": "staticwebassets\\statuses\\status-create.html"
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\statuses\\css\\statuses.css",
+      "PackagePath": "staticwebassets\\statuses\\css\\statuses.css"
     },
     {
-      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\statuses\\status-details.html",
-      "PackagePath": "staticwebassets\\statuses\\status-details.html"
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\statuses\\js\\status-create.js",
+      "PackagePath": "staticwebassets\\statuses\\js\\status-create.js"
     },
     {
-      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\statuses\\status-edit.html",
-      "PackagePath": "staticwebassets\\statuses\\status-edit.html"
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\statuses\\js\\status-details.js",
+      "PackagePath": "staticwebassets\\statuses\\js\\status-details.js"
     },
     {
-      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\statuses\\statuses.css",
-      "PackagePath": "staticwebassets\\statuses\\statuses.css"
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\statuses\\js\\status-edit.js",
+      "PackagePath": "staticwebassets\\statuses\\js\\status-edit.js"
     },
     {
-      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\statuses\\statuses.html",
-      "PackagePath": "staticwebassets\\statuses\\statuses.html"
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\statuses\\js\\statuses.js",
+      "PackagePath": "staticwebassets\\statuses\\js\\statuses.js"
     },
     {
-      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\statuses\\statuses.js",
-      "PackagePath": "staticwebassets\\statuses\\statuses.js"
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\statuses\\pages\\status-create.html",
+      "PackagePath": "staticwebassets\\statuses\\pages\\status-create.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\statuses\\pages\\status-details.html",
+      "PackagePath": "staticwebassets\\statuses\\pages\\status-details.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\statuses\\pages\\status-edit.html",
+      "PackagePath": "staticwebassets\\statuses\\pages\\status-edit.html"
+    },
+    {
+      "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\statuses\\pages\\statuses.html",
+      "PackagePath": "staticwebassets\\statuses\\pages\\statuses.html"
     },
     {
       "Id": "D:\\Projects\\AdminPanelAPI\\Interface\\wwwroot\\styles.css",

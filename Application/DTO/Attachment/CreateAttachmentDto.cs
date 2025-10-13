@@ -10,9 +10,8 @@ public class CreateAttachmentDto
     public int FeedbackId { get; set; }
     [Required]
     public string UserId { get; set; }
-    [BindNever]
-    public string FilePath { get; set; }
     [Required]
+    public string FilePath { get; set; }
     public IFormFile File { get; set; }
     [Required]
     public string FileType { get; set; }

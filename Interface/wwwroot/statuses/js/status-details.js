@@ -1,0 +1,31 @@
+document.addEventListener('DOMContentLoaded', async () => {
+    const idElem = document.getElementById('id');
+    const nameElem = document.getElementById('name');
+
+    async function fetchJson(url) {
+        try {
+            const resp = await fetch(url, { credentials: 'include' });
+            if (!resp.ok) throw new Error(`Ошибка загрузки ${url}: ${resp.status}`);
+            return resp.json();
+        } catch (error) {
+            console.error(error);
+            alert('Ошибка загрузки данных');
+            window.location.href = 'statuses.html';
+            return null;
+        }
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const statusId = urlParams.get('id');
+    if (!statusId) {
+        alert('Не указан ID статуса');
+        window.location.href = 'statuses.html';
+        return;
+    }
+
+    const status = await fetchJson(`/api/status/${statusId}`);
+    if (!status) return;
+
+    idElem.textContent = status.id || '---';
+    nameElem.textContent = status.name || 'Неизвестно';
+});

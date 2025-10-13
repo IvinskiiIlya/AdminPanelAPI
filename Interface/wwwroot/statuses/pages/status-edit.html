@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <title>Редактировать статус - Рабочая панель</title>
+    <link rel="stylesheet" href="../css/statuses.css" />
+</head>
+<body>
+<div class="container-card">
+    <h1>Редактирование статуса</h1>
+    <form id="statusForm">
+        <label for="id">Идентификатор:</label><br />
+        <input type="number" id="id" name="id" required />
+
+        <label for="name">Название:</label><br />
+        <input type="text" id="name" name="name" required maxlength="100" /><br /><br />
+
+        <button type="button" class="return-buttons" onclick="location.href='statuses.html'">Вернуться</button>
+        <button type="submit" class="create-buttons">Сохранить</button>
+    </form>
+
+    <div id="formMessage"></div>
+</div>
+
+<script src="../js/status-edit.js"></script>
+</body>
+</html>
