@@ -5,6 +5,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         totalPages: 1
     };
 
+    const categoryNameMap = {
+        errors: 'Ошибки',
+        suggestions: 'Предложения',
+        questions: 'Вопросы',
+        complaints: 'Жалобы',
+        docs: 'Документация',
+        security: 'Безопасность',
+        performance: 'Производительность',
+        ui: 'Интерфейс',
+        integration: 'Интеграция',
+        other: 'Прочее'
+    };
+
     let currentUserInfo = null;
 
     async function init() {
@@ -111,7 +124,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 categoryElem.innerHTML = `
                     <div class="category-content">
-                        <p><strong>Название:</strong> ${escapeHtml(cat.name)}</p>
+                        <p><strong>Название:</strong> ${escapeHtml(categoryNameMap[cat.name] || cat.name)}</p>
                         <p><small>${cat.description ? escapeHtml(cat.description) : ''}</small></p>
                     </div>
                     <div class="category-buttons">

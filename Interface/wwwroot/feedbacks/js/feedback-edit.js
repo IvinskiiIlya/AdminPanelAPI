@@ -4,6 +4,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     const formMessage = document.getElementById('formMessage');
     const feedbackForm = document.getElementById('feedbackForm');
 
+    const categoryNameMap = {
+        errors: 'Ошибки',
+        suggestions: 'Предложения',
+        questions: 'Вопросы',
+        complaints: 'Жалобы',
+        docs: 'Документация',
+        security: 'Безопасность',
+        performance: 'Производительность',
+        ui: 'Интерфейс',
+        integration: 'Интеграция',
+        other: 'Прочее'
+    };
+
     let loadedFeedback = null;
 
     async function getUserInfo() {
@@ -51,7 +64,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         categories.forEach(cat => {
             const option = document.createElement('option');
             option.value = cat.id;
-            option.textContent = cat.name;
+            option.textContent = categoryNameMap[cat.name] || cat.name;
             categorySelect.appendChild(option);
         });
     }

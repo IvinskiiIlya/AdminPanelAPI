@@ -14,6 +14,19 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     let currentUserInfo = null;
 
+    const categoryNameMap = {
+        errors: 'Ошибки',
+        suggestions: 'Предложения',
+        questions: 'Вопросы',
+        complaints: 'Жалобы',
+        docs: 'Документация',
+        security: 'Безопасность',
+        performance: 'Производительность',
+        ui: 'Интерфейс',
+        integration: 'Интеграция',
+        other: 'Прочее'
+    };
+
     async function init() {
         currentUserInfo = await getUserInfo();
         if (!currentUserInfo) {
@@ -70,7 +83,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 categories.forEach(cat => {
                     const option = document.createElement('option');
                     option.value = cat.id;
-                    option.textContent = cat.name || `Категория ${cat.id}`;
+                    option.textContent = categoryNameMap[cat.name] || cat.name || `Категория ${cat.id}`;
                     categorySelect.appendChild(option);
                 });
             }

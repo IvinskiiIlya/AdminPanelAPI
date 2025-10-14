@@ -3,6 +3,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     const nameElem = document.getElementById('name');
     const descriptionElem = document.getElementById('description');
 
+    const categoryNameMap = {
+        errors: 'Ошибки',
+        suggestions: 'Предложения',
+        questions: 'Вопросы',
+        complaints: 'Жалобы',
+        docs: 'Документация',
+        security: 'Безопасность',
+        performance: 'Производительность',
+        ui: 'Интерфейс',
+        integration: 'Интеграция',
+        other: 'Прочее'
+    };
+
     async function fetchJson(url) {
         try {
             const resp = await fetch(url, { credentials: 'include' });
@@ -31,6 +44,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!category) return;
 
     idElem.textContent = category.id || '---';
-    nameElem.textContent = category.name || 'Неизвестно';
+    nameElem.textContent = categoryNameMap[category.name] || category.name || 'Неизвестно';
     descriptionElem.textContent = category.description || 'Отсутствует описание';
 });

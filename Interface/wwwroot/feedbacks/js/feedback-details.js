@@ -8,6 +8,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     const responsesListElem = document.getElementById('responsesList');
     const attachmentsListElem = document.getElementById('attachmentsList');
 
+    const categoryNameMap = {
+        errors: 'Ошибки',
+        suggestions: 'Предложения',
+        questions: 'Вопросы',
+        complaints: 'Жалобы',
+        docs: 'Документация',
+        security: 'Безопасность',
+        performance: 'Производительность',
+        ui: 'Интерфейс',
+        integration: 'Интеграция',
+        other: 'Прочее'
+    };
+
     async function fetchJson(url) {
         try {
             const resp = await fetch(url, {
@@ -72,7 +85,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     userNameElem.textContent = user ? user.userName : 'Неизвестно';
     userEmailElem.textContent = user ? user.email : '';
 
-    categoryNameElem.textContent = category ? category.name : 'Неизвестно';
+    categoryNameElem.textContent = category ? (categoryNameMap[category.name] || category.name) : 'Неизвестно';
     statusNameElem.textContent = status ? status.name : 'Неизвестно';
     createdAtElem.textContent = new Date(feedback.createdAt).toLocaleString();
     messageElem.textContent = feedback.message;
