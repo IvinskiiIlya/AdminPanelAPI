@@ -1,4 +1,53 @@
+function showCustomAlert(message, duration = 3000) {
+    let alertContainer = document.getElementById('custom-alert-container');
+    if (!alertContainer) {
+        alertContainer = document.createElement('div');
+        alertContainer.id = 'custom-alert-container';
+        Object.assign(alertContainer.style, {
+            position: 'fixed',
+            top: '1rem',
+            right: '1rem',
+            zIndex: 10000,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.5rem',
+            maxWidth: '300px',
+            fontFamily: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif'
+        });
+        document.body.appendChild(alertContainer);
+    }
+
+    const alert = document.createElement('div');
+    alert.textContent = message;
+    Object.assign(alert.style, {
+        backgroundColor: 'rgba(51, 51, 51, 0.9)',
+        color: 'white',
+        padding: '0.75rem 1rem',
+        borderRadius: '0.625rem',
+        boxShadow: '0 0.4rem 0.75rem rgba(51, 51, 51, 0.7)',
+        fontSize: '1rem',
+        opacity: '1',
+        transition: 'opacity 0.5s ease'
+    });
+    alertContainer.appendChild(alert);
+
+    setTimeout(() => {
+        alert.style.opacity = '0';
+        setTimeout(() => alert.remove(), 500);
+    }, duration);
+}
+
+function showPendingAlerts() {
+    const pendingAlert = sessionStorage.getItem('pendingAlert');
+    if (pendingAlert) {
+        showCustomAlert(pendingAlert);
+        sessionStorage.removeItem('pendingAlert');
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+    showPendingAlerts();
+
     const feedbackListDiv = document.getElementById('feedbackList');
     const attachmentForm = document.getElementById('attachmentForm');
     const formMessage = document.getElementById('formMessage');
@@ -44,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
         feedbackListDiv.innerHTML = '<p>Загрузка отзывов...</p>';
         const userInfo = await getUserInfo();
         if (!userInfo || !userInfo.userId) {
-            alert('Требуется авторизация, перенаправление на страницу входа');
+            sessionStorage.setItem('pendingAlert', 'Требуется авторизация, перенаправление на страницу входа');
             window.location.href = '../../auth.html';
             return;
         }
@@ -90,14 +139,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const userInfo = await getUserInfo();
         if (!userInfo) {
-            alert('Требуется авторизация, перенаправление на страницу входа');
+            sessionStorage.setItem('pendingAlert', 'Требуется авторизация, перенаправление на страницу входа');
             window.location.href = '../../auth.html';
             return;
         }
 
         const selectedFeedback = document.querySelector('input[name="feedbackCheckbox"]:checked');
         if (!selectedFeedback) {
-            alert('Пожалуйста, выберите отзыв.');
+            showCustomAlert('Пожалуйста, выберите отзыв.');
             return;
         }
 
@@ -124,24 +173,24 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (response.status === 201) {
-                alert('Вложение успешно добавлено');
+                sessionStorage.setItem('pendingAlert', 'Вложение успешно добавлено');
                 window.location.href = 'attachments.html';
             } else if (response.status === 400) {
                 const errorData = await response.json();
                 if (errorData.errors) {
-                    alert('Ошибка: ' + Object.values(errorData.errors).flat().join(', '));
+                    showCustomAlert('Ошибка: ' + Object.values(errorData.errors).flat().join(', '));
                 } else {
-                    alert('Ошибка: ' + (errorData.detail || 'Некорректные данные'));
+                    showCustomAlert('Ошибка: ' + (errorData.detail || 'Некорректные данные'));
                 }
             } else if (response.status === 401) {
-                alert('Сессия истекла, требуется повторная авторизация');
+                sessionStorage.setItem('pendingAlert', 'Сессия истекла, требуется повторная авторизация');
                 window.location.href = '../../auth.html';
             } else {
-                alert('Ошибка при добавлении вложения.');
+                showCustomAlert('Ошибка при добавлении вложения.');
             }
         } catch (error) {
             console.error(error);
-            alert('Ошибка сервера. Попробуйте позже.');
+            showCustomAlert('Ошибка сервера. Попробуйте позже.');
         }
     });
 

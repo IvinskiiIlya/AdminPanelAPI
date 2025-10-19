@@ -1,4 +1,53 @@
+function showCustomAlert(message, duration = 3000) {
+    let alertContainer = document.getElementById('custom-alert-container');
+    if (!alertContainer) {
+        alertContainer = document.createElement('div');
+        alertContainer.id = 'custom-alert-container';
+        Object.assign(alertContainer.style, {
+            position: 'fixed',
+            top: '1rem',
+            right: '1rem',
+            zIndex: 10000,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.5rem',
+            maxWidth: '300px',
+            fontFamily: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif'
+        });
+        document.body.appendChild(alertContainer);
+    }
+
+    const alert = document.createElement('div');
+    alert.textContent = message;
+    Object.assign(alert.style, {
+        backgroundColor: 'rgba(51, 51, 51, 0.9)',
+        color: 'white',
+        padding: '0.75rem 1rem',
+        borderRadius: '0.625rem',
+        boxShadow: '0 0.4rem 0.75rem rgba(51, 51, 51, 0.7)',
+        fontSize: '1rem',
+        opacity: '1',
+        transition: 'opacity 0.5s ease'
+    });
+    alertContainer.appendChild(alert);
+
+    setTimeout(() => {
+        alert.style.opacity = '0';
+        setTimeout(() => alert.remove(), 500);
+    }, duration);
+}
+
+function showPendingAlerts() {
+    const pendingAlert = sessionStorage.getItem('pendingAlert');
+    if (pendingAlert) {
+        showCustomAlert(pendingAlert);
+        sessionStorage.removeItem('pendingAlert');
+    }
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
+    showPendingAlerts();
+
     const pagination = {
         pageNumber: 1,
         pageSize: 10,
@@ -30,7 +79,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     async function init() {
         currentUserInfo = await getUserInfo();
         if (!currentUserInfo) {
-            alert('Требуется авторизация, перенаправление на страницу входа');
+            sessionStorage.setItem('pendingAlert', 'Требуется авторизация, перенаправление на страницу входа');
             window.location.href = '../../auth.html';
             return;
         }
@@ -113,13 +162,63 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    function updateFilterUI() {
+        document.getElementById('searchTerm').value = pagination.searchTerm;
+        document.getElementById('categoryId').value = pagination.categoryId;
+        document.getElementById('statusId').value = pagination.statusId;
+        document.getElementById('createdFrom').value = pagination.createdFrom;
+        document.getElementById('createdTo').value = pagination.createdTo;
+        document.getElementById('sortColumn').value = pagination.sortColumn;
+        document.getElementById('sortOrder').value = pagination.sortOrder;
+    }
+
+    function loadPaginationFromUrlOrStorage() {
+        const params = new URLSearchParams(window.location.search);
+        const stored = sessionStorage.getItem('paginationFilters');
+        if (stored) {
+            const storedPagination = JSON.parse(stored);
+            Object.assign(pagination, storedPagination);
+        } else {
+            pagination.pageNumber = Number(params.get('pageNumber')) || 1;
+            pagination.searchTerm = params.get('searchTerm') || "";
+            pagination.categoryId = params.get('categoryId') || "";
+            pagination.statusId = params.get('statusId') || "";
+            pagination.createdFrom = params.get('createdFrom') || "";
+            pagination.createdTo = params.get('createdTo') || "";
+            pagination.sortColumn = params.get('sortColumn') || "Id";
+            pagination.sortOrder = params.get('sortOrder') || "asc";
+
+            sessionStorage.setItem('paginationFilters', JSON.stringify(pagination));
+        }
+
+        updateFilterUI();
+    }
+
+    function updateUrlFromPagination() {
+        const params = new URLSearchParams();
+
+        params.set('pageNumber', pagination.pageNumber);
+        if (pagination.searchTerm) params.set('searchTerm', pagination.searchTerm);
+        if (pagination.categoryId) params.set('categoryId', pagination.categoryId);
+        if (pagination.statusId) params.set('statusId', pagination.statusId);
+        if (pagination.createdFrom) params.set('createdFrom', pagination.createdFrom);
+        if (pagination.createdTo) params.set('createdTo', pagination.createdTo);
+        params.set('sortColumn', pagination.sortColumn);
+        params.set('sortOrder', pagination.sortOrder);
+
+        const newUrl = `${window.location.pathname}?${params.toString()}`;
+        history.pushState({...pagination}, '', newUrl);
+        sessionStorage.setItem('paginationFilters', JSON.stringify(pagination));
+    }
+
     document.querySelector('.pagination').addEventListener('click', (event) => {
         const target = event.target;
         if (!target.classList.contains('page-btn')) return;
 
-        let newPage = Number(target.dataset.page);
+        const newPage = Number(target.dataset.page);
         if (newPage >= 1 && newPage <= pagination.totalPages && newPage !== pagination.pageNumber) {
             pagination.pageNumber = newPage;
+            updateUrlFromPagination();
             loadFeedbacks(pagination.pageNumber);
         }
     });
@@ -134,7 +233,24 @@ document.addEventListener('DOMContentLoaded', async () => {
         pagination.sortOrder = document.getElementById('sortOrder').value;
         pagination.pageNumber = 1;
 
+        updateUrlFromPagination();
         loadFeedbacks(pagination.pageNumber);
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+        pagination.searchTerm = "";
+        pagination.categoryId = "";
+        pagination.statusId = "";
+        pagination.createdFrom = "";
+        pagination.createdTo = "";
+        pagination.sortColumn = "Id";
+        pagination.sortOrder = "asc";
+        pagination.pageNumber = 1;
+
+        updateFilterUI();
+        updateUrlFromPagination();
+        loadFeedbacks(pagination.pageNumber);
+        sessionStorage.removeItem('paginationFilters');
     });
 
     async function loadFeedbacks(pageNumber) {
@@ -164,7 +280,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             if (!response.ok) {
                 if (response.status === 401) {
-                    alert('Сессия истекла, требуется повторная авторизация');
+                    sessionStorage.setItem('pendingAlert', 'Сессия истекла, требуется повторная авторизация');
+                    sessionStorage.removeItem('paginationFilters'); // Очистить при выходе
                     window.location.href = '../../auth.html';
                     return;
                 }
@@ -222,7 +339,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             method: 'GET',
             credentials: 'include'
         });
-        if (!response.ok) return null;
+        if (!response.ok) {
+            sessionStorage.removeItem('paginationFilters');
+            return null;
+        }
 
         const data = await response.json();
         return { userId: data.id || data.userId || null, name: data.name, roles: data.roles };
@@ -305,16 +425,29 @@ document.addEventListener('DOMContentLoaded', async () => {
                 credentials: 'include'
             });
             if (!response.ok) {
-                alert('Ошибка при удалении отзыва');
+                showCustomAlert('Ошибка при удалении отзыва');
                 return;
             }
-            alert('Отзыв успешно удалён');
+            showCustomAlert('Отзыв успешно удалён');
             loadFeedbacks(1);
         } catch (error) {
-            alert('Не удалось удалить отзыв.');
+            showCustomAlert('Не удалось удалить отзыв.');
             console.error(error);
         }
     }
 
-    init();
+    loadPaginationFromUrlOrStorage();
+    await init();
+
+    window.onpopstate = (event) => {
+        if (event.state) {
+            Object.assign(pagination, event.state);
+            updateFilterUI();
+            loadFeedbacks(pagination.pageNumber);
+            sessionStorage.setItem('paginationFilters', JSON.stringify(pagination));
+        } else {
+            loadPaginationFromUrlOrStorage();
+            loadFeedbacks(pagination.pageNumber);
+        }
+    };
 });

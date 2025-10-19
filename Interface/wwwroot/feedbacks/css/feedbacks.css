@@ -71,11 +71,11 @@ p {
     max-height: 300px;
     overflow-y: auto;
     margin-bottom: 1.875rem;
+    padding: 0 1rem !important;
     text-align: left;
     border: 1px solid #ccc;
     border-radius: 0.5rem;
     background-color: rgba(255, 255, 255, 0.6);
-    padding: 1rem;
     color: #333;
 }
 
@@ -223,14 +223,27 @@ form textarea {
 }
 
 .filter-bar {
-    margin-bottom: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.625rem; 
+    justify-content: center;
+    margin-bottom: 0.625rem; 
 }
 .filter-bar input,
 .filter-bar select,
 .filter-bar button {
-    margin-right: 10px;
-    padding: 5px 8px;
-    font-size: 14px;
+    margin-right: 0.625rem; 
+    padding: 0.3125rem 0.5rem; 
+    font-size: 0.875rem; 
 }
 
+.filter-buttons {
+    display: flex;
+    justify-content: center;
+    margin: 0.625rem 0;
+}
 
+.filter-buttons button {
+    padding: 0.5rem 1.25rem; 
+    margin: 0 0.625rem;
+}

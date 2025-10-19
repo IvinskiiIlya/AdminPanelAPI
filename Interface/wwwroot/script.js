@@ -1,4 +1,52 @@
+function showCustomAlert(message, duration = 3000) {
+    let alertContainer = document.getElementById('custom-alert-container');
+    if (!alertContainer) {
+        alertContainer = document.createElement('div');
+        alertContainer.id = 'custom-alert-container';
+        Object.assign(alertContainer.style, {
+            position: 'fixed',
+            top: '1rem',
+            right: '1rem',
+            zIndex: 10000,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.5rem',
+            maxWidth: '300px',
+            fontFamily: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif'
+        });
+        document.body.appendChild(alertContainer);
+    }
+
+    const alert = document.createElement('div');
+    alert.textContent = message;
+    Object.assign(alert.style, {
+        backgroundColor: 'rgba(51, 51, 51, 0.9)',
+        color: 'white',
+        padding: '0.75rem 1rem',
+        borderRadius: '0.625rem',
+        boxShadow: '0 0.4rem 0.75rem rgba(51, 51, 51, 0.7)',
+        fontSize: '1rem',
+        opacity: '1',
+        transition: 'opacity 0.5s ease'
+    });
+    alertContainer.appendChild(alert);
+
+    setTimeout(() => {
+        alert.style.opacity = '0';
+        setTimeout(() => alert.remove(), 500);
+    }, duration);
+}
+
+function showPendingAlerts() {
+    const pendingAlert = sessionStorage.getItem('pendingAlert');
+    if (pendingAlert) {
+        showCustomAlert(pendingAlert);
+        sessionStorage.removeItem('pendingAlert');
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+    showPendingAlerts();
     handleLoginForm();
     handleMainPageRoleControl();
 
@@ -9,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: 'POST',
                 credentials: 'include'
             });
-            alert('Вы успешно вышли из системы');
+            sessionStorage.setItem('pendingAlert', 'Вы успешно вышли из системы');
             window.location.href = 'auth.html';
         });
     }
@@ -26,7 +74,7 @@ async function handleLoginForm() {
         const password = document.getElementById('password').value;
 
         if (!email || !password) {
-            alert('Пожалуйста, заполните все поля');
+            showCustomAlert('Пожалуйста, заполните все поля');
             return;
         }
 
@@ -39,15 +87,15 @@ async function handleLoginForm() {
             });
 
             if (!response.ok) {
-                alert('Неверная электронная почта или пароль');
+                showCustomAlert('Неверная электронная почта или пароль');
                 return;
             }
 
-            alert('Вход выполнен успешно');
+            sessionStorage.setItem('pendingAlert', 'Вход выполнен успешно');
             window.location.href = 'index.html';
 
         } catch (error) {
-            alert('Ошибка сервера, попробуйте позже');
+            showCustomAlert('Ошибка сервера, попробуйте позже');
             console.error(error);
         }
     });
@@ -73,7 +121,7 @@ async function handleMainPageRoleControl() {
 
     const userInfo = await getUserInfo();
     if (!userInfo) {
-        alert('Требуется авторизация, перенаправление на страницу входа');
+        sessionStorage.setItem('pendingAlert', 'Требуется авторизация, перенаправление на страницу входа');
         window.location.href = '/auth.html';
         return;
     }

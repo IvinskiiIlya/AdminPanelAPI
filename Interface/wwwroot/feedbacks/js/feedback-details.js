@@ -1,4 +1,53 @@
+function showCustomAlert(message, duration = 3000) {
+    let alertContainer = document.getElementById('custom-alert-container');
+    if (!alertContainer) {
+        alertContainer = document.createElement('div');
+        alertContainer.id = 'custom-alert-container';
+        Object.assign(alertContainer.style, {
+            position: 'fixed',
+            top: '1rem',
+            right: '1rem',
+            zIndex: 10000,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.5rem',
+            maxWidth: '300px',
+            fontFamily: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif'
+        });
+        document.body.appendChild(alertContainer);
+    }
+
+    const alert = document.createElement('div');
+    alert.textContent = message;
+    Object.assign(alert.style, {
+        backgroundColor: 'rgba(51, 51, 51, 0.9)',
+        color: 'white',
+        padding: '0.75rem 1rem',
+        borderRadius: '0.625rem',
+        boxShadow: '0 0.4rem 0.75rem rgba(51, 51, 51, 0.7)',
+        fontSize: '1rem',
+        opacity: '1',
+        transition: 'opacity 0.5s ease'
+    });
+    alertContainer.appendChild(alert);
+
+    setTimeout(() => {
+        alert.style.opacity = '0';
+        setTimeout(() => alert.remove(), 500);
+    }, duration);
+}
+
+function showPendingAlerts() {
+    const pendingAlert = sessionStorage.getItem('pendingAlert');
+    if (pendingAlert) {
+        showCustomAlert(pendingAlert);
+        sessionStorage.removeItem('pendingAlert');
+    }
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
+    showPendingAlerts();
+
     const userNameElem = document.getElementById('userName');
     const userEmailElem = document.getElementById('userEmail');
     const categoryNameElem = document.getElementById('categoryName');
@@ -27,13 +76,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                 credentials: 'include'
             });
             if (!resp.ok) {
-                alert(`Ошибка загрузки данных: ${resp.status}`);
+                showCustomAlert(`Ошибка загрузки данных: ${resp.status}`);
                 throw new Error(`Ошибка загрузки ${url}: ${resp.status}`);
             }
             return resp.json();
         } catch (error) {
             console.error(error);
-            alert('Ошибка загрузки данных. Попробуйте позже.');
+            showCustomAlert('Ошибка загрузки данных. Попробуйте позже.');
             throw error;
         }
     }
@@ -50,7 +99,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const feedbackId = urlParams.get('id');
     if (!feedbackId) {
-        alert('Не указан ID отзыва');
+        showCustomAlert('Не указан ID отзыва');
         window.location.href = 'feedbacks.html';
         return;
     }
@@ -59,7 +108,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         feedback = await fetchJson(`/api/feedback/${feedbackId}`);
     } catch {
-        alert('Не удалось загрузить отзыв');
+        showCustomAlert('Не удалось загрузить отзыв');
         window.location.href = 'feedbacks.html';
         return;
     }

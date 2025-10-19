@@ -1,4 +1,53 @@
+function showCustomAlert(message, duration = 3000) {
+    let alertContainer = document.getElementById('custom-alert-container');
+    if (!alertContainer) {
+        alertContainer = document.createElement('div');
+        alertContainer.id = 'custom-alert-container';
+        Object.assign(alertContainer.style, {
+            position: 'fixed',
+            top: '1rem',
+            right: '1rem',
+            zIndex: 10000,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.5rem',
+            maxWidth: '300px',
+            fontFamily: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif'
+        });
+        document.body.appendChild(alertContainer);
+    }
+
+    const alert = document.createElement('div');
+    alert.textContent = message;
+    Object.assign(alert.style, {
+        backgroundColor: 'rgba(51, 51, 51, 0.9)',
+        color: 'white',
+        padding: '0.75rem 1rem',
+        borderRadius: '0.625rem',
+        boxShadow: '0 0.4rem 0.75rem rgba(51, 51, 51, 0.7)',
+        fontSize: '1rem',
+        opacity: '1',
+        transition: 'opacity 0.5s ease'
+    });
+    alertContainer.appendChild(alert);
+
+    setTimeout(() => {
+        alert.style.opacity = '0';
+        setTimeout(() => alert.remove(), 500);
+    }, duration);
+}
+
+function showPendingAlerts() {
+    const pendingAlert = sessionStorage.getItem('pendingAlert');
+    if (pendingAlert) {
+        showCustomAlert(pendingAlert);
+        sessionStorage.removeItem('pendingAlert');
+    }
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
+    showPendingAlerts();
+
     const categorySelect = document.getElementById('category');
     const messageInput = document.getElementById('message');
     const formMessage = document.getElementById('formMessage');
@@ -31,7 +80,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const userInfo = await getUserInfo();
     if (!userInfo) {
-        alert('Требуется авторизация, перенаправление на страницу входа');
+        sessionStorage.setItem('pendingAlert', 'Требуется авторизация, перенаправление на страницу входа');
         window.location.href = '../../auth.html';
         return;
     }
@@ -46,7 +95,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             return respJson.data || [];
         } catch (err) {
             console.error(err);
-            alert('Ошибка загрузки данных.');
+            showCustomAlert('Ошибка загрузки данных.');
             return [];
         }
     }
@@ -54,7 +103,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const feedbackId = urlParams.get('id');
     if (!feedbackId) {
-        alert('Не указан ID отзыва');
+        showCustomAlert('Не указан ID отзыва');
         window.location.href = 'feedbacks.html';
         return;
     }
@@ -76,11 +125,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
             if (!response.ok) {
                 if (response.status === 404) {
-                    alert('Отзыв не найден');
+                    showCustomAlert('Отзыв не найден');
                 } else if (response.status === 401) {
-                    alert('Сессия истекла, требуется повторная авторизация');
+                    sessionStorage.setItem('pendingAlert', 'Сессия истекла, требуется повторная авторизация');
                 } else {
-                    alert('Ошибка загрузки отзыва');
+                    showCustomAlert('Ошибка загрузки отзыва');
                 }
                 window.location.href = 'feedbacks.html';
                 return;
@@ -90,7 +139,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             messageInput.value = loadedFeedback.message;
         } catch (error) {
             console.error(error);
-            alert('Ошибка сервера при загрузке отзыва');
+            showCustomAlert('Ошибка сервера при загрузке отзыва');
             window.location.href = 'feedbacks.html';
         }
     }
@@ -104,7 +153,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const currentUserId = userInfo.userId;
         if (!currentUserId) {
-            alert('Требуется авторизация, перенаправление на страницу входа');
+            sessionStorage.setItem('pendingAlert', 'Требуется авторизация, перенаправление на страницу входа');
             window.location.href = '../../auth.html';
             return;
         }
@@ -118,7 +167,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         };
 
         if (!dto.categoryId || dto.message.length < 10) {
-            alert('Пожалуйста, заполните все поля корректно.');
+            showCustomAlert('Пожалуйста, заполните все поля корректно.');
             return;
         }
 
@@ -133,23 +182,23 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
 
             if (response.status === 204) {
-                alert('Отзыв успешно обновлен.');
+                sessionStorage.setItem('pendingAlert', 'Отзыв успешно обновлен.');
                 window.location.href = 'feedbacks.html';
             } else if (response.status === 400) {
                 const errorData = await response.json();
-                alert('Ошибка: ' + (errorData.detail || 'Некорректные данные'));
+                showCustomAlert('Ошибка: ' + (errorData.detail || 'Некорректные данные'));
             } else if (response.status === 401) {
-                alert('Сессия истекла, требуется повторная авторизация');
+                sessionStorage.setItem('pendingAlert', 'Сессия истекла, требуется повторная авторизация');
                 window.location.href = '../../auth.html';
             } else if (response.status === 404) {
-                alert('Отзыв не найден');
+                showCustomAlert('Отзыв не найден');
                 window.location.href = 'feedbacks.html';
             } else {
-                alert('Ошибка обновления отзыва.');
+                showCustomAlert('Ошибка обновления отзыва.');
             }
         } catch (error) {
             console.error(error);
-            alert('Ошибка сервера. Попробуйте позже.');
+            showCustomAlert('Ошибка сервера. Попробуйте позже.');
         }
     });
 });

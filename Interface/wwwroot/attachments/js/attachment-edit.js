@@ -1,4 +1,53 @@
+function showCustomAlert(message, duration = 3000) {
+    let alertContainer = document.getElementById('custom-alert-container');
+    if (!alertContainer) {
+        alertContainer = document.createElement('div');
+        alertContainer.id = 'custom-alert-container';
+        Object.assign(alertContainer.style, {
+            position: 'fixed',
+            top: '1rem',
+            right: '1rem',
+            zIndex: 10000,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.5rem',
+            maxWidth: '300px',
+            fontFamily: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif'
+        });
+        document.body.appendChild(alertContainer);
+    }
+
+    const alert = document.createElement('div');
+    alert.textContent = message;
+    Object.assign(alert.style, {
+        backgroundColor: 'rgba(51, 51, 51, 0.9)',
+        color: 'white',
+        padding: '0.75rem 1rem',
+        borderRadius: '0.625rem',
+        boxShadow: '0 0.4rem 0.75rem rgba(51, 51, 51, 0.7)',
+        fontSize: '1rem',
+        opacity: '1',
+        transition: 'opacity 0.5s ease'
+    });
+    alertContainer.appendChild(alert);
+
+    setTimeout(() => {
+        alert.style.opacity = '0';
+        setTimeout(() => alert.remove(), 500);
+    }, duration);
+}
+
+function showPendingAlerts() {
+    const pendingAlert = sessionStorage.getItem('pendingAlert');
+    if (pendingAlert) {
+        showCustomAlert(pendingAlert);
+        sessionStorage.removeItem('pendingAlert');
+    }
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
+    showPendingAlerts();
+
     const feedbackIdInput = document.getElementById('feedbackId');
     const filePathInput = document.getElementById('filePath');
     const fileTypeInput = document.getElementById('fileType');
@@ -9,7 +58,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const attachmentId = urlParams.get('id');
     if (!attachmentId) {
-        alert('Не указан ID вложения');
+        showCustomAlert('Не указан ID вложения');
         window.location.href = 'attachments.html';
         return;
     }
@@ -31,11 +80,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
             if (!response.ok) {
                 if (response.status === 404) {
-                    alert('Вложение не найдено');
+                    showCustomAlert('Вложение не найдено');
                 } else if (response.status === 401) {
-                    alert('Требуется авторизация');
+                    showCustomAlert('Требуется авторизация');
                 } else {
-                    alert('Ошибка загрузки вложения');
+                    showCustomAlert('Ошибка загрузки вложения');
                 }
                 window.location.href = 'attachments.html';
                 return;
@@ -47,14 +96,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             fileTypeInput.value = att.fileType;
         } catch (error) {
             console.error(error);
-            alert('Ошибка сервера при загрузке вложения');
+            showCustomAlert('Ошибка сервера при загрузке вложения');
             window.location.href = 'attachments.html';
         }
     }
 
     const userInfo = await getUserInfo();
     if (!userInfo) {
-        alert('Требуется авторизация, перенаправление на страницу входа');
+        sessionStorage.setItem('pendingAlert', 'Требуется авторизация, перенаправление на страницу входа');
         window.location.href = '../../auth.html';
         return;
     }
@@ -73,7 +122,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         };
 
         if (!dto.feedbackId || !dto.filePath || !dto.fileType) {
-            alert('Пожалуйста, заполните все поля корректно.');
+            showCustomAlert('Пожалуйста, заполните все поля корректно.');
             return;
         }
 
@@ -88,23 +137,23 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
 
             if (response.status === 204) {
-                alert('Вложение успешно обновлено');
+                sessionStorage.setItem('pendingAlert', 'Вложение успешно обновлено');
                 window.location.href = 'attachments.html';
             } else if (response.status === 400) {
                 const errorData = await response.json();
-                alert('Ошибка: ' + (errorData.detail || 'Некорректные данные'));
+                showCustomAlert('Ошибка: ' + (errorData.detail || 'Некорректные данные'));
             } else if (response.status === 401) {
-                alert('Сессия истекла, требуется повторная авторизация');
+                sessionStorage.setItem('pendingAlert', 'Сессия истекла, требуется повторная авторизация');
                 window.location.href = '../../auth.html';
             } else if (response.status === 404) {
-                alert('Вложение не найдено');
+                showCustomAlert('Вложение не найдено');
                 window.location.href = 'attachments.html';
             } else {
-                alert('Ошибка обновления вложения.');
+                showCustomAlert('Ошибка обновления вложения.');
             }
         } catch (error) {
             console.error(error);
-            alert('Ошибка сервера. Попробуйте позже.');
+            showCustomAlert('Ошибка сервера. Попробуйте позже.');
         }
     });
 });
