@@ -1,9 +1,9 @@
 export interface PaginationParams {
-    pageNumber?: number;     // В API используется pageNumber
+    pageNumber?: number;
     pageSize?: number;
     sortColumn?: string;
     sortOrder?: 'asc' | 'desc';
-    searchTerm?: string;     // Оставляем только поиск
+    searchTerm?: string;
 }
 
 export interface PagedResponse<T> {

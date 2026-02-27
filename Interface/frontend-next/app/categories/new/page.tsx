@@ -1,4 +1,4 @@
-import { Navigation } from '@/components/layout/navigation';
+import { Navigation } from '@/components/navigation';
 import { CategoryForm } from '@/components/forms/category-form';
 
 export default function NewCategoryPage() {

@@ -1,4 +1,4 @@
-import { Navigation } from '@/components/layout/navigation';
+import { Navigation } from '@/components/navigation';
 import { FeedbackForm } from '@/components/forms/feedback-form';
 
 export default function NewFeedbackPage() {

@@ -24,9 +24,9 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { feedbackSchema, FeedbackFormValues } from '@/lib/validations/feedback';
-import { feedbackApi } from '@/lib/api/feedbacks';
-import { categoryApi } from '@/lib/api/categories';
-import { Category, Feedback } from '@/types';
+import { feedbackApi } from '@/lib/api/feedbacks/feedbacks';
+import { categoryApi } from '@/lib/api/categories/categories';
+import { Category, Feedback } from '@/index';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface FeedbackFormProps {
@@ -53,11 +53,8 @@ export function FeedbackForm({ initialData }: FeedbackFormProps) {
                 setLoading(true);
                 const categoriesData = await categoryApi.getAll({ pageSize: 100 });
                 setCategories(categoriesData.data || []);
-                
             } catch (error) {
-                console.error('Error loading categories:', error);
                 toast.error('Ошибка при загрузке категорий');
-                
             } finally {
                 setLoading(false);
             }
@@ -68,7 +65,6 @@ export function FeedbackForm({ initialData }: FeedbackFormProps) {
     async function onSubmit(data: FeedbackFormValues) {
         try {
             setIsSubmitting(true);
-            console.log('Submitting feedback form data:', data);
 
             if (initialData?.id) {
                 await feedbackApi.update(initialData.id, {
@@ -76,7 +72,8 @@ export function FeedbackForm({ initialData }: FeedbackFormProps) {
                     message: data.message
                 });
                 toast.success('Отзыв обновлен');
-            } else {
+            } 
+            else {
                 await feedbackApi.create({
                     categoryId: data.categoryId,
                     message: data.message
@@ -88,8 +85,6 @@ export function FeedbackForm({ initialData }: FeedbackFormProps) {
             router.refresh();
             
         } catch (error: any) {
-            console.error('Form submission error:', error);
-
             const errorMessage = error.response?.data?.message
                 || error.response?.data
                 || 'Ошибка при сохранении';

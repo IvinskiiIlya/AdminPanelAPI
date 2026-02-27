@@ -1,4 +1,4 @@
-import { Navigation } from '@/components/layout/navigation';
+import { Navigation } from '@/components/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { FolderTree, MessageSquare, Paperclip, Users } from 'lucide-react';
 

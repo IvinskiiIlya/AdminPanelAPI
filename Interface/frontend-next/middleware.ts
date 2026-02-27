@@ -6,12 +6,10 @@ export function middleware(request: NextRequest) {
     const isAuthPage = request.nextUrl.pathname.startsWith('/login');
     const isPublicPath = request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/';
 
-    // Если нет токена и страница не публичная - редирект на логин
     if (!token && !isPublicPath) {
         return NextResponse.redirect(new URL('/login', request.url));
     }
 
-    // Если есть токен и мы на странице логина - редирект на главную
     if (token && isAuthPage) {
         return NextResponse.redirect(new URL('/', request.url));
     }

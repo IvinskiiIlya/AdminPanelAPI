@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { Navigation } from '@/components/layout/navigation';
+import { Navigation } from '@/components/navigation';
 import { CategoryForm } from '@/components/forms/category-form';
-import { categoryApi } from '@/lib/api/categories';
-import { Category } from '@/types';
+import { categoryApi } from '@/lib/api/categories/categories';
+import { Category } from '@/index';
 import { toast } from 'sonner';
 
 export default function EditCategoryPage() {
@@ -20,10 +20,11 @@ export default function EditCategoryPage() {
                 const id = parseInt(params.id as string);
                 const data = await categoryApi.getById(id);
                 setCategory(data);
+                
             } catch (error) {
-                console.error('Error fetching category:', error);
                 toast.error('Ошибка при загрузке категории');
                 router.push('/categories');
+                
             } finally {
                 setLoading(false);
             }

@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { Navigation } from '@/components/layout/navigation';
+import { Navigation } from '@/components/navigation';
 import { FeedbackForm } from '@/components/forms/feedback-form';
-import { feedbackApi } from '@/lib/api/feedbacks';
-import { Feedback } from '@/types';
+import { feedbackApi } from '@/lib/api/feedbacks/feedbacks';
+import { Feedback } from '@/index';
 import { toast } from 'sonner';
 
 export default function EditFeedbackPage() {
@@ -20,10 +20,11 @@ export default function EditFeedbackPage() {
                 const id = parseInt(params.id as string);
                 const data = await feedbackApi.getById(id);
                 setFeedback(data);
+                
             } catch (error) {
-                console.error('Error fetching feedback:', error);
                 toast.error('Ошибка при загрузке отзыва');
                 router.push('/feedbacks');
+                
             } finally {
                 setLoading(false);
             }

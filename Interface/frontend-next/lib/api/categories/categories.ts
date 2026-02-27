@@ -1,5 +1,5 @@
-import { apiClient } from './axios';
-import { Category, CreateCategoryDto, PagedResponse, PaginationParams } from '@/types';
+import { apiClient } from '../axios';
+import { Category, CreateCategoryDto, PagedResponse, PaginationParams } from '@/index';
 
 export const categoryApi = {
     getAll: async (params?: PaginationParams): Promise<PagedResponse<Category>> => {
@@ -13,9 +13,8 @@ export const categoryApi = {
             if (params.searchTerm) apiParams.searchTerm = params.searchTerm;
         }
 
-        console.log('API Request params:', apiParams);
         const { data } = await apiClient.get('/Category', { params: apiParams });
-        console.log('API Response:', data);
+        
         return data;
     },
 

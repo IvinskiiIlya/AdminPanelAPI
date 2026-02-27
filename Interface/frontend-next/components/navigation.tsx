@@ -35,7 +35,6 @@ export function Navigation() {
             await logout();
             toast.success('Выход выполнен');
         } catch (error) {
-            console.error('Logout error:', error);
             document.cookie = 'jwtToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
             window.location.href = '/login';
         }
@@ -69,7 +68,7 @@ export function Navigation() {
                         variant="ghost"
                         size="sm"
                         onClick={handleLogout}
-                        className="flex items-center gap-2 text-red-600 hover:text-red-700 hover:bg-red-50"
+                        className="flex items-center gap-2 text-white bg-black hover:text-red-700 hover:bg-red-100"
                     >
                         <LogOut className="h-4 w-4" />
                         Выйти

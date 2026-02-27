@@ -17,8 +17,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { categorySchema, CategoryFormValues } from '@/lib/validations/category';
-import { categoryApi } from '@/lib/api/categories';
-import { Category } from '@/types';
+import { categoryApi } from '@/lib/api/categories/categories';
+import { Category } from '@/index';
 import { useState } from 'react';
 
 interface CategoryFormProps {
@@ -41,7 +41,6 @@ export function CategoryForm({ initialData }: CategoryFormProps) {
     async function onSubmit(data: CategoryFormValues) {
         try {
             setIsSubmitting(true);
-            console.log('Submitting form data:', data);
 
             if (initialData?.id) {
                 await categoryApi.update(initialData.id, {
@@ -49,7 +48,8 @@ export function CategoryForm({ initialData }: CategoryFormProps) {
                     description: data.description
                 });
                 toast.success('Категория обновлена');
-            } else {
+            } 
+            else {
                 if (!data.id) {
                     toast.error('Необходимо указать ID категории');
                     setIsSubmitting(false);
@@ -65,14 +65,14 @@ export function CategoryForm({ initialData }: CategoryFormProps) {
 
             router.push('/categories');
             router.refresh();
+            
         } catch (error: any) {
-            console.error('Form submission error:', error);
-
             const errorMessage = error.response?.data?.message
                 || error.response?.data
                 || 'Ошибка при сохранении';
 
             toast.error(typeof errorMessage === 'string' ? errorMessage : JSON.stringify(errorMessage));
+            
         } finally {
             setIsSubmitting(false);
         }

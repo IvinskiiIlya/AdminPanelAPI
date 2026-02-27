@@ -30,8 +30,8 @@ import {
 } from '@/components/ui/select';
 import { MoreHorizontal, Pencil, Trash, Plus, ArrowUpDown, Search, X } from 'lucide-react';
 import { toast } from 'sonner';
-import { categoryApi } from '@/lib/api/categories';
-import { Category } from '@/types';
+import { categoryApi } from '@/lib/api/categories/categories';
+import { Category } from '@/index';
 
 export function CategoriesTable() {
     const router = useRouter();
@@ -57,12 +57,14 @@ export function CategoriesTable() {
         Object.entries(updates).forEach(([key, value]) => {
             if (value === null || value === '') {
                 params.delete(key);
-            } else {
+            } 
+            else {
                 params.set(key, String(value));
             }
         });
 
         router.push(`/categories?${params.toString()}`);
+        
     }, [router, searchParams]);
 
     const fetchData = useCallback(async () => {
@@ -76,24 +78,21 @@ export function CategoriesTable() {
                 sortOrder,
                 searchTerm: searchTerm || undefined
             };
-
-            console.log('Fetching with params:', params);
-
+            
             const response = await categoryApi.getAll(params);
-
-            console.log('API Response:', response);
-            console.log('Current page:', pageNumber, 'Total pages:', response.totalPages);
-
+            
             setData(response.data || []);
             setTotalPages(response.totalPages);
             setTotalRecords(response.totalRecords);
+            
         } catch (error) {
-            console.error('Error fetching categories:', error);
             toast.error('Ошибка при загрузке');
             setData([]);
+            
         } finally {
             setLoading(false);
         }
+        
     }, [pageNumber, pageSize, sortColumn, sortOrder, searchTerm]);
 
     useEffect(() => {
@@ -110,13 +109,11 @@ export function CategoriesTable() {
     };
 
     const handleSort = (column: string) => {
-        const newOrder: 'asc' | 'desc' =
-            sortColumn === column && sortOrder === 'asc' ? 'desc' : 'asc';
+        const newOrder: 'asc' | 'desc' = sortColumn === column && sortOrder === 'asc' ? 'desc' : 'asc';
         updateParams({ sortColumn: column, sortOrder: newOrder, page: 1 });
     };
 
     const handlePageChange = (newPage: number) => {
-        console.log('Changing to page:', newPage);
         updateParams({ page: newPage });
     };
 
@@ -131,7 +128,6 @@ export function CategoriesTable() {
                 toast.success('Категория удалена');
                 fetchData();
             } catch (error) {
-                console.error('Error deleting category:', error);
                 toast.error('Ошибка при удалении');
             }
         }

@@ -1,5 +1,5 @@
-import { Navigation } from '@/components/layout/navigation';
-import { CategoriesTable } from '@/components/categories/categories-table';
+import { Navigation } from '@/components/navigation';
+import { CategoriesTable } from '@/components/categories-table';
 import { Suspense } from 'react';
 
 export default function CategoriesPage() {

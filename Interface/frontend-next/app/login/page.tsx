@@ -43,8 +43,10 @@ export default function LoginPage() {
             toast.success('Вход выполнен успешно');
             router.push('/');
             router.refresh();
+            
         } catch (error: any) {
             toast.error('Ошибка при входе');
+            
         } finally {
             setLoading(false);
         }
@@ -90,7 +92,7 @@ export default function LoginPage() {
                                         <FormControl>
                                             <Input
                                                 type="password"
-                                                placeholder="••••••••"
+                                                placeholder="Password"
                                                 disabled={loading}
                                                 {...field}
                                             />

@@ -11,7 +11,6 @@ export const authApi = {
         try {
             await apiClient.post('/auth/login', { email, password });
         } catch (error) {
-            console.error('Login error:', error);
             throw error;
         }
     },
@@ -20,17 +19,15 @@ export const authApi = {
         try {
             await apiClient.post('/auth/logout');
         } catch (error) {
-            console.error('Logout API error:', error);
+            throw error;
         }
     },
 
     getCurrentUser: async (): Promise<UserInfo> => {
         try {
             const { data } = await apiClient.get('/auth/userinfo');
-            console.log('Current user info:', data);
             return data;
         } catch (error) {
-            console.error('Get user info error:', error);
             throw error;
         }
     }

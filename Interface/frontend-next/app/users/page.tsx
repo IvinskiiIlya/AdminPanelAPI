@@ -1,4 +1,4 @@
-import { Navigation } from '@/components/layout/navigation';
+import { Navigation } from '@/components/navigation';
 
 export default function UsersPage() {
     return (

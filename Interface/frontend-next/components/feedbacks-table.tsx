@@ -31,10 +31,10 @@ import {
 import { MoreHorizontal, Pencil, Trash, Plus, ArrowUpDown, Search, X, Filter } from 'lucide-react';
 import { toast } from 'sonner';
 import { formatDate } from '@/lib/utils';
-import { feedbackApi } from '@/lib/api/feedbacks';
-import { categoryApi } from '@/lib/api/categories';
-import { statusApi } from '@/lib/api/statuses';
-import { Feedback, Category, Status } from '@/types';
+import { feedbackApi } from '@/lib/api/feedbacks/feedbacks';
+import { categoryApi } from '@/lib/api/categories/categories';
+import { statusApi } from '@/lib/api/statuses/statuses';
+import { Feedback, Category, Status } from '@/index';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
@@ -75,9 +75,10 @@ export function FeedbacksTable() {
                 ]);
                 setCategories(categoriesData.data || []);
                 setStatuses(statusesData);
+                
             } catch (error) {
-                console.error('Error loading filters:', error);
                 toast.error('Ошибка при загрузке фильтров');
+                
             } finally {
                 setLoadingFilters(false);
             }
@@ -91,12 +92,14 @@ export function FeedbacksTable() {
         Object.entries(updates).forEach(([key, value]) => {
             if (value === null || value === '' || value === 'all') {
                 params.delete(key);
-            } else {
+            } 
+            else {
                 params.set(key, String(value));
             }
         });
 
         router.push(`/feedbacks?${params.toString()}`);
+        
     }, [router, searchParams]);
 
     const fetchData = useCallback(async () => {
@@ -112,9 +115,7 @@ export function FeedbacksTable() {
                 categoryId: categoryFilter ? parseInt(categoryFilter) : undefined,
                 statusId: statusFilter ? parseInt(statusFilter) : undefined
             };
-
-            console.log('Fetching feedbacks with params:', params);
-
+            
             const response = await feedbackApi.getAll(params);
 
             const enrichedData = response.data.map(item => ({
@@ -128,13 +129,13 @@ export function FeedbacksTable() {
             setTotalRecords(response.totalRecords);
             
         } catch (error) {
-            console.error('Error fetching feedbacks:', error);
             toast.error('Ошибка при загрузке отзывов');
             setData([]);
             
         } finally {
             setLoading(false);
         }
+        
     }, [pageNumber, pageSize, sortColumn, sortOrder, searchTerm, categoryFilter, statusFilter, categories, statuses]);
 
     useEffect(() => {
@@ -172,8 +173,7 @@ export function FeedbacksTable() {
     };
 
     const handleSort = (column: string) => {
-        const newOrder: 'asc' | 'desc' =
-            sortColumn === column && sortOrder === 'asc' ? 'desc' : 'asc';
+        const newOrder: 'asc' | 'desc' = sortColumn === column && sortOrder === 'asc' ? 'desc' : 'asc';
         updateParams({ sortColumn: column, sortOrder: newOrder, page: 1 });
     };
 
@@ -192,7 +192,6 @@ export function FeedbacksTable() {
                 toast.success('Отзыв удален');
                 fetchData();
             } catch (error) {
-                console.error('Error deleting feedback:', error);
                 toast.error('Ошибка при удалении');
             }
         }

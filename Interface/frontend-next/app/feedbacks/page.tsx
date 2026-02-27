@@ -1,5 +1,5 @@
-import { Navigation } from '@/components/layout/navigation';
-import { FeedbacksTable } from '@/components/feedbacks/feedbacks-table';
+import { Navigation } from '@/components/navigation';
+import { FeedbacksTable } from '@/components/feedbacks-table';
 import { Suspense } from 'react';
 
 export default function FeedbacksPage() {
