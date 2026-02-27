@@ -13,7 +13,6 @@ namespace Interface.Controllers;
 [Route("api/[controller]")]
 public class AttachmentController : ControllerBase
 {
-    
     private readonly IWebHostEnvironment _env;
     private readonly IAttachmentService _attachmentService;
     private readonly IFeedbackService _feedbackService;

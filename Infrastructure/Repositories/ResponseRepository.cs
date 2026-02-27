@@ -6,7 +6,6 @@ namespace Infrastructure.Repositories
 {
     public class ResponseRepository : IResponseRepository
     {
-        
         private readonly AppDbContext _context;
 
         public ResponseRepository(AppDbContext context)

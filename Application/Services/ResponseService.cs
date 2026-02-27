@@ -12,7 +12,6 @@ namespace Application.Services
 {
     public class ResponseService : IResponseService
     {
-        
         private readonly IResponseRepository _responseRepository;
 
         public ResponseService(IResponseRepository responseRepository)

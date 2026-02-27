@@ -13,7 +13,6 @@ namespace Interface.Controllers;
 [Route("api/[controller]")]
 public class ResponseController : ControllerBase
 {
-    
     private readonly IResponseService _responseService;
 
     public ResponseController(IResponseService responseService)

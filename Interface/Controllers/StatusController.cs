@@ -13,7 +13,6 @@ namespace Interface.Controllers;
 [Route("api/[controller]")]
 public class StatusController : ControllerBase
 {
-    
     private readonly IStatusService _statusService;
 
     public StatusController(IStatusService statusService)

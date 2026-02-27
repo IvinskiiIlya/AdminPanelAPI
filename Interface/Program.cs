@@ -70,9 +70,12 @@ builder.Services.AddScoped<IStatusRepository, StatusRepository>();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
+    options.AddPolicy("AllowNextJs", policy =>
     {
-        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+        policy.WithOrigins("http://localhost:3000")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials();
     });
 });
 
@@ -140,7 +143,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
-app.UseCors("AllowAll"); 
+app.UseCors("AllowNextJs"); 
 
 app.UseAuthentication();
 app.UseAuthorization();

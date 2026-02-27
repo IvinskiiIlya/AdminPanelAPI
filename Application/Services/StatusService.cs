@@ -11,7 +11,6 @@ namespace Application.Services
 {
     public class StatusService : IStatusService
     {
-        
         private readonly IStatusRepository _statusRepository;
 
         public StatusService(IStatusRepository statusRepository)

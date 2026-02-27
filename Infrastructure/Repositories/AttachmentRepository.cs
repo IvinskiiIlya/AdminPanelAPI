@@ -6,7 +6,6 @@ namespace Infrastructure.Repositories
 {
     public class AttachmentRepository : IAttachmentRepository
     {
-        
         private readonly AppDbContext _context;
 
         public AttachmentRepository(AppDbContext context)

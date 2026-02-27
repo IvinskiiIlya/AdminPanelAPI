@@ -13,7 +13,6 @@ namespace Interface.Controllers;
 [Route("api/[controller]")]
 public class FeedbackController : ControllerBase
 {
-    
     private readonly IFeedbackService _feedbackService;
 
     public FeedbackController(IFeedbackService feedbackService)

@@ -12,7 +12,6 @@ namespace Application.Services
 {
     public class UserService : IUserService
     {
-        
         private readonly UserManager<IdentityUser> _userManager;
 
         public UserService(UserManager<IdentityUser> userManager)

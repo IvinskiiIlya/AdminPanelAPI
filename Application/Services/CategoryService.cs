@@ -11,7 +11,6 @@ namespace Application.Services
 {
     public class CategoryService : ICategoryService
     {
-        
         private readonly ICategoryRepository _categoryRepository;
 
         public CategoryService(ICategoryRepository categoryRepository)

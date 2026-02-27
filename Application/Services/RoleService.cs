@@ -12,7 +12,6 @@ namespace Application.Services
 {
     public class RoleService : IRoleService
     {
-        
         private readonly RoleManager<IdentityRole> _roleManager;
 
         public RoleService(RoleManager<IdentityRole> roleManager)

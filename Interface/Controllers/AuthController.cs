@@ -14,7 +14,6 @@ namespace Interface.Controllers;
 [Route("api/auth")]
 public class AuthController : ControllerBase
 {
-    
     private readonly UserManager<IdentityUser> _userManager;
     private readonly IConfiguration _configuration;
 
@@ -73,8 +72,9 @@ public class AuthController : ControllerBase
         {
             HttpOnly = true,
             Secure = true,
-            SameSite = SameSiteMode.Strict,
-            Expires = token.ValidTo
+            SameSite = SameSiteMode.None,
+            Expires = token.ValidTo,
+            Domain = "localhost"
         };
         Response.Cookies.Append("jwtToken", tokenString, cookieOptions);
 

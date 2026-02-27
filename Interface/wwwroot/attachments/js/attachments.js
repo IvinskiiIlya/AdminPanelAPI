@@ -134,6 +134,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         });
 
+        loadPaginationFromUrlOrStorage();
+
         loadAttachments(pagination.pageNumber);
     }
 
@@ -378,7 +380,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    loadPaginationFromUrlOrStorage();
     await init();
 
     window.onpopstate = (event) => {

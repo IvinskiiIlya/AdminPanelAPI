@@ -117,6 +117,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         await loadCategories();
         await loadStatuses();
 
+        loadPaginationFromUrlOrStorage();
+
         loadFeedbacks(pagination.pageNumber);
     }
 
@@ -196,7 +198,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     function updateUrlFromPagination() {
         const params = new URLSearchParams();
-
+        
         params.set('pageNumber', pagination.pageNumber);
         if (pagination.searchTerm) params.set('searchTerm', pagination.searchTerm);
         if (pagination.categoryId) params.set('categoryId', pagination.categoryId);
@@ -205,9 +207,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (pagination.createdTo) params.set('createdTo', pagination.createdTo);
         params.set('sortColumn', pagination.sortColumn);
         params.set('sortOrder', pagination.sortOrder);
-
+        
         const newUrl = `${window.location.pathname}?${params.toString()}`;
-        history.pushState({...pagination}, '', newUrl);
+        history.pushState({...pagination}, "", newUrl);
         sessionStorage.setItem('paginationFilters', JSON.stringify(pagination));
     }
 
@@ -281,7 +283,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (!response.ok) {
                 if (response.status === 401) {
                     sessionStorage.setItem('pendingAlert', 'Сессия истекла, требуется повторная авторизация');
-                    sessionStorage.removeItem('paginationFilters'); // Очистить при выходе
+                    sessionStorage.removeItem('paginationFilters'); 
                     window.location.href = '../../auth.html';
                     return;
                 }
@@ -436,7 +438,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    loadPaginationFromUrlOrStorage();
     await init();
 
     window.onpopstate = (event) => {

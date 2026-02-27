@@ -14,7 +14,6 @@ namespace Application.Services
 {
     public class AttachmentService : IAttachmentService
     {
-        
         private readonly IAttachmentRepository _attachmentRepository;
 
         public AttachmentService(IAttachmentRepository attachmentRepository)

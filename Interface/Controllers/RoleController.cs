@@ -13,7 +13,6 @@ namespace Interface.Controllers;
 [Route("api/[controller]")]
 public class RoleController : ControllerBase
 {
-    
     private readonly IRoleService _roleService;
 
     public RoleController(IRoleService roleService)

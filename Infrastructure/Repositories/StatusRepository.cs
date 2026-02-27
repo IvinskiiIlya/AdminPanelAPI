@@ -6,7 +6,6 @@ namespace Infrastructure.Repositories
 {
     public class StatusRepository : IStatusRepository
     {
-    
         private readonly AppDbContext _context;
 
         public StatusRepository(AppDbContext context)

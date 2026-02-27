@@ -6,7 +6,6 @@ namespace Infrastructure.Repositories
 {
     public class FeedbackRepository : IFeedbackRepository
     {
-        
         private readonly AppDbContext _context;
 
         public FeedbackRepository(AppDbContext context)
