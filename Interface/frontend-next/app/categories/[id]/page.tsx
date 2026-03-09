@@ -1,59 +1,28 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
 import { Navigation } from '@/components/navigation';
 import { CategoryForm } from '@/components/forms/category-form';
-import { categoryApi } from '@/lib/api/categories/categories';
-import { Category } from '@/index';
-import { toast } from 'sonner';
+import { notFound } from 'next/navigation';
+import { cookies } from 'next/headers';
 
-export default function EditCategoryPage() {
-    const params = useParams();
-    const router = useRouter();
-    const [category, setCategory] = useState<Category | null>(null);
-    const [loading, setLoading] = useState(true);
+async function getCategory(id: number) {
+    const cookieStore = await cookies();
+    
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Category/${id}`, {
+        headers: { Cookie: cookieStore.toString() },
+        cache: 'no-store'
+    });
 
-    useEffect(() => {
-        const fetchCategory = async () => {
-            try {
-                const id = parseInt(params.id as string);
-                const data = await categoryApi.getById(id);
-                setCategory(data);
-                
-            } catch (error) {
-                toast.error('Ошибка при загрузке категории');
-                router.push('/categories');
-                
-            } finally {
-                setLoading(false);
-            }
-        };
+    if (res.status === 404) return null;
+    if (!res.ok) throw new Error('Failed to fetch');
+    return res.json();
+}
 
-        fetchCategory();
-    }, [params.id, router]);
+export default async function EditCategoryPage({ params }: { params: Promise<{ id: string }>; }) {
+    const { id } = await params;
+    const numericId = parseInt(id);
+    if (isNaN(numericId)) notFound();
 
-    if (loading) {
-        return (
-            <div>
-                <Navigation />
-                <main className="p-8">
-                    <div>Загрузка...</div>
-                </main>
-            </div>
-        );
-    }
-
-    if (!category) {
-        return (
-            <div>
-                <Navigation />
-                <main className="p-8">
-                    <div>Категория не найдена</div>
-                </main>
-            </div>
-        );
-    }
+    const category = await getCategory(numericId);
+    if (!category) notFound();
 
     return (
         <div>

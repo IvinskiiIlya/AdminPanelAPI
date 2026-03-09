@@ -1,5 +1,5 @@
 import { apiClient } from '../axios';
-import { Status, PagedResponse } from '@/index';
+import { Status } from '@/index';
 
 export const statusApi = {
     getAll: async (): Promise<Status[]> => {

@@ -10,17 +10,13 @@ export const metadata: Metadata = {
     description: "Панель администратора",
 };
 
-export default function RootLayout({
-                                       children,
-                                   }: Readonly<{
-    children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
     return (
         <html lang="ru">
-        <body className={inter.className}>
-        {children}
-        <Toaster richColors position="top-right" />
-        </body>
+            <body className={inter.className}>
+                {children}
+                <Toaster richColors position="top-right" />
+            </body>
         </html>
     );
 }

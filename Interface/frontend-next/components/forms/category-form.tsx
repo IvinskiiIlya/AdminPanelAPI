@@ -48,7 +48,7 @@ export function CategoryForm({ initialData }: CategoryFormProps) {
                     description: data.description
                 });
                 toast.success('Категория обновлена');
-            } 
+            }
             else {
                 if (!data.id) {
                     toast.error('Необходимо указать ID категории');
@@ -65,14 +65,14 @@ export function CategoryForm({ initialData }: CategoryFormProps) {
 
             router.push('/categories');
             router.refresh();
-            
+
         } catch (error: any) {
             const errorMessage = error.response?.data?.message
                 || error.response?.data
                 || 'Ошибка при сохранении';
 
             toast.error(typeof errorMessage === 'string' ? errorMessage : JSON.stringify(errorMessage));
-            
+
         } finally {
             setIsSubmitting(false);
         }

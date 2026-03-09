@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
@@ -25,19 +24,18 @@ import {
 } from '@/components/ui/select';
 import { feedbackSchema, FeedbackFormValues } from '@/lib/validations/feedback';
 import { feedbackApi } from '@/lib/api/feedbacks/feedbacks';
-import { categoryApi } from '@/lib/api/categories/categories';
 import { Category, Feedback } from '@/index';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useState } from 'react';
 
 interface FeedbackFormProps {
     initialData?: Feedback;
+    initialCategories: Category[];
 }
 
-export function FeedbackForm({ initialData }: FeedbackFormProps) {
+export function FeedbackForm({ initialData, initialCategories }: FeedbackFormProps) {
     const router = useRouter();
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [categories, setCategories] = useState<Category[]>([]);
-    const [loading, setLoading] = useState(true);
 
     const form = useForm<FeedbackFormValues>({
         resolver: zodResolver(feedbackSchema),
@@ -46,21 +44,6 @@ export function FeedbackForm({ initialData }: FeedbackFormProps) {
             message: initialData?.message || '',
         },
     });
-
-    useEffect(() => {
-        const loadCategories = async () => {
-            try {
-                setLoading(true);
-                const categoriesData = await categoryApi.getAll({ pageSize: 100 });
-                setCategories(categoriesData.data || []);
-            } catch (error) {
-                toast.error('Ошибка при загрузке категорий');
-            } finally {
-                setLoading(false);
-            }
-        };
-        loadCategories();
-    }, []);
 
     async function onSubmit(data: FeedbackFormValues) {
         try {
@@ -72,7 +55,7 @@ export function FeedbackForm({ initialData }: FeedbackFormProps) {
                     message: data.message
                 });
                 toast.success('Отзыв обновлен');
-            } 
+            }
             else {
                 await feedbackApi.create({
                     categoryId: data.categoryId,
@@ -83,21 +66,17 @@ export function FeedbackForm({ initialData }: FeedbackFormProps) {
 
             router.push('/feedbacks');
             router.refresh();
-            
+
         } catch (error: any) {
             const errorMessage = error.response?.data?.message
                 || error.response?.data
                 || 'Ошибка при сохранении';
 
             toast.error(typeof errorMessage === 'string' ? errorMessage : JSON.stringify(errorMessage));
-            
+
         } finally {
             setIsSubmitting(false);
         }
-    }
-
-    if (loading) {
-        return <div className="text-center py-8">Загрузка категорий...</div>;
     }
 
     return (
@@ -105,7 +84,7 @@ export function FeedbackForm({ initialData }: FeedbackFormProps) {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                 <Card>
                     <CardHeader>
-                        <CardTitle>Новый отзыв</CardTitle>
+                        <CardTitle>{initialData ? 'Редактирование' : 'Новый'} отзыв</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <FormField
@@ -125,7 +104,7 @@ export function FeedbackForm({ initialData }: FeedbackFormProps) {
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            {categories.map((category) => (
+                                            {initialCategories.map((category) => (
                                                 <SelectItem key={category.id} value={String(category.id)}>
                                                     {category.name}
                                                 </SelectItem>

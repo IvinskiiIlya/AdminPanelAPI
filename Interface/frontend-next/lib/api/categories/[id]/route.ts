@@ -13,6 +13,6 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     });
 
     const data = await response.json();
-    
+
     return NextResponse.json(data, { status: response.status });
 }
