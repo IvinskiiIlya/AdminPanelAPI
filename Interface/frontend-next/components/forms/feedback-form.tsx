@@ -23,10 +23,10 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { feedbackSchema, FeedbackFormValues } from '@/lib/validations/feedback';
-import { feedbackApi } from '@/lib/api/feedbacks/feedbacks';
 import { Category, Feedback } from '@/index';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useState } from 'react';
+import { useTransition } from 'react';
+import { createFeedback, updateFeedback } from '@/app/actions/feedbacks';
 
 interface FeedbackFormProps {
     initialData?: Feedback;
@@ -35,7 +35,7 @@ interface FeedbackFormProps {
 
 export function FeedbackForm({ initialData, initialCategories }: FeedbackFormProps) {
     const router = useRouter();
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isPending, startTransition] = useTransition();
 
     const form = useForm<FeedbackFormValues>({
         resolver: zodResolver(feedbackSchema),
@@ -46,36 +46,24 @@ export function FeedbackForm({ initialData, initialCategories }: FeedbackFormPro
     });
 
     async function onSubmit(data: FeedbackFormValues) {
-        try {
-            setIsSubmitting(true);
+        const formData = new FormData();
+        formData.append('categoryId', String(data.categoryId));
+        formData.append('message', data.message);
 
-            if (initialData?.id) {
-                await feedbackApi.update(initialData.id, {
-                    categoryId: data.categoryId,
-                    message: data.message
-                });
-                toast.success('Отзыв обновлен');
-            }
-            else {
-                await feedbackApi.create({
-                    categoryId: data.categoryId,
-                    message: data.message
-                });
-                toast.success('Отзыв создан');
-            }
-
-            router.push('/feedbacks');
-            router.refresh();
-
-        } catch (error: any) {
-            const errorMessage = error.response?.data?.message
-                || error.response?.data
-                || 'Ошибка при сохранении';
-
-            toast.error(typeof errorMessage === 'string' ? errorMessage : JSON.stringify(errorMessage));
-
-        } finally {
-            setIsSubmitting(false);
+        if (initialData?.id) {
+            startTransition(async () => {
+                const result = await updateFeedback(initialData.id, formData);
+                if (result?.error) {
+                    toast.error(result.error);
+                }
+            });
+        } else {
+            startTransition(async () => {
+                const result = await createFeedback(formData);
+                if (result?.error) {
+                    toast.error(result.error);
+                }
+            });
         }
     }
 
@@ -94,7 +82,7 @@ export function FeedbackForm({ initialData, initialCategories }: FeedbackFormPro
                                 <FormItem>
                                     <FormLabel>Категория *</FormLabel>
                                     <Select
-                                        disabled={isSubmitting}
+                                        disabled={isPending}
                                         onValueChange={(value) => field.onChange(parseInt(value))}
                                         value={String(field.value)}
                                     >
@@ -125,7 +113,7 @@ export function FeedbackForm({ initialData, initialCategories }: FeedbackFormPro
                                     <FormControl>
                                         <Textarea
                                             placeholder="Введите текст отзыва"
-                                            disabled={isSubmitting}
+                                            disabled={isPending}
                                             className="min-h-[150px]"
                                             {...field}
                                         />
@@ -141,14 +129,14 @@ export function FeedbackForm({ initialData, initialCategories }: FeedbackFormPro
                 </Card>
 
                 <div className="flex gap-4">
-                    <Button type="submit" disabled={isSubmitting}>
-                        {isSubmitting ? 'Сохранение...' : (initialData ? 'Сохранить' : 'Создать')}
+                    <Button type="submit" disabled={isPending}>
+                        {isPending ? 'Сохранение...' : (initialData ? 'Сохранить' : 'Создать')}
                     </Button>
                     <Button
                         type="button"
                         variant="outline"
                         onClick={() => router.push('/feedbacks')}
-                        disabled={isSubmitting}
+                        disabled={isPending}
                     >
                         Отмена
                     </Button>

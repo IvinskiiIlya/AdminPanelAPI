@@ -29,9 +29,9 @@ import {
 } from '@/components/ui/select';
 import { MoreHorizontal, Pencil, Trash, Plus, ArrowUpDown, Search, X } from 'lucide-react';
 import { toast } from 'sonner';
-import { categoryApi } from '@/lib/api/categories/categories';
 import { Category } from '@/index';
-import { useState, useEffect } from 'react';
+import { useState, useTransition } from 'react';
+import { deleteCategory } from '@/app/actions/categories';
 
 interface CategoriesTableProps {
     initialData: {
@@ -51,11 +51,11 @@ interface CategoriesTableProps {
 export function CategoriesTable({ initialData, initialSearchParams }: CategoriesTableProps) {
     const router = useRouter();
     const searchParams = useSearchParams();
+    const [isPending, startTransition] = useTransition();
 
-    const [data, setData] = useState(initialData.data);
-    const [totalPages, setTotalPages] = useState(initialData.totalPages);
-    const [totalRecords, setTotalRecords] = useState(initialData.totalRecords);
-    const [loading, setLoading] = useState(false);
+    const data = initialData.data;
+    const totalPages = initialData.totalPages;
+    const totalRecords = initialData.totalRecords;
 
     const pageNumber = Number(searchParams.get('page')) || Number(initialSearchParams.page) || 1;
     const pageSize = Number(searchParams.get('pageSize')) || Number(initialSearchParams.pageSize) || 10;
@@ -76,7 +76,9 @@ export function CategoriesTable({ initialData, initialSearchParams }: Categories
             }
         });
 
-        router.push(`/categories?${params.toString()}`);
+        startTransition(() => {
+            router.push(`/categories?${params.toString()}`);
+        });
     };
 
     const handleSearch = () => {
@@ -104,44 +106,27 @@ export function CategoriesTable({ initialData, initialSearchParams }: Categories
     const handleDelete = async (id: number) => {
         if (confirm('Вы уверены, что хотите удалить эту категорию?')) {
             try {
-                await categoryApi.delete(id);
+                await deleteCategory(id);
                 toast.success('Категория удалена');
-                router.refresh();
+
+                if (data.length === 1 && pageNumber > 1) {
+                    updateParams({ page: pageNumber - 1 });
+                } 
+                else {
+                    router.refresh();
+                }
             } catch (error) {
                 toast.error('Ошибка при удалении');
             }
         }
     };
 
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            try {
-                const params = {
-                    pageNumber,
-                    pageSize,
-                    sortColumn,
-                    sortOrder,
-                    searchTerm: searchTerm || undefined
-                };
-                const response = await categoryApi.getAll(params);
-                setData(response.data);
-                setTotalPages(response.totalPages);
-                setTotalRecords(response.totalRecords);
-                
-            } catch (error) {
-                toast.error('Ошибка при загрузке');
-                
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchData();
-    }, [pageNumber, pageSize, sortColumn, sortOrder, searchTerm]);
-
     return (
         <div className="space-y-4">
+            {isPending && (
+                <div className="fixed top-0 left-0 right-0 h-1 bg-blue-500 animate-pulse z-50" />
+            )}
+
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex flex-1 items-center gap-2 max-w-md">
                     <div className="relative flex-1">
@@ -152,18 +137,32 @@ export function CategoriesTable({ initialData, initialSearchParams }: Categories
                             onChange={(e) => setLocalSearch(e.target.value)}
                             onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                             className="pl-8 pr-8"
+                            disabled={isPending}
                         />
                         {localSearch && (
-                            <button onClick={clearSearch} className="absolute right-2 top-2.5">
+                            <button
+                                onClick={clearSearch}
+                                className="absolute right-2 top-2.5"
+                                disabled={isPending}
+                            >
                                 <X className="h-4 w-4 text-muted-foreground" />
                             </button>
                         )}
                     </div>
-                    <Button variant="secondary" onClick={handleSearch}>Поиск</Button>
+                    <Button
+                        variant="secondary"
+                        onClick={handleSearch}
+                        disabled={isPending}
+                    >
+                        Поиск
+                    </Button>
                 </div>
 
                 <Link href="/categories/new">
-                    <Button><Plus className="mr-2 h-4 w-4" />Добавить категорию</Button>
+                    <Button disabled={isPending}>
+                        <Plus className="mr-2 h-4 w-4" />
+                        Добавить категорию
+                    </Button>
                 </Link>
             </div>
 
@@ -172,15 +171,33 @@ export function CategoriesTable({ initialData, initialSearchParams }: Categories
                     <TableHeader>
                         <TableRow>
                             <TableHead>
-                                <Button variant="ghost" onClick={() => handleSort('id')} className="flex items-center gap-1">
+                                <Button
+                                    variant="ghost"
+                                    onClick={() => handleSort('id')}
+                                    className="flex items-center gap-1"
+                                    disabled={isPending}
+                                >
                                     ID <ArrowUpDown className="h-4 w-4" />
-                                    {sortColumn === 'id' && <span className="text-xs ml-1">{sortOrder === 'asc' ? '↑' : '↓'}</span>}
+                                    {sortColumn === 'id' && (
+                                        <span className="text-xs ml-1">
+                                            {sortOrder === 'asc' ? '↑' : '↓'}
+                                        </span>
+                                    )}
                                 </Button>
                             </TableHead>
                             <TableHead>
-                                <Button variant="ghost" onClick={() => handleSort('name')} className="flex items-center gap-1">
+                                <Button
+                                    variant="ghost"
+                                    onClick={() => handleSort('name')}
+                                    className="flex items-center gap-1"
+                                    disabled={isPending}
+                                >
                                     Название <ArrowUpDown className="h-4 w-4" />
-                                    {sortColumn === 'name' && <span className="text-xs ml-1">{sortOrder === 'asc' ? '↑' : '↓'}</span>}
+                                    {sortColumn === 'name' && (
+                                        <span className="text-xs ml-1">
+                                            {sortOrder === 'asc' ? '↑' : '↓'}
+                                        </span>
+                                    )}
                                 </Button>
                             </TableHead>
                             <TableHead>Описание</TableHead>
@@ -188,10 +205,12 @@ export function CategoriesTable({ initialData, initialSearchParams }: Categories
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {loading ? (
-                            <TableRow><TableCell colSpan={4} className="text-center py-8">Загрузка...</TableCell></TableRow>
-                        ) : data.length === 0 ? (
-                            <TableRow><TableCell colSpan={4} className="text-center py-8">Нет данных</TableCell></TableRow>
+                        {data.length === 0 ? (
+                            <TableRow>
+                                <TableCell colSpan={4} className="text-center py-8">
+                                    {isPending ? 'Загрузка...' : 'Нет данных'}
+                                </TableCell>
+                            </TableRow>
                         ) : (
                             data.map((item) => (
                                 <TableRow key={item.id}>
@@ -201,7 +220,11 @@ export function CategoriesTable({ initialData, initialSearchParams }: Categories
                                     <TableCell>
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
-                                                <Button variant="ghost" className="h-8 w-8 p-0">
+                                                <Button
+                                                    variant="ghost"
+                                                    className="h-8 w-8 p-0"
+                                                    disabled={isPending}
+                                                >
                                                     <MoreHorizontal className="h-4 w-4" />
                                                 </Button>
                                             </DropdownMenuTrigger>
@@ -209,12 +232,17 @@ export function CategoriesTable({ initialData, initialSearchParams }: Categories
                                                 <DropdownMenuLabel>Действия</DropdownMenuLabel>
                                                 <DropdownMenuItem asChild>
                                                     <Link href={`/categories/${item.id}`}>
-                                                        <Pencil className="mr-2 h-4 w-4" />Редактировать
+                                                        <Pencil className="mr-2 h-4 w-4" />
+                                                        Редактировать
                                                     </Link>
                                                 </DropdownMenuItem>
                                                 <DropdownMenuSeparator />
-                                                <DropdownMenuItem className="text-red-600" onClick={() => handleDelete(item.id)}>
-                                                    <Trash className="mr-2 h-4 w-4" />Удалить
+                                                <DropdownMenuItem
+                                                    className="text-red-600"
+                                                    onClick={() => handleDelete(item.id)}
+                                                >
+                                                    <Trash className="mr-2 h-4 w-4" />
+                                                    Удалить
                                                 </DropdownMenuItem>
                                             </DropdownMenuContent>
                                         </DropdownMenu>
@@ -228,25 +256,63 @@ export function CategoriesTable({ initialData, initialSearchParams }: Categories
 
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                    <p className="text-sm text-muted-foreground">Всего записей: {totalRecords}</p>
-                    <Select value={String(pageSize)} onValueChange={handlePageSizeChange}>
+                    <p className="text-sm text-muted-foreground">
+                        Всего записей: {totalRecords}
+                    </p>
+                    <Select
+                        value={String(pageSize)}
+                        onValueChange={handlePageSizeChange}
+                        disabled={isPending}
+                    >
                         <SelectTrigger className="h-8 w-[70px]">
                             <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
                             {[5, 10, 20, 50, 100].map((size) => (
-                                <SelectItem key={size} value={String(size)}>{size}</SelectItem>
+                                <SelectItem key={size} value={String(size)}>
+                                    {size}
+                                </SelectItem>
                             ))}
                         </SelectContent>
                     </Select>
                 </div>
 
                 <div className="flex items-center gap-2">
-                    <Button variant="outline" size="sm" onClick={() => handlePageChange(1)} disabled={pageNumber === 1}>Первая</Button>
-                    <Button variant="outline" size="sm" onClick={() => handlePageChange(pageNumber - 1)} disabled={pageNumber === 1}>Предыдущая</Button>
-                    <span className="text-sm">Страница {pageNumber} из {totalPages}</span>
-                    <Button variant="outline" size="sm" onClick={() => handlePageChange(pageNumber + 1)} disabled={pageNumber === totalPages}>Следующая</Button>
-                    <Button variant="outline" size="sm" onClick={() => handlePageChange(totalPages)} disabled={pageNumber === totalPages}>Последняя</Button>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handlePageChange(1)}
+                        disabled={pageNumber === 1 || isPending}
+                    >
+                        Первая
+                    </Button>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handlePageChange(pageNumber - 1)}
+                        disabled={pageNumber === 1 || isPending}
+                    >
+                        Предыдущая
+                    </Button>
+                    <span className="text-sm">
+                        Страница {pageNumber} из {totalPages}
+                    </span>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handlePageChange(pageNumber + 1)}
+                        disabled={pageNumber === totalPages || isPending}
+                    >
+                        Следующая
+                    </Button>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handlePageChange(totalPages)}
+                        disabled={pageNumber === totalPages || isPending}
+                    >
+                        Последняя
+                    </Button>
                 </div>
             </div>
         </div>

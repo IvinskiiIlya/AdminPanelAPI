@@ -17,9 +17,9 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { categorySchema, CategoryFormValues } from '@/lib/validations/category';
-import { categoryApi } from '@/lib/api/categories/categories';
 import { Category } from '@/index';
-import { useState } from 'react';
+import { useTransition } from 'react';
+import { createCategory, updateCategory } from '@/app/actions/categories';
 
 interface CategoryFormProps {
     initialData?: Category;
@@ -27,7 +27,7 @@ interface CategoryFormProps {
 
 export function CategoryForm({ initialData }: CategoryFormProps) {
     const router = useRouter();
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isPending, startTransition] = useTransition();
 
     const form = useForm<CategoryFormValues>({
         resolver: zodResolver(categorySchema),
@@ -40,41 +40,26 @@ export function CategoryForm({ initialData }: CategoryFormProps) {
 
     async function onSubmit(data: CategoryFormValues) {
         try {
-            setIsSubmitting(true);
+            const formData = new FormData();
 
             if (initialData?.id) {
-                await categoryApi.update(initialData.id, {
-                    name: data.name,
-                    description: data.description
-                });
-                toast.success('Категория обновлена');
-            }
-            else {
-                if (!data.id) {
-                    toast.error('Необходимо указать ID категории');
-                    setIsSubmitting(false);
-                    return;
-                }
-                await categoryApi.create({
-                    id: data.id,
-                    name: data.name,
-                    description: data.description
-                });
-                toast.success('Категория создана');
-            }
+                formData.append('name', data.name);
+                formData.append('description', data.description || '');
 
-            router.push('/categories');
-            router.refresh();
+                startTransition(async () => {
+                    await updateCategory(initialData.id, formData);
+                });
+            } else {
+                formData.append('id', String(data.id));
+                formData.append('name', data.name);
+                formData.append('description', data.description || '');
 
+                startTransition(async () => {
+                    await createCategory(formData);
+                });
+            }
         } catch (error: any) {
-            const errorMessage = error.response?.data?.message
-                || error.response?.data
-                || 'Ошибка при сохранении';
-
-            toast.error(typeof errorMessage === 'string' ? errorMessage : JSON.stringify(errorMessage));
-
-        } finally {
-            setIsSubmitting(false);
+            toast.error(error.message || 'Ошибка при сохранении');
         }
     }
 
@@ -92,7 +77,7 @@ export function CategoryForm({ initialData }: CategoryFormProps) {
                                     <Input
                                         type="number"
                                         placeholder="Введите ID категории"
-                                        disabled={isSubmitting}
+                                        disabled={isPending}
                                         onChange={(e) => field.onChange(parseInt(e.target.value) || undefined)}
                                         value={field.value || ''}
                                     />
@@ -115,7 +100,7 @@ export function CategoryForm({ initialData }: CategoryFormProps) {
                             <FormControl>
                                 <Input
                                     placeholder="Введите название категории"
-                                    disabled={isSubmitting}
+                                    disabled={isPending}
                                     {...field}
                                 />
                             </FormControl>
@@ -133,7 +118,7 @@ export function CategoryForm({ initialData }: CategoryFormProps) {
                             <FormControl>
                                 <Textarea
                                     placeholder="Введите описание категории"
-                                    disabled={isSubmitting}
+                                    disabled={isPending}
                                     {...field}
                                     value={field.value || ''}
                                 />
@@ -144,14 +129,14 @@ export function CategoryForm({ initialData }: CategoryFormProps) {
                 />
 
                 <div className="flex gap-4">
-                    <Button type="submit" disabled={isSubmitting}>
-                        {isSubmitting ? 'Сохранение...' : (initialData ? 'Сохранить' : 'Создать')}
+                    <Button type="submit" disabled={isPending}>
+                        {isPending ? 'Сохранение...' : (initialData ? 'Сохранить' : 'Создать')}
                     </Button>
                     <Button
                         type="button"
                         variant="outline"
                         onClick={() => router.push('/categories')}
-                        disabled={isSubmitting}
+                        disabled={isPending}
                     >
                         Отмена
                     </Button>
