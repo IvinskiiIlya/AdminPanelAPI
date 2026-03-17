@@ -19,7 +19,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { categorySchema, CategoryFormValues } from '@/lib/validations/category';
 import { Category } from '@/index';
 import { useTransition } from 'react';
-import { createCategory, updateCategory } from '@/app/actions/categories';
+import { createCategory, updateCategory } from '@/lib/actions/categories';
 
 interface CategoryFormProps {
     initialData?: Category;

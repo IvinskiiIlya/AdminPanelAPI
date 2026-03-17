@@ -31,7 +31,7 @@ import { MoreHorizontal, Pencil, Trash, Plus, ArrowUpDown, Search, X } from 'luc
 import { toast } from 'sonner';
 import { Category } from '@/index';
 import { useState, useTransition } from 'react';
-import { deleteCategory } from '@/app/actions/categories';
+import { deleteCategory } from '@/lib/actions/categories';
 
 interface CategoriesTableProps {
     initialData: {

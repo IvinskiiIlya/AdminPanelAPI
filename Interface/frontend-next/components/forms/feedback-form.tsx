@@ -26,7 +26,7 @@ import { feedbackSchema, FeedbackFormValues } from '@/lib/validations/feedback';
 import { Category, Feedback } from '@/index';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useTransition } from 'react';
-import { createFeedback, updateFeedback } from '@/app/actions/feedbacks';
+import { createFeedback, updateFeedback } from '@/lib/actions/feedbacks';
 
 interface FeedbackFormProps {
     initialData?: Feedback;

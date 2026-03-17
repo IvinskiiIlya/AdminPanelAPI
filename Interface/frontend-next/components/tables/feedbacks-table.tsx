@@ -33,7 +33,7 @@ import { Feedback, Category, Status } from '@/index';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useState, useTransition } from 'react';
-import { deleteFeedback } from '@/app/actions/feedbacks';
+import { deleteFeedback } from '@/lib/actions/feedbacks';
 
 interface FeedbacksTableProps {
     initialData: {
