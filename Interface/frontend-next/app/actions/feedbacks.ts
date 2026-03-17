@@ -103,12 +103,14 @@ export async function updateFeedback(id: number, formData: FormData) {
 
     const categoryId = parseInt(formData.get('categoryId') as string);
     const message = formData.get('message') as string;
+    const statusId = parseInt(formData.get('statusId') as string);
     
     const data = {
         id,
         categoryId,
         message,
         userId,
+        statusId,
     };
 
     const response = await fetch(`${API_URL}/Feedback/${id}`, {

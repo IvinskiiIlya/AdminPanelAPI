@@ -57,11 +57,18 @@ async function getStatuses(cookieString: string) {
     });
 
     if (!res.ok) return [];
-    return res.json();
+
+    const data = await res.json();
+
+    if (data && Array.isArray(data.data)) {
+        return data.data;
+    }
+
+    return [];
 }
 
 async function FeedbacksTableWrapper({ searchParams }: {
-    searchParams: {
+    searchParams: Promise<{
         page?: string;
         pageSize?: string;
         sortColumn?: string;
@@ -69,13 +76,14 @@ async function FeedbacksTableWrapper({ searchParams }: {
         searchTerm?: string;
         categoryId?: string;
         statusId?: string;
-    }
+    }>
 }) {
+    const unwrappedSearchParams = await searchParams || {};
     const cookieStore = await cookies();
     const cookieString = cookieStore.toString();
 
     const [feedbacks, categories, statuses] = await Promise.all([
-        getFeedbacks(searchParams, cookieString),
+        getFeedbacks(unwrappedSearchParams, cookieString),
         getCategories(cookieString),
         getStatuses(cookieString)
     ]);
@@ -85,7 +93,7 @@ async function FeedbacksTableWrapper({ searchParams }: {
     return (
         <FeedbacksTable
             initialData={feedbacks}
-            initialSearchParams={searchParams}
+            initialSearchParams={unwrappedSearchParams}
             initialCategories={categories.data || []}
             initialStatuses={statusesArray}
         />
@@ -103,16 +111,13 @@ export default async function FeedbacksPage({ searchParams }: {
         statusId?: string;
     }>;
 }) {
-    const unwrappedSearchParams = await searchParams || {};
-    const paramsKey = JSON.stringify(unwrappedSearchParams);
-
     return (
         <div>
             <Navigation />
             <main className="p-8">
                 <h1 className="text-3xl font-bold mb-8">Отзывы</h1>
-                <Suspense key={paramsKey} fallback={<div>Загрузка таблицы...</div>}>
-                    <FeedbacksTableWrapper searchParams={unwrappedSearchParams} />
+                <Suspense fallback={<div>Загрузка таблицы...</div>}>
+                    <FeedbacksTableWrapper searchParams={searchParams || Promise.resolve({})} />
                 </Suspense>
             </main>
         </div>

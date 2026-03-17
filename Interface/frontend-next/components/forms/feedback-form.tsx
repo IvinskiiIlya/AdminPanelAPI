@@ -49,6 +49,10 @@ export function FeedbackForm({ initialData, initialCategories }: FeedbackFormPro
         const formData = new FormData();
         formData.append('categoryId', String(data.categoryId));
         formData.append('message', data.message);
+        
+        if (initialData?.statusId) {
+            formData.append('statusId', String(initialData.statusId));
+        }
 
         if (initialData?.id) {
             startTransition(async () => {

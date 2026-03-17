@@ -2,7 +2,6 @@ import { Navigation } from '@/components/navigation';
 import { CategoriesTable } from '@/components/tables/categories-table';
 import { Suspense } from 'react';
 import { cookies } from 'next/headers';
-import { cacheTag } from 'next/cache';
 
 async function getCategories(
     searchParams: {
@@ -15,7 +14,6 @@ async function getCategories(
     cookieString: string
 ) {
     'use cache';
-    cacheTag('categories');
 
     const params = new URLSearchParams();
 
@@ -27,14 +25,15 @@ async function getCategories(
 
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Category?${params}`, {
         headers: { Cookie: cookieString },
+        next: { tags: ['categories'] }
     });
 
     if (!res.ok) throw new Error('Failed to fetch');
     return res.json();
 }
 
-async function CategoriesTableWrapper({ searchParamsPromise }: {
-    searchParamsPromise: Promise<{
+async function CategoriesTableWrapper({ searchParams }: {
+    searchParams: Promise<{
         page?: string;
         pageSize?: string;
         sortColumn?: string;
@@ -42,16 +41,16 @@ async function CategoriesTableWrapper({ searchParamsPromise }: {
         searchTerm?: string;
     }>
 }) {
-    const searchParams = await searchParamsPromise;
+    const unwrappedSearchParams = await searchParams || {};
     const cookieStore = await cookies();
     const cookieString = cookieStore.toString();
 
-    const data = await getCategories(searchParams, cookieString);
+    const data = await getCategories(unwrappedSearchParams, cookieString);
 
     return (
         <CategoriesTable
             initialData={data}
-            initialSearchParams={searchParams}
+            initialSearchParams={unwrappedSearchParams}
         />
     );
 }
@@ -65,16 +64,13 @@ export default async function CategoriesPage({ searchParams }: {
         searchTerm?: string;
     }>;
 }) {
-    const searchParamsPromise = searchParams || Promise.resolve({});
-    const paramsKey = JSON.stringify(await searchParamsPromise);
-
     return (
         <div>
             <Navigation />
             <main className="p-8">
                 <h1 className="text-3xl font-bold mb-8">Категории</h1>
-                <Suspense key={paramsKey} fallback={<div>Загрузка таблицы...</div>}>
-                    <CategoriesTableWrapper searchParamsPromise={searchParamsPromise} />
+                <Suspense fallback={<div>Загрузка таблицы...</div>}>
+                    <CategoriesTableWrapper searchParams={searchParams || Promise.resolve({})} />
                 </Suspense>
             </main>
         </div>

@@ -29,7 +29,6 @@ import {
 } from '@/components/ui/select';
 import { MoreHorizontal, Pencil, Trash, Plus, ArrowUpDown, Search, X, Filter } from 'lucide-react';
 import { toast } from 'sonner';
-import { formatDate } from '@/lib/utils';
 import { Feedback, Category, Status } from '@/index';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -324,7 +323,15 @@ export function FeedbacksTable({ initialData, initialSearchParams, initialCatego
                                         <Badge variant="outline">{item.categoryName || `ID: ${item.categoryId}`}</Badge>
                                     </TableCell>
                                     <TableCell>{getStatusBadge(item.statusName)}</TableCell>
-                                    <TableCell>{formatDate(item.createdAt)}</TableCell>
+                                    <TableCell>
+                                        {new Date(item.createdAt).toLocaleString('ru-RU', {
+                                            day: '2-digit',
+                                            month: '2-digit',
+                                            year: 'numeric',
+                                            hour: '2-digit',
+                                            minute: '2-digit'
+                                        })}
+                                    </TableCell>
                                     <TableCell>
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>

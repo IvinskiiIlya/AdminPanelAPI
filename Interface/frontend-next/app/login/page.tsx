@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { authApi } from '@/lib/api/auth';
+import { authApi } from '@/lib/auth';
 
 const formSchema = z.object({
     email: z.string().email('Введите корректный email'),
